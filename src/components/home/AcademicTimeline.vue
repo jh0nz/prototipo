@@ -191,92 +191,9 @@ const filters = [
   { label: 'Eventos', value: 'events', icon: '🎓' }
 ]
 
-const events: TimelineEvent[] = [
-  {
-    id: 1,
-    date: '2025-07-29',
-    title: 'Inicio venta de matrícula 2-2025',
-    description: 'Apertura del proceso de venta de matrículas para el semestre 2-2025. Se recomienda realizar el pago lo antes posible para asegurar su inscripción.',
-    type: 'warning',
-    category: 'procedures',
-    location: 'Ventanilla de Tesorería'
-  },
-  {
-    id: 2,
-    date: '2025-08-15',
-    title: 'Publicación de Cronograma Exámenes Mesa',
-    description: 'Se publica el cronograma oficial de exámenes de mesa para el semestre 2-2025.',
-    type: 'info',
-    category: 'exams'
-  },
-  {
-    id: 3,
-    date: '2025-08-18',
-    title: 'Inicio de Clases 2-2025',
-    description: 'Inicio oficial del semestre académico 2-2025. Todos los estudiantes deben estar inscritos previamente.',
-    type: 'info',
-    category: 'events',
-    time: '07:30'
-  },
-  {
-    id: 4,
-    date: '2025-10-13',
-    title: 'Primeros Parciales Inician',
-    description: 'Inicio del período de primeros exámenes parciales. Consulte el horario específico de cada materia.',
-    type: 'warning',
-    category: 'exams'
-  },
-  {
-    id: 5,
-    date: '2025-11-01',
-    title: 'Fin Primeros Parciales',
-    description: 'Finalización del período de primeros exámenes parciales.',
-    type: 'success',
-    category: 'exams'
-  },
-  {
-    id: 6,
-    date: '2025-12-01',
-    title: 'Segundos Parciales Inician',
-    description: 'Inicio del período de segundos exámenes parciales.',
-    type: 'warning',
-    category: 'exams'
-  },
-  {
-    id: 7,
-    date: '2025-12-13',
-    title: 'Fin Segundos Parciales',
-    description: 'Finalización del período de segundos exámenes parciales.',
-    type: 'success',
-    category: 'exams'
-  },
-  {
-    id: 8,
-    date: '2025-12-15',
-    title: 'Exámenes Finales Inician',
-    description: 'Inicio del período de exámenes finales. Evento crítico - prepare con anticipación.',
-    type: 'urgent',
-    category: 'exams',
-    isUrgent: true
-  },
-  {
-    id: 9,
-    date: '2025-12-25',
-    title: 'FERIADO - NAVIDAD',
-    description: 'Feriado nacional. No hay clases ni actividades administrativas.',
-    type: 'info',
-    category: 'holidays'
-  },
-  {
-    id: 10,
-    date: '2025-12-27',
-    title: 'Fin Semestre 2-2025',
-    description: 'Finalización oficial del semestre académico 2-2025.',
-    type: 'urgent',
-    category: 'events',
-    isUrgent: true
-  }
-]
+import eventsData from '@/data/calendar-events.json'
+
+const events: TimelineEvent[] = eventsData as TimelineEvent[]
 
 const filteredEvents = computed(() => {
   if (activeFilter.value === 'all') {

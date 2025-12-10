@@ -3,9 +3,6 @@
     <!-- Hero Carousel -->
     <HeroCarousel />
     
-    <!-- Quick Access Buttons -->
-    <QuickActions />
-    
     <!-- Academic Calendar Timeline -->
     <AcademicTimeline />
     
@@ -16,7 +13,6 @@
 
 <script setup lang="ts">
 import HeroCarousel from '@/components/home/HeroCarousel.vue'
-import QuickActions from '@/components/home/QuickActions.vue'
 import AcademicTimeline from '@/components/home/AcademicTimeline.vue'
 import AdmissionsWizard from '@/components/home/AdmissionsWizard.vue'
 import { usePageSections } from '@/composables/usePageSections'

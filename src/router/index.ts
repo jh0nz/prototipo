@@ -18,8 +18,8 @@ const router = createRouter({
       name: 'institutional',
       component: () => import('@/views/InstitutionalView.vue'),
       meta: {
-        title: 'Institucional - FCyT UMSS',
-        breadcrumb: 'Institucional'
+        title: 'Nosotros - FCyT UMSS',
+        breadcrumb: 'Nosotros'
       }
     },
     {

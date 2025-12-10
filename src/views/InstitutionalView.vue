@@ -3,7 +3,7 @@
     <!-- Page Header -->
     <header class="page-header">
       <div class="container">
-        <h1 class="page-header__title">Información Institucional</h1>
+        <h1 class="page-header__title">Nosotros</h1>
         <p class="page-header__subtitle">
           Conoce nuestra historia, misión y las personas que hacen posible la excelencia académica
         </p>
@@ -258,7 +258,7 @@ import autoridadesData from '@/data/autoridades.json'
 import manualFuncionesData from '@/data/manual-funciones.json'
 import { usePageSections } from '@/composables/usePageSections'
 
-document.title = 'Institucional - FCyT UMSS'
+document.title = 'Nosotros - FCyT UMSS'
 
 // Initialize page sections detection
 usePageSections()

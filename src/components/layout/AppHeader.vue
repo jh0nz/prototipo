@@ -96,7 +96,7 @@ const isMobileMenuOpen = ref(false)
 
 const navItems = [
   { label: 'Inicio', path: '/', icon: '🏠' },
-  { label: 'Institucional', path: '/institucional', icon: '🏛️' },
+  { label: 'Nosotros', path: '/institucional', icon: '🏛️' },
   { label: 'Horarios', path: '/horarios', icon: '🕒' },
   { label: 'Admisión', path: '/admision', icon: '📝' },
   { label: 'Contacto', path: '/contacto', icon: '📧' }
