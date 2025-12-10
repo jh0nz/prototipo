@@ -7,6 +7,9 @@
     
     <AppHeader />
     
+    <!-- Breadcrumb Navigation -->
+    <Breadcrumb />
+    
     <main id="main-content">
       <RouterView v-slot="{ Component }">
         <transition name="page" mode="out-in">
@@ -27,6 +30,7 @@
 <script setup lang="ts">
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import Breadcrumb from '@/components/layout/Breadcrumb.vue'
 import ToastContainer from '@/components/ui/ToastContainer.vue'
 </script>
 

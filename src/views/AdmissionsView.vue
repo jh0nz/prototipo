@@ -1,12 +1,5 @@
 <template>
   <div class="admissions-page">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb container" aria-label="Ubicación">
-      <RouterLink to="/" class="breadcrumb__link">Inicio</RouterLink>
-      <span class="breadcrumb__separator">/</span>
-      <span class="breadcrumb__current">Admisión</span>
-    </nav>
-
     <!-- Page Header -->
     <header class="page-header">
       <div class="container">
@@ -223,8 +216,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import type { Career, AdmissionRequirement } from '@/types'
+import { usePageSections } from '@/composables/usePageSections'
 
 document.title = 'Admisión - FCyT UMSS'
+
+// Initialize page sections detection
+usePageSections()
 
 const selectedCareer = ref<Career | null>(null)
 const countdown = ref({ days: 0, hours: 0, minutes: 0 })
@@ -341,34 +338,12 @@ onUnmounted(() => {
   min-height: 100vh;
 }
 
-/* Breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  padding-top: var(--spacing-6);
-  padding-bottom: var(--spacing-4);
-  font-size: var(--font-size-sm);
-}
-
-.breadcrumb__link {
-  color: var(--color-secondary);
-}
-
-.breadcrumb__separator {
-  color: #9CA3AF;
-}
-
-.breadcrumb__current {
-  color: #6B7280;
-}
-
 /* Page Header */
 .page-header {
-  padding: var(--spacing-8) 0 var(--spacing-12);
+  padding: var(--spacing-6) 0 var(--spacing-8);
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
 }
 
 .page-header__title {

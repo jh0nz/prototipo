@@ -159,8 +159,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
-  gap: var(--spacing-6);
+  height: 64px;
+  gap: var(--spacing-5);
 }
 
 /* Logo Styles */
@@ -273,7 +273,7 @@ onUnmounted(() => {
 /* Mobile Menu */
 .mobile-menu {
   position: fixed;
-  top: 72px;
+  top: 64px;
   left: 0;
   right: 0;
   bottom: 0;

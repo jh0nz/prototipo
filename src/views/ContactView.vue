@@ -1,12 +1,5 @@
 <template>
   <div class="contact-page">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb container" aria-label="Ubicación">
-      <RouterLink to="/" class="breadcrumb__link">Inicio</RouterLink>
-      <span class="breadcrumb__separator">/</span>
-      <span class="breadcrumb__current">Contacto</span>
-    </nav>
-
     <!-- Page Header -->
     <header class="page-header">
       <div class="container">
@@ -256,8 +249,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useToastStore } from '@/stores/toast'
+import { usePageSections } from '@/composables/usePageSections'
 
 document.title = 'Contacto - FCyT UMSS'
+
+// Initialize page sections detection
+usePageSections()
 
 const toastStore = useToastStore()
 
@@ -287,34 +284,12 @@ function handleSubmit() {
   min-height: 100vh;
 }
 
-/* Breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  padding-top: var(--spacing-6);
-  padding-bottom: var(--spacing-4);
-  font-size: var(--font-size-sm);
-}
-
-.breadcrumb__link {
-  color: var(--color-secondary);
-}
-
-.breadcrumb__separator {
-  color: #9CA3AF;
-}
-
-.breadcrumb__current {
-  color: #6B7280;
-}
-
 /* Page Header */
 .page-header {
-  padding: var(--spacing-8) 0 var(--spacing-12);
+  padding: var(--spacing-6) 0 var(--spacing-8);
   background: linear-gradient(135deg, var(--color-secondary) 0%, #002D7A 100%);
   color: white;
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
 }
 
 .page-header__title {

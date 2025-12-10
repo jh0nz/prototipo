@@ -1,12 +1,5 @@
 <template>
   <div class="institutional-page">
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb container" aria-label="Ubicación">
-      <RouterLink to="/" class="breadcrumb__link">Inicio</RouterLink>
-      <span class="breadcrumb__separator">/</span>
-      <span class="breadcrumb__current">Institucional</span>
-    </nav>
-
     <!-- Page Header -->
     <header class="page-header">
       <div class="container">
@@ -18,7 +11,7 @@
     </header>
 
     <!-- History Section -->
-    <section class="history section">
+    <section id="antecedentes" class="history section">
       <div class="container">
         <h2 class="section-title">Antecedentes</h2>
         
@@ -74,7 +67,7 @@
     </section>
 
     <!-- Authorities Section -->
-    <section class="authorities section">
+    <section id="autoridades" class="authorities section">
       <div class="container">
         <h2 class="section-title">Autoridades</h2>
         
@@ -85,7 +78,13 @@
             class="authority-card"
           >
             <div class="authority-card__image">
-              <div class="authority-card__placeholder">
+              <img 
+                v-if="authority.image"
+                :src="authority.image" 
+                :alt="authority.name"
+                class="authority-card__photo"
+              />
+              <div v-else class="authority-card__placeholder">
                 <span>{{ getInitials(authority.name) }}</span>
               </div>
             </div>
@@ -105,29 +104,45 @@
       </div>
     </section>
 
-    <!-- Goals Section -->
-    <section class="goals section">
+    <!-- Mission, Vision & Goals Section -->
+    <section id="mision-vision" class="mission-vision section">
       <div class="container">
-        <h2 class="section-title">Metas y Objetivos</h2>
-        
-        <div class="goals__grid">
-          <article 
-            v-for="goal in goals" 
-            :key="goal.id"
-            class="goal-card"
-          >
-            <div class="goal-card__icon">
-              <span>{{ goal.icon }}</span>
+        <div class="mission-vision__grid">
+          <article class="mission-card">
+            <div class="mission-card__header">
+              <span class="mission-card__icon">🎯</span>
+              <h3 class="mission-card__title">Misión</h3>
             </div>
-            <h3 class="goal-card__title">{{ goal.title }}</h3>
-            <p class="goal-card__description">{{ goal.description }}</p>
+            <p class="mission-card__content">
+              Es una unidad académica e investigativa en ciencias y tecnología de la UMSS que genera valor para la región, formando integralmente profesionales calificados, líderes, críticos, éticos, con conciencia ciudadana y ambiental; generando y aplicando conocimiento científico y tecnológico desde su Parque Científico, ofertando servicios especializados de calidad, divulgando y difundiendo conocimiento científico; transfiriendo tecnología y consolidando sistemas de innovación y emprendimiento, para mejorar la competitividad regional y nacional.
+            </p>
+          </article>
+
+          <article class="mission-card">
+            <div class="mission-card__header">
+              <span class="mission-card__icon">🔭</span>
+              <h3 class="mission-card__title">Visión</h3>
+            </div>
+            <p class="mission-card__content">
+              Ser una Facultad referente en ciencias y tecnología a nivel nacional e internacional, reconocida por el desempeño profesional de sus titulados, por la calidad de los resultados de su actividad científica y tecnológica, por su adecuado rol en la articulación con el medio y el entorno internacional, y por propiciar la economía del conocimiento a través de su Parque Científico para la consolidación de Cochabamba como ciudad del conocimiento.
+            </p>
+          </article>
+
+          <article class="mission-card mission-card--full">
+            <div class="mission-card__header">
+              <span class="mission-card__icon">🎓</span>
+              <h3 class="mission-card__title">Metas y Objetivos</h3>
+            </div>
+            <p class="mission-card__content">
+              Por el carácter de las disciplinas que regenta la Facultad de Ciencias y Tecnología, tiene como meta fundamental contribuir al desarrollo de las fuerzas productivas de la región y el país, a través de la preparación de los recursos naturales, por medio de una interacción equilibrada de elaboración teórica y experimental en el campo de la formación profesional, la investigación, la interacción y la producción. Asimismo, se pretende generar un proceso de desarrollo científico y tecnológico, a través de la asimilación, adecuación y desarrollo de procesos tecnológicos que contribuyan al desarrollo productivo de la región y del país.
+            </p>
           </article>
         </div>
       </div>
     </section>
 
     <!-- Manual de Funciones -->
-    <section class="manual section">
+    <section id="manual-funciones" class="manual section">
       <div class="container">
         <h2 class="section-title">Manual de Funciones</h2>
         
@@ -144,7 +159,6 @@
               :aria-expanded="openAccordion === index"
               :aria-controls="`accordion-content-${index}`"
             >
-              <span class="accordion__icon">{{ item.icon }}</span>
               <span class="accordion__title">{{ item.title }}</span>
               <svg 
                 class="accordion__arrow" 
@@ -164,10 +178,70 @@
               :hidden="openAccordion !== index"
             >
               <div class="accordion__body">
-                <p>{{ item.content }}</p>
-                <ul v-if="item.items">
-                  <li v-for="subitem in item.items" :key="subitem">{{ subitem }}</li>
-                </ul>
+                <div v-if="item.unit" class="manual-section">
+                  <h4>Unidad</h4>
+                  <p>{{ item.unit }}</p>
+                </div>
+                
+                <div v-if="item.position" class="manual-section">
+                  <h4>Cargo</h4>
+                  <p>{{ item.position }}</p>
+                </div>
+                
+                <div v-if="item.dependency" class="manual-section">
+                  <h4>Dependencia</h4>
+                  <p>{{ item.dependency }}</p>
+                </div>
+                
+                <div v-if="item.dependents" class="manual-section">
+                  <h4>Dependientes</h4>
+                  <p>{{ item.dependents }}</p>
+                </div>
+                
+                <div v-if="item.authority" class="manual-section">
+                  <h4>Autoridad</h4>
+                  <p>{{ item.authority }}</p>
+                </div>
+                
+                <div v-if="item.objective" class="manual-section">
+                  <h4>Objetivo</h4>
+                  <p>{{ item.objective }}</p>
+                </div>
+                
+                <div v-if="item.functions && item.functions.length > 0" class="manual-section">
+                  <h4>Funciones</h4>
+                  <ul>
+                    <li v-for="(func, idx) in item.functions" :key="idx">{{ func }}</li>
+                  </ul>
+                </div>
+                
+                <div v-if="item.responsibilities && item.responsibilities.length > 0" class="manual-section">
+                  <h4>Responsabilidades</h4>
+                  <ul>
+                    <li v-for="(resp, idx) in item.responsibilities" :key="idx">{{ resp }}</li>
+                  </ul>
+                </div>
+                
+                <div v-if="item.relations" class="manual-section">
+                  <h4>Relaciones</h4>
+                  <p>{{ item.relations }}</p>
+                </div>
+                
+                <div v-if="item.requirements" class="manual-section">
+                  <h4>Requisitos</h4>
+                  <div v-if="item.requirements.education" class="requirement-item">
+                    <strong>Grado de Instrucción:</strong> {{ item.requirements.education }}
+                  </div>
+                  <div v-if="item.requirements.experience" class="requirement-item">
+                    <strong>Experiencia:</strong> {{ item.requirements.experience }}
+                  </div>
+                  <div v-if="item.requirements.skills" class="requirement-item">
+                    <strong>Habilidades y Destrezas:</strong> {{ item.requirements.skills }}
+                  </div>
+                  <div v-if="item.requirements.knowledge" class="requirement-item">
+                    <strong>Otros Conocimientos:</strong> {{ item.requirements.knowledge }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -180,126 +254,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Authority, InstitutionalGoal } from '@/types'
+import autoridadesData from '@/data/autoridades.json'
+import manualFuncionesData from '@/data/manual-funciones.json'
+import { usePageSections } from '@/composables/usePageSections'
 
 document.title = 'Institucional - FCyT UMSS'
 
+// Initialize page sections detection
+usePageSections()
+
 const openAccordion = ref<number | null>(null)
 
-const authorities: Authority[] = [
-  { 
-    id: 1, 
-    name: 'Dr. Juan Carlos Mendoza García',
-    role: 'Decano',
-    image: '',
-    email: 'decanato@fcyt.umss.edu.bo'
-  },
-  { 
-    id: 2, 
-    name: 'Ing. María Elena Rojas Velásquez',
-    role: 'Directora Académica',
-    image: '',
-    email: 'academica@fcyt.umss.edu.bo'
-  },
-  { 
-    id: 3, 
-    name: 'Dr. Roberto Fernández Quiroga',
-    role: 'Director de Investigación',
-    image: '',
-    email: 'investigacion@fcyt.umss.edu.bo'
-  },
-  { 
-    id: 4, 
-    name: 'Msc. Ana Patricia Vargas López',
-    role: 'Directora de Postgrado',
-    image: '',
-    email: 'postgrado@fcyt.umss.edu.bo'
-  }
-]
+const authorities: Authority[] = autoridadesData as Authority[]
 
-const goals: InstitutionalGoal[] = [
-  {
-    id: 1,
-    title: 'Excelencia Académica',
-    description: 'Formar profesionales competentes con sólidos conocimientos científicos y tecnológicos, capaces de responder a las demandas del mercado laboral.',
-    icon: '🎓'
-  },
-  {
-    id: 2,
-    title: 'Investigación e Innovación',
-    description: 'Promover la investigación científica y tecnológica para contribuir al desarrollo sostenible de Bolivia y la región.',
-    icon: '🔬'
-  },
-  {
-    id: 3,
-    title: 'Vinculación Social',
-    description: 'Establecer vínculos con la sociedad, el sector productivo y las instituciones públicas para transferir conocimiento y tecnología.',
-    icon: '🤝'
-  },
-  {
-    id: 4,
-    title: 'Internacionalización',
-    description: 'Fomentar la cooperación internacional y la movilidad académica para enriquecer la formación de estudiantes y docentes.',
-    icon: '🌍'
-  }
-]
-
-const manualItems = [
-  {
-    title: 'Decanato',
-    icon: '👔',
-    content: 'El Decanato es la máxima autoridad ejecutiva de la Facultad, responsable de la gestión administrativa y académica.',
-    items: [
-      'Representar oficialmente a la Facultad',
-      'Presidir el Consejo Facultativo',
-      'Supervisar la gestión académica y administrativa',
-      'Gestionar convenios interinstitucionales'
-    ]
-  },
-  {
-    title: 'Dirección Académica',
-    icon: '📚',
-    content: 'La Dirección Académica coordina y supervisa las actividades de enseñanza-aprendizaje de todas las carreras.',
-    items: [
-      'Planificar y coordinar actividades académicas',
-      'Supervisar el cumplimiento de planes de estudio',
-      'Gestionar procesos de evaluación docente',
-      'Coordinar calendarios académicos'
-    ]
-  },
-  {
-    title: 'Dirección de Investigación',
-    icon: '🔬',
-    content: 'La Dirección de Investigación promueve y coordina las actividades de investigación científica y tecnológica.',
-    items: [
-      'Promover proyectos de investigación',
-      'Gestionar financiamiento para investigación',
-      'Coordinar publicaciones científicas',
-      'Organizar eventos académicos y científicos'
-    ]
-  },
-  {
-    title: 'Dirección de Postgrado',
-    icon: '🎓',
-    content: 'La Dirección de Postgrado administra los programas de especialización, maestría y doctorado.',
-    items: [
-      'Diseñar y actualizar programas de postgrado',
-      'Coordinar actividades de formación continua',
-      'Gestionar admisiones a programas de postgrado',
-      'Supervisar la calidad académica de los programas'
-    ]
-  },
-  {
-    title: 'Administración y Finanzas',
-    icon: '💼',
-    content: 'El área de Administración y Finanzas gestiona los recursos económicos y materiales de la Facultad.',
-    items: [
-      'Elaborar y ejecutar el presupuesto',
-      'Gestionar adquisiciones y contratos',
-      'Administrar recursos humanos',
-      'Mantener la infraestructura física'
-    ]
-  }
-]
+const manualItems = manualFuncionesData
 
 function getInitials(name: string): string {
   return name
@@ -308,7 +276,6 @@ function getInitials(name: string): string {
     .slice(0, 2)
     .map(word => word[0])
     .join('')
-    .toUpperCase()
 }
 
 function toggleAccordion(index: number) {
@@ -321,34 +288,19 @@ function toggleAccordion(index: number) {
   min-height: 100vh;
 }
 
-/* Breadcrumb */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  padding-top: var(--spacing-6);
-  padding-bottom: var(--spacing-4);
-  font-size: var(--font-size-sm);
-}
-
-.breadcrumb__link {
-  color: var(--color-secondary);
-}
-
-.breadcrumb__separator {
-  color: #9CA3AF;
-}
-
-.breadcrumb__current {
-  color: #6B7280;
+/* Quick Navigation */
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px; /* Header (64px) + Breadcrumb (46px) */
 }
 
 /* Page Header */
 .page-header {
-  padding: var(--spacing-8) 0 var(--spacing-12);
+  padding: var(--spacing-6) 0 var(--spacing-8);
   background: linear-gradient(135deg, var(--color-secondary) 0%, #002D7A 100%);
   color: white;
-  margin-bottom: var(--spacing-8);
+  margin-bottom: var(--spacing-6);
 }
 
 .page-header__title {
@@ -458,6 +410,9 @@ function toggleAccordion(index: number) {
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .authority-card:hover {
@@ -467,12 +422,23 @@ function toggleAccordion(index: number) {
 
 .authority-card__image {
   padding: var(--spacing-6) var(--spacing-6) var(--spacing-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+}
+
+.authority-card__photo {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 4px solid var(--color-surface-variant);
 }
 
 .authority-card__placeholder {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -485,13 +451,21 @@ function toggleAccordion(index: number) {
 
 .authority-card__content {
   padding: 0 var(--spacing-5) var(--spacing-6);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .authority-card__name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-neutral-dark);
-  margin-bottom: var(--spacing-1);
+  margin-bottom: var(--spacing-2);
+  min-height: 2.5em;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .authority-card__role {
@@ -499,6 +473,11 @@ function toggleAccordion(index: number) {
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-3);
+  min-height: 2.5em;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .authority-card__email {
@@ -513,58 +492,64 @@ function toggleAccordion(index: number) {
   color: var(--color-secondary);
 }
 
-/* Goals Section */
-.goals {
+/* Mission, Vision & Goals Section */
+.mission-vision {
   background-color: var(--color-surface);
 }
 
-.goals__grid {
+.mission-vision__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-6);
 }
 
-@media (max-width: 1023px) {
-  .goals__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 639px) {
-  .goals__grid {
+@media (max-width: 767px) {
+  .mission-vision__grid {
     grid-template-columns: 1fr;
   }
 }
 
-.goal-card {
-  padding: var(--spacing-6);
+.mission-card {
   background-color: var(--color-surface-variant);
   border-radius: var(--radius-xl);
-  text-align: center;
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
 }
 
-.goal-card:hover {
-  background-color: var(--color-secondary-light);
-  transform: translateY(-4px);
+.mission-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-.goal-card__icon {
-  font-size: 3rem;
+.mission-card--full {
+  grid-column: 1 / -1;
+}
+
+.mission-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
   margin-bottom: var(--spacing-4);
 }
 
-.goal-card__title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-dark);
-  margin-bottom: var(--spacing-3);
+.mission-card__icon {
+  font-size: 2rem;
+  flex-shrink: 0;
 }
 
-.goal-card__description {
-  font-size: var(--font-size-sm);
-  color: #6B7280;
+.mission-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.mission-card__content {
+  font-size: var(--font-size-base);
+  color: #4B5563;
   line-height: var(--line-height-relaxed);
+  text-align: justify;
   margin: 0;
 }
 
@@ -630,8 +615,7 @@ function toggleAccordion(index: number) {
 }
 
 .accordion__body {
-  padding: 0 var(--spacing-5) var(--spacing-5);
-  padding-left: calc(var(--spacing-5) + 1.5rem + var(--spacing-4));
+  padding: var(--spacing-5);
 }
 
 .accordion__body p {
@@ -646,6 +630,7 @@ function toggleAccordion(index: number) {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
+  margin-top: var(--spacing-3);
 }
 
 .accordion__body li {
@@ -653,6 +638,7 @@ function toggleAccordion(index: number) {
   color: #4B5563;
   padding-left: var(--spacing-4);
   position: relative;
+  line-height: var(--line-height-relaxed);
 }
 
 .accordion__body li::before {
@@ -664,5 +650,38 @@ function toggleAccordion(index: number) {
   height: 6px;
   background-color: var(--color-secondary);
   border-radius: var(--radius-full);
+}
+
+.manual-section {
+  margin-bottom: var(--spacing-6);
+}
+
+.manual-section:last-child {
+  margin-bottom: 0;
+}
+
+.manual-section h4 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-3);
+  border-bottom: 2px solid var(--color-surface-variant);
+  padding-bottom: var(--spacing-2);
+}
+
+.manual-section p {
+  margin-bottom: 0;
+}
+
+.requirement-item {
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  color: #4B5563;
+  line-height: var(--line-height-relaxed);
+}
+
+.requirement-item strong {
+  color: var(--color-neutral-dark);
+  font-weight: var(--font-weight-semibold);
 }
 </style>

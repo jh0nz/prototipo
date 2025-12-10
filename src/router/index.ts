@@ -8,31 +8,46 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { title: 'FCyT UMSS - Facultad de Ciencias y Tecnología' }
+      meta: {
+        title: 'FCyT UMSS - Facultad de Ciencias y Tecnología',
+        breadcrumb: 'Inicio'
+      }
     },
     {
       path: '/institucional',
       name: 'institutional',
       component: () => import('@/views/InstitutionalView.vue'),
-      meta: { title: 'Institucional - FCyT UMSS' }
+      meta: {
+        title: 'Institucional - FCyT UMSS',
+        breadcrumb: 'Institucional'
+      }
     },
     {
       path: '/horarios',
       name: 'schedules',
       component: () => import('@/views/SchedulesView.vue'),
-      meta: { title: 'Horarios - FCyT UMSS' }
+      meta: {
+        title: 'Horarios - FCyT UMSS',
+        breadcrumb: 'Horarios'
+      }
     },
     {
       path: '/admision',
       name: 'admissions',
       component: () => import('@/views/AdmissionsView.vue'),
-      meta: { title: 'Admisión - FCyT UMSS' }
+      meta: {
+        title: 'Admisión - FCyT UMSS',
+        breadcrumb: 'Admisión'
+      }
     },
     {
       path: '/contacto',
       name: 'contact',
       component: () => import('@/views/ContactView.vue'),
-      meta: { title: 'Contacto - FCyT UMSS' }
+      meta: {
+        title: 'Contacto - FCyT UMSS',
+        breadcrumb: 'Contacto'
+      }
     },
     {
       // Catch-all redirect to home
