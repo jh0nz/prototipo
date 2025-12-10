@@ -1,0 +1,328 @@
+<template>
+  <header class="header" :class="{ 'header--scrolled': isScrolled }">
+    <div class="header__container container">
+      <!-- Logo -->
+      <RouterLink to="/" class="header__logo" aria-label="FCyT UMSS - Ir al inicio">
+        <div class="logo">
+          <div class="logo__icon">
+            <span class="logo__icon-text">FCyT</span>
+          </div>
+          <div class="logo__text hide-mobile">
+            <span class="logo__title">Facultad de Ciencias y Tecnología</span>
+            <span class="logo__subtitle">UMSS</span>
+          </div>
+        </div>
+      </RouterLink>
+
+      <!-- Desktop Navigation -->
+      <nav class="header__nav hide-mobile" aria-label="Navegación principal">
+        <ul class="nav-list">
+          <li v-for="item in navItems" :key="item.path" class="nav-item">
+            <RouterLink 
+              :to="item.path" 
+              class="nav-link"
+              :class="{ 'nav-link--active': isActive(item.path) }"
+            >
+              {{ item.label }}
+            </RouterLink>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Actions -->
+      <div class="header__actions">
+        <!-- Search Button -->
+        <button 
+          class="btn btn-icon" 
+          @click="openSearch"
+          aria-label="Buscar"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button 
+          class="btn btn-icon hide-desktop" 
+          @click="toggleMobileMenu"
+          :aria-expanded="isMobileMenuOpen"
+          aria-label="Menú de navegación"
+        >
+          <svg v-if="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Overlay -->
+    <Transition name="slide">
+      <div v-if="isMobileMenuOpen" class="mobile-menu hide-desktop">
+        <nav aria-label="Navegación móvil">
+          <ul class="mobile-nav-list">
+            <li v-for="item in navItems" :key="item.path">
+              <RouterLink 
+                :to="item.path" 
+                class="mobile-nav-link"
+                :class="{ 'mobile-nav-link--active': isActive(item.path) }"
+                @click="closeMobileMenu"
+              >
+                <span class="mobile-nav-icon">{{ item.icon }}</span>
+                {{ item.label }}
+              </RouterLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </Transition>
+
+    <!-- Search Modal -->
+    <SearchModal />
+  </header>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useSearchStore } from '@/stores/search'
+import SearchModal from '@/components/search/SearchModal.vue'
+
+const route = useRoute()
+const searchStore = useSearchStore()
+
+const isScrolled = ref(false)
+const isMobileMenuOpen = ref(false)
+
+const navItems = [
+  { label: 'Inicio', path: '/', icon: '🏠' },
+  { label: 'Institucional', path: '/institucional', icon: '🏛️' },
+  { label: 'Horarios', path: '/horarios', icon: '🕒' },
+  { label: 'Admisión', path: '/admision', icon: '📝' },
+  { label: 'Contacto', path: '/contacto', icon: '📧' }
+]
+
+function isActive(path: string) {
+  if (path === '/') {
+    return route.path === '/'
+  }
+  return route.path.startsWith(path)
+}
+
+function openSearch() {
+  searchStore.open()
+}
+
+function toggleMobileMenu() {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : ''
+}
+
+function closeMobileMenu() {
+  isMobileMenuOpen.value = false
+  document.body.style.overflow = ''
+}
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 20
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
+
+<style scoped>
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-normal);
+}
+
+.header--scrolled {
+  box-shadow: var(--shadow-md);
+  border-bottom-color: var(--color-neutral-light);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: var(--spacing-6);
+}
+
+/* Logo Styles */
+.header__logo {
+  text-decoration: none;
+  color: inherit;
+}
+
+.header__logo:hover {
+  text-decoration: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.logo__icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo__icon-text {
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+.logo__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-dark);
+  line-height: 1.2;
+}
+
+.logo__subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Desktop Navigation */
+.header__nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-1);
+}
+
+.nav-link {
+  display: block;
+  padding: var(--spacing-2) var(--spacing-4);
+  color: var(--color-neutral-dark);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  text-decoration: none;
+}
+
+.nav-link--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.nav-link--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Header Actions */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-surface);
+  z-index: var(--z-fixed);
+  padding: var(--spacing-6);
+  overflow-y: auto;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-4);
+  color: var(--color-neutral-dark);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  text-decoration: none;
+}
+
+.mobile-nav-icon {
+  font-size: var(--font-size-xl);
+}
+
+/* Slide Transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all var(--transition-normal);
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+</style>
