@@ -199,8 +199,14 @@ function openEventModal(event: TimelineEvent) {
 }
 
 function formatDateFull(dateStr: string) {
-  // Fix timezone issue by parsing parts manually or appending time
-  const [year, month, day] = dateStr.split('-').map(Number)
+  // Fix timezone issue by parsing parts manually
+  const parts = dateStr.split('-').map(Number)
+  const year = parts[0] || 0
+  const month = parts[1] || 0
+  const day = parts[2] || 0
+  
+  if (!year || !month || !day) return dateStr
+  
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' })
 }
