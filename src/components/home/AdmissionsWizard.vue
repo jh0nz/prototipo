@@ -40,7 +40,7 @@
             <div class="wizard-step__header">
               <span class="wizard-step__icon">🎓</span>
               <div>
-                <h3 class="wizard-step__title">{{ steps[0].title }}</h3>
+                <h3 class="wizard-step__title">{{ steps[0]?.title }}</h3>
                 <p class="wizard-step__description">Selecciona la carrera que te interesa</p>
               </div>
             </div>
@@ -72,7 +72,7 @@
             <div class="wizard-step__header">
               <span class="wizard-step__icon">📋</span>
               <div>
-                <h3 class="wizard-step__title">{{ steps[1].title }}</h3>
+                <h3 class="wizard-step__title">{{ steps[1]?.title }}</h3>
                 <p class="wizard-step__description">Estos son los documentos que necesitas</p>
               </div>
             </div>
@@ -100,7 +100,7 @@
             <div class="wizard-step__header">
               <span class="wizard-step__icon">📅</span>
               <div>
-                <h3 class="wizard-step__title">{{ steps[2].title }}</h3>
+                <h3 class="wizard-step__title">{{ steps[2]?.title }}</h3>
                 <p class="wizard-step__description">Próxima fecha de admisión</p>
               </div>
             </div>
@@ -169,7 +169,7 @@
             <div class="wizard-step__header">
               <span class="wizard-step__icon">✅</span>
               <div>
-                <h3 class="wizard-step__title">{{ steps[3].title }}</h3>
+                <h3 class="wizard-step__title">{{ steps[3]?.title }}</h3>
                 <p class="wizard-step__description">¡Estás listo! Contáctanos para más información</p>
               </div>
             </div>

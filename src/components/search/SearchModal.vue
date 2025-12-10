@@ -207,8 +207,9 @@ function focusPrevSuggestion() {
 }
 
 function selectFocusedSuggestion() {
-  if (focusedIndex.value >= 0 && suggestions.value[focusedIndex.value]) {
-    goToSuggestion(suggestions.value[focusedIndex.value])
+  const suggestion = suggestions.value[focusedIndex.value]
+  if (focusedIndex.value >= 0 && suggestion) {
+    goToSuggestion(suggestion)
   }
 }
 
