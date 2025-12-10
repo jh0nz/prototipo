@@ -11,7 +11,7 @@ export interface NewsItem {
 }
 
 // ===== Timeline/Calendar Types =====
-export type EventType = 'info' | 'success' | 'warning' | 'urgent'
+export type EventType = 'info' | 'success' | 'warning' | 'urgent' | 'news'
 
 export interface TimelineEvent {
     id: number
@@ -19,7 +19,7 @@ export interface TimelineEvent {
     title: string
     description?: string
     type: EventType
-    category: 'exams' | 'procedures' | 'holidays' | 'events' | 'all'
+    category: 'exams' | 'procedures' | 'holidays' | 'events' | 'all' | 'news'
     time?: string
     location?: string
     isUrgent?: boolean

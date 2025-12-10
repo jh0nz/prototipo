@@ -45,7 +45,8 @@
               class="event-card"
               :class="{ 
                 'event-card--past': day.isPast,
-                'event-card--urgent': event.isUrgent || (isUpcoming(day.dateStr) && !day.isPast)
+                'event-card--urgent': event.isUrgent || (isUpcoming(day.dateStr) && !day.isPast && event.type !== 'news'),
+                'event-card--news': event.type === 'news'
               }"
               @click="openEventModal(event)"
             >
@@ -53,10 +54,12 @@
               <div class="event-card__content">
                 <div class="event-card__header">
                   <span class="event-time" v-if="event.time">{{ event.time }}</span>
+                  <span class="event-time news-time" v-if="event.type === 'news'">Noticia</span>
                   <span class="event-badge" v-if="event.type === 'urgent'">!</span>
+                  <span class="event-badge news-badge" v-if="event.type === 'news'">N</span>
                 </div>
                 <h4 class="event-title">{{ event.title }}</h4>
-                <div v-if="isUpcoming(day.dateStr) && !day.isPast" class="event-alert">
+                <div v-if="isUpcoming(day.dateStr) && !day.isPast && event.type !== 'news'" class="event-alert">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"/>
                     <line x1="12" y1="8" x2="12" y2="12"/>
@@ -66,8 +69,25 @@
                 </div>
               </div>
             </div>
+            
+            <div v-if="getEventsForDay(day.dateStr).length === 0" class="no-events">
+              <span class="no-events-dot">·</span>
+            </div>
           </div>
         </div>
+      </div>
+      
+      <!-- Full Calendar Button -->
+      <div class="calendar-footer">
+        <RouterLink to="/calendario" class="btn btn-outline btn-block">
+          Ver Calendario Completo Mensual
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </RouterLink>
       </div>
 
       <!-- Event Modal -->
@@ -81,8 +101,10 @@
               </div>
               <div class="event-modal__body">
                 <p class="modal-date">{{ formatDateFull(selectedEvent.date) }}</p>
+                <div v-if="selectedEvent.type === 'news'" class="news-tag">Noticia</div>
                 <p v-if="selectedEvent.time" class="modal-time">Hora: {{ selectedEvent.time }}</p>
                 <p>{{ selectedEvent.description }}</p>
+                
                 <div class="modal-tags" v-if="selectedEvent.location">
                   <span class="tag-location">📍 {{ selectedEvent.location }}</span>
                 </div>
@@ -98,12 +120,28 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import eventsData from '@/data/calendar-events.json'
+import noticiasData from '@/data/noticias.json'
 import type { TimelineEvent } from '@/types'
 
 // State
 const currentDate = ref(new Date()) // Start with today
 const selectedEvent = ref<TimelineEvent | null>(null)
-const events = eventsData as TimelineEvent[]
+
+// Merge events and news
+const calendarEvents: TimelineEvent[] = [
+  ...(eventsData as TimelineEvent[]),
+  ...noticiasData.map((news: any) => ({
+    id: 10000 + news.id,
+    date: news.date,
+    title: news.title,
+    description: news.excerpt,
+    type: 'news' as const,
+    category: 'news' as const,
+    location: undefined,
+    time: undefined,
+    isUrgent: false
+  }))
+]
 
 // Utils
 const getStartOfWeek = (date: Date) => {
@@ -178,7 +216,7 @@ function goToToday() {
 }
 
 function getEventsForDay(dateStr: string) {
-  return events.filter(e => e.date === dateStr)
+  return calendarEvents.filter(e => e.date === dateStr)
 }
 
 function isUpcoming(dateStr: string) {
@@ -374,6 +412,7 @@ function formatDateFull(dateStr: string) {
 .indicator--warning { border-left-color: var(--color-warning); }
 .indicator--urgent { border-left-color: var(--color-error); }
 .indicator--success { border-left-color: var(--color-success); }
+.indicator--news { border-left-color: #8B5CF6; /* Purple for news */ }
 
 .event-card:hover {
   transform: translateY(-2px);
@@ -388,6 +427,10 @@ function formatDateFull(dateStr: string) {
 .event-card--urgent {
   background-color: #FFF5F5;
   border-left-color: var(--color-error);
+}
+
+.event-card--news {
+  background-color: #F3F0FF;
 }
 
 .event-card__content {
@@ -408,6 +451,10 @@ function formatDateFull(dateStr: string) {
   font-weight: bold;
 }
 
+.news-time {
+  color: #7C3AED;
+}
+
 .event-badge {
   background: var(--color-error);
   color: white;
@@ -419,6 +466,10 @@ function formatDateFull(dateStr: string) {
   justify-content: center;
   font-size: 10px;
   font-weight: bold;
+}
+
+.news-badge {
+  background: #8B5CF6;
 }
 
 .event-title {
@@ -441,6 +492,33 @@ function formatDateFull(dateStr: string) {
   color: var(--color-error);
   font-weight: bold;
   margin-top: 4px;
+}
+
+.no-events {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--color-neutral-light);
+}
+
+.no-events-dot {
+  font-size: 24px;
+}
+
+.calendar-footer {
+  margin-top: var(--spacing-8);
+  display: flex;
+  justify-content: center;
+}
+
+.btn-block {
+  width: 100%;
+  max-width: 300px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Modal Simple */
@@ -476,6 +554,7 @@ function formatDateFull(dateStr: string) {
 
 .header--urgent { background: var(--color-error); }
 .header--warning { background: var(--color-warning); }
+.header--news { background: #8B5CF6; }
 
 .event-modal__header h3 {
   margin: 0;
@@ -510,6 +589,17 @@ function formatDateFull(dateStr: string) {
 .tag-location {
   font-size: var(--font-size-sm);
   color: var(--color-secondary);
+}
+
+.news-tag {
+  display: inline-block;
+  background: #F3F0FF;
+  color: #8B5CF6;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: var(--spacing-2);
 }
 
 /* Responsive */

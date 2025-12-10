@@ -23,6 +23,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/calendario',
+      name: 'calendar',
+      component: () => import('@/views/CalendarView.vue'),
+      meta: {
+        title: 'Calendario Académico - FCyT UMSS',
+        breadcrumb: 'Calendario'
+      }
+    },
+    {
       path: '/horarios',
       name: 'schedules',
       component: () => import('@/views/SchedulesView.vue'),
