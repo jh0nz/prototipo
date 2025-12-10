@@ -22,15 +22,34 @@
       </div>
     </section>
 
-    <!-- Admissions Wizard -->
-    <AdmissionsWizard />
+    <!-- Admissions CTA -->
+    <section class="section container">
+      <div class="admissions-cta-home">
+        <div class="cta-text">
+          <h2>Admisiones FCyT 2026</h2>
+          <p>
+            ¿Quieres formar parte de nuestra comunidad? Sigue nuestra guía paso a paso para postularte.
+            <br>
+            <strong>Próximo Examen: 15 de Enero 2026</strong>
+          </p>
+        </div>
+        <div class="cta-action">
+          <RouterLink to="/admision" class="btn btn-primary btn-lg">
+            Ver Requisitos e Inscribirse
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </RouterLink>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 
 <script setup lang="ts">
 import HeroCarousel from '@/components/home/HeroCarousel.vue'
 import AcademicTimeline from '@/components/home/AcademicTimeline.vue'
-import AdmissionsWizard from '@/components/home/AdmissionsWizard.vue'
 import { usePageSections } from '@/composables/usePageSections'
 
 // Title is handled by router meta, but we can double check
@@ -41,6 +60,39 @@ usePageSections()
 </script>
 
 <style scoped>
+/* ... existing styles ... */
+/* Add CTA styles */
+.admissions-cta-home {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, white 100%);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.cta-text h2 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-2);
+}
+
+.cta-text p {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-dark);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .admissions-cta-home {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 .dashboard-grid {
   display: flex;
   flex-direction: column;

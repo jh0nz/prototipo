@@ -33,10 +33,7 @@
           @click="openSearch"
           aria-label="Buscar"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
-          </svg>
+          <span class="material-symbols-rounded">search</span>
         </button>
 
         <!-- Mobile Menu Button -->
@@ -46,12 +43,8 @@
           :aria-expanded="isMobileMenuOpen"
           aria-label="Menú de navegación"
         >
-          <svg v-if="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12h18M3 6h18M3 18h18"/>
-          </svg>
-          <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
+          <span v-if="!isMobileMenuOpen" class="material-symbols-rounded">menu</span>
+          <span v-else class="material-symbols-rounded">close</span>
         </button>
       </div>
     </div>
@@ -68,7 +61,7 @@
                 :class="{ 'mobile-nav-link--active': isActive(item.path) }"
                 @click="closeMobileMenu"
               >
-                <span class="mobile-nav-icon">{{ item.icon }}</span>
+                <span class="material-symbols-rounded mobile-nav-icon">{{ item.icon }}</span>
                 {{ item.label }}
               </RouterLink>
             </li>
@@ -95,11 +88,12 @@ const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 
 const navItems = [
-  { label: 'Inicio', path: '/', icon: '🏠' },
-  { label: 'Nosotros', path: '/institucional', icon: '🏛️' },
-  { label: 'Horarios', path: '/horarios', icon: '🕒' },
-  { label: 'Admisión', path: '/admision', icon: '📝' },
-  { label: 'Contacto', path: '/contacto', icon: '📧' }
+  { label: 'Inicio', path: '/', icon: 'home' },
+  { label: 'Nosotros', path: '/institucional', icon: 'account_balance' },
+  { label: 'Calendario', path: '/calendario', icon: 'calendar_month' },
+  { label: 'Horarios', path: '/horarios', icon: 'schedule' },
+  { label: 'Admisión', path: '/admision', icon: 'edit_document' },
+  { label: 'Contacto', path: '/contacto', icon: 'mail' }
 ]
 
 function isActive(path: string) {
