@@ -18,6 +18,8 @@ export interface TimelineEvent {
     date: string
     title: string
     description?: string
+    ctaLabel?: string
+    ctaLink?: string
     type: EventType
     category: 'exams' | 'procedures' | 'holidays' | 'events' | 'all' | 'news'
     time?: string
