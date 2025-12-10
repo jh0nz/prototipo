@@ -225,7 +225,7 @@ function handleExport() {
 /* Page Header */
 .page-header {
   padding: var(--spacing-6) 0 var(--spacing-8);
-  background: linear-gradient(135deg, var(--color-secondary) 0%, #002D7A 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
   color: white;
   margin-bottom: var(--spacing-4);
 }
