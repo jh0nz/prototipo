@@ -80,6 +80,15 @@
                 <div v-if="selectedEvent.type === 'news'" class="news-tag">Noticia</div>
                 <p v-if="selectedEvent.time" class="modal-time">Hora: {{ selectedEvent.time }}</p>
                 <p>{{ selectedEvent.description }}</p>
+                <a
+                  v-if="selectedEvent.ctaLink"
+                  :href="selectedEvent.ctaLink"
+                  class="modal-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ selectedEvent.ctaLabel || 'Ver detalles de la convocatoria' }}
+                </a>
                 
                 <div class="modal-tags" v-if="selectedEvent.location">
                   <span class="tag-location">📍 {{ selectedEvent.location }}</span>
@@ -111,6 +120,8 @@ const calendarEvents: TimelineEvent[] = [
     date: news.date,
     title: news.title,
     description: news.excerpt,
+    ctaLabel: news.cta,
+    ctaLink: news.ctaLink,
     type: 'news' as const,
     category: 'news' as const,
     location: undefined,
@@ -472,6 +483,25 @@ function formatDateFull(dateStr: string) {
 
 .event-modal__body {
   padding: var(--spacing-4);
+}
+
+.modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--spacing-3);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.modal-link::after {
+  content: '↗';
+  font-size: 0.85em;
+}
+
+.modal-link:hover {
+  text-decoration: underline;
 }
 
 .modal-date {
