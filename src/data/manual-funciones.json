@@ -1,0 +1,174 @@
+[
+  {
+    "id": 1,
+    "title": "Consejo Facultativo de la Facultad (H.C.F)",
+    "unit": "Consejo Facultativo de la Facultad de Ciencias y Tecnología",
+    "dependency": "Ninguna por ser la máxima autoridad de la facultad",
+    "objective": "Tiene la finalidad de promover, legislar y fiscalizar el accionar del normal desenvolvimiento académico y administrativo de la Facultad de Ciencias y Tecnología.",
+    "authority": "Sobre toda la estructura orgánica de la Facultad de Ciencias y Tecnología.",
+    "functions": [
+      "Dictar sus reglamentos, resoluciones y otros instrumentos normativos universitarios.",
+      "Formular las políticas generales de la Facultad y fijar los objetivos de los planes y programas a realizarse.",
+      "Aprobar planes, programas proyectos para el mejoramiento de la enseñanza – aprendizaje.",
+      "Elaborar el perfil del presupuesto de requerimientos de la Facultad y poner en consideración H. Consejo Universitario.",
+      "Aprobar el plan de estudio con sus respectivos horarios y distribución de aulas.",
+      "Aprobar los convenios y contratos que se suscriben para el interés de la Facultad.",
+      "Automatizar la adquisición de bienes.",
+      "Aprobar los reglamentos internos de la Facultad",
+      "Ejercer y cumplir con las demás atribuciones o responsabilidades que señale el Estatuto Orgánico de la Universidad y reglamentos.",
+      "Aprobar los nombramientos de las autoridades académicas, administrativas, proyectos y convenios de la Facultad de Ciencias y Tecnología.",
+      "Aprobar la carga horaria de Docentes",
+      "Aprobar la convocatoria para el claustro facultativo y Directores de Carrera.",
+      "Aprobar la elaboración del POA y SOA de la Facultad.",
+      "Aprobar la participación de la facultad en fundaciones, asociaciones y organizaciones estatales y privadas.",
+      "Aprobar adquisiciones de acuerdo al Reglamento específico de las normas vigentes."
+    ],
+    "responsibilities": [
+      "Sobre todas las acciones enmarcada dentro la C.P.E., el Estatuto Orgánico de la UMSS y con todas las disposiciones legales vigentes."
+    ],
+    "relations": "Con toda la estructura orgánica de la Facultad de Ciencias y Tecnología."
+  },
+  {
+    "id": 2,
+    "title": "Decano",
+    "position": "Decano de la Facultad de Ciencias y Tecnología",
+    "dependency": "Asamblea y Consejo Facultativo",
+    "dependents": "Toda la estructura orgánica de la Facultad de Ciencias y Tecnología",
+    "objective": "Representar a la Facultad de Ciencia y Tecnología en todos sus actos, teniendo a su cargo la dirección, promoción y supervisión del desarrollo académico – administrativo en base al Estatuto Orgánico de la U.M.S.S. y disposiciones legales, reglamentos y resoluciones o otras normativas que regulen las relaciones académicas – administrativas y estudiantiles.",
+    "functions": [
+      "Desarrollar una adecuada planificación en función de las posibilidades y alternativas, políticas económicas, sociales, directrices, programas y medios adecuados para lograr una eficiente prestación académica – administrativa en beneficio de la comunidad.",
+      "Convocar al Consejo Facultativo, presidirlo y ejecutar sus resoluciones.",
+      "Conocer y evaluar el cumplimiento de la programación de operaciones, presupuesto y planes operativos al final de cada gestión.",
+      "Convocar al consejo Facultativo para su aprobación del POA, SOA y presupuesto",
+      "Proponer modificaciones en los planes de estudio y métodos de enseñanza previo informe de directores y jefes de departamento de las distintas carreras de la Facultad.",
+      "Coordinar y armonizar la acción de los diversos sistemas administrativos, unidades de servicio y actividades orientadas al logro de la metas deseadas.",
+      "Asistir al Congreso y Consejo Universitario con derecho a voz y a voto.",
+      "Cumplir y hacer cumplir la ejecución de las decisiones emanadas por el Consejo Universitario, las resoluciones, acuerdos y reglamentos universitarios que se emitan.",
+      "Elevar informes periódicos al Consejo Facultativo sobre la marcha de los diferentes programas y proyectos a ser ejecutados en beneficio de la Facultad y de la Institución para su respectiva evaluación, revisión, emisión de sugerencias y modificaciones.",
+      "Presidir los tribunales de exámenes de graduación y defensa de trabajos de investigación y/o defensa de tesis de grado.",
+      "Presentar proyecto de resoluciones a consideración del Consejo Facultativo con la respectiva fundamentación",
+      "Conceder licencia y permisos al sector académico y administrativo según reglamento de personal.",
+      "Presidir los claustros facultativos",
+      "Promover ante el Consejo Facultativo el nombramiento de docentes, dependientes y administrativos de acuerdo con el Reglamento.",
+      "Imponer sanciones a los funcionarios administrativos",
+      "Cumplir con todas las resoluciones del Consejo Facultativo",
+      "Determinar la publicación de los trabajos de investigación de la Facultad de Ciencias y Tecnología",
+      "Suscribir junto al rector contratos o convenios para programas y proyectos que sean de beneficio para la Facultad y la Institución."
+    ],
+    "responsibilities": [
+      "Sobre la planificación de mecanismos que permitan lograr una eficiente labor académica administrativa.",
+      "Sobre la convocatoria al Consejo Facultativo y presidirla.",
+      "Sobre el conocimiento y evaluación del cumplimiento de la programación de operaciones, programas, presupuesto y planes operativos al final de cada gestión.",
+      "Sobre la aprobación del POA, SOA y presupuesto",
+      "Sobre la coordinación de acciones diversas para el funcionamiento de los sistemas administrativos, actividades, unidades de servicio a fin de alcanzar las metas y fines.",
+      "Sobre el cumplimiento y ejecución de las decisiones emanadas por el Consejo Universitario que se emitan.",
+      "Sobre los informes a ser presentados al Consejo Universitario",
+      "Sobre el nombramiento de docentes según reglamentos de la U.M.S.S.",
+      "Sobre la publicación de trabajos de investigación",
+      "Sobre los tribunales para las defensas de tesis y trabajos de investigación.",
+      "Sobre la firma de certificados de notas"
+    ],
+    "requirements": {
+      "education": "Título en Provisión Nacional de Ingeniero",
+      "experience": "Cinco años de docente titular"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Director Académico",
+    "position": "Director Académico",
+    "dependency": "Decano",
+    "dependents": "Jefes de Departamento, Directores de Carrera, Instituto de Investigación",
+    "objective": "Dirigir, organizar, coordinar y controlar los mecanismos de comunicación interna y externa entre el personal académico – administrativo, sirviendo de apoyo al Decano en las actividades del proceso enseñanza – aprendizaje e investigación científica de la Facultad de Ciencias y Tecnología.",
+    "functions": [
+      "Dirigir, coordinar y supervisar las actividades de enseñanza – aprendizaje, investigación científica, tecnológica y de interacción universitaria.",
+      "Supervisar, controlar y participar en la preparación de disposiciones, resoluciones y otros documentos universitarios que emanen periódicamente.",
+      "Responsable de la comisión académica de la Facultad, velando el normal funcionamiento de los diferentes departamentos y el normal desenvolvimiento de las actividades académicas.",
+      "Redactar las instrucciones emitidas que imparten las autoridades para el personal académico – administrativo velando por su cumplimiento.",
+      "Asistir a las sesiones del Consejo Facultativo.",
+      "Responsable del seguimiento académico y del calendario académico para su cumplimiento según cronograma aprobado por el Consejo Facultativo.",
+      "Cumplir y hacer cumplir el Estatuto Orgánico de la Universidad, reglamentos internos y disposiciones legales para la contratación y evaluación de los docentes",
+      "Resolver todos los problemas generados en la Facultad del sector estudiantil y docente referente al área académica.",
+      "Dirigir y coordinar con los directores de Carrera, Jefes de Departamento, las actividades diseñadas en el campo académico.",
+      "Reemplazar al decanato en caso de ausencia del mismo.",
+      "Revisar y preparar la documentación que se somete a consideración del Consejo Facultativo y la Comisión Académica.",
+      "Atender las consultas de docentes y estudiantes y personal administrativo que acude sobre aspectos académicos – administrativos.",
+      "Sugerir medidas para mejorar el servicio a los estudiantes y elaborar informes ante la máxima autoridad.",
+      "Revisar los documentos y la correspondencia recogida por el personal subalterno.",
+      "Preservar los bienes asignados a su cargo para el cumplimiento específico de sus funciones.",
+      "Participar en la formulación de la programación de operaciones y requerimientos presupuestarios de cada gestión.",
+      "Comunicar a su inmediato superior y a requerimiento de este sobre las actividades realizadas en el área específica de sus funciones."
+    ],
+    "responsibilities": [
+      "Sobre la recepción y distribución de documentos oficiales de la Facultad y de la Institución.",
+      "Sobre el apoyo al Decano en los aspectos de su competencia.",
+      "Sobre la supervisión, control y participación en la preparación de disposiciones, resoluciones y otros documentos universitarios.",
+      "Sobre la atención al personal de su gestión que le encomienda las autoridades.",
+      "Sobre la revisión y preparación de la documentación que se somete a consideración del Decano y Consejo Facultativo.",
+      "Sobre la ejecución de mecanismos, normas, reglamentos para la evaluación de docentes.",
+      "Sobre los informes de aprobación y rechazo de traspasos de universidades.",
+      "Sobre el calendario académico y su cumplimiento.",
+      "Sobre el cumplimiento de las tareas que le encomienda el Consejo Facultativo y Decano.",
+      "Sobre la dirección, coordinación y supervisión de las actividades de enseñanza – aprendizaje.",
+      "Sobre la responsabilidad del normal funcionamiento de la comisión académica.",
+      "Sobre la asistencia y participación en las reuniones del Consejo Facultativo."
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Jefe de Departamento",
+    "position": "Jefe de Departamento",
+    "dependency": "Director de Carrera",
+    "objective": "Gestionar y administrar óptimamente el departamento para la formación de profesionales con excelencia, garantizar el normal desarrollo de las actividades académicas y proporcionar servicios académicos.",
+    "functions": [
+      "Cumplir y hacer cumplir el Estatuto Orgánico de la Universidad, reglamentos y resoluciones del consejo facultativo.",
+      "Elaborar el POA, SOA y presupuestos.",
+      "Administrar y mejorar los equipos y materiales del laboratorio.",
+      "Planear y desarrollar un modelo administrativo y de gestión descentralizada.",
+      "Representar al departamento en todas las actividades administrativas tanto internas como externas.",
+      "Fortalecer la formación de recursos humanos para la investigación y el mejoramiento de la docencia.",
+      "Evaluar y hacer seguimiento de las actividades de investigación e interacción social.",
+      "Apoyar en el proceso de auto evaluación y acreditación de las carreras.",
+      "Coordinar y ejecutar cursos de posgrado y de maestrías."
+    ],
+    "requirements": {
+      "education": "Profesional con diploma académico y título en provisión nacional",
+      "skills": "Alta capacidad de análisis y síntesis. Excelente relación interpersonal.",
+      "knowledge": "Manejo de los diferentes sistemas de administración. Cursos sobre relaciones humanas. Manejo de paquetes computacionales."
+    }
+  },
+  {
+    "id": 5,
+    "title": "Director de Carrera",
+    "position": "Director de Carrera",
+    "dependency": "Director Académico",
+    "dependents": "Personal de Apoyo Administrativo Docente",
+    "objective": "Dirigir, organizar, coordinar y controlar las diferentes actividades del proceso enseñanza aprendizaje en las diferentes carreras de la facultad.",
+    "functions": [
+      "Cumplir y hacer cumplir el Estatuto Orgánico de la Universidad, reglamentos y resoluciones de la Facultad y de la Carrera.",
+      "Sugerir modificaciones en los planes de estudio y métodos de enseñanza al Consejo de Carrera.",
+      "Dirigir y representar al Consejo de Carrera",
+      "Elaborar el POA, SOA y presupuesto",
+      "Integrar la comisión académica de la Facultad con derecho a voz y voto.",
+      "Convocar a Consejo de Carrera y dirigirlo",
+      "Presidir los tribunales de Exámenes de Grado en representación del Decano.",
+      "Presentar informes al decano y al Consejo Facultativo al término de cada período académico.",
+      "Coordinar las actividades académicas de la Carrera con los responsables de la Unidad académica de las que recibe servicios y a las que presta servicios."
+    ],
+    "responsibilities": [
+      "Sobre la representación ante el Consejo de Carrera.",
+      "Sobre el cumplimiento del Estatuto Orgánico de la U.M.S.S.",
+      "Sobre las modificaciones de los planes de estudio.",
+      "Sobre la convocatoria al Consejo de Carrera.",
+      "Sobre la elaboración del POA, SOA y presupuesto.",
+      "Sobre la prestación de informes al Decano y Consejo Facultativo.",
+      "Sobre la coordinación de las actividades académicas.",
+      "Sobre el cuidado de los bienes asignados a la Universidad."
+    ],
+    "requirements": {
+      "education": "Título en provisión Nacional en Licenciatura o Ingeniería. Ser docente Titular.",
+      "experience": "Tener más de cinco años de docencia titular",
+      "knowledge": "Manejo de los diferentes sistemas de administración. Cursos sobre relaciones humanas. Manejo de paquetes computacionales."
+    }
+  }
+]

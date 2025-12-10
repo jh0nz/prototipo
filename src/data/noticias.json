@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "CONVOCATORIA EXAMEN DE INGRESO SEMESTRE 1-2026",
+    "date": "2025-12-09",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/examen-de-ingreso-fcyt-1-2026-1024x726.jpg",
+    "tags": ["#Admisión", "#Nuevo"],
+    "cta": "Ver Convocatoria",
+    "ctaLink": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/ConvocatoriaExamenIngreso-1-2026.pdf",
+    "excerpt": "Inscripciones abiertas para el examen de ingreso del primer semestre 2026. Consulta requisitos, fechas y lugares de inscripción."
+  },
+  {
+    "id": 2,
+    "title": "FORO LATINOAMERICANO DE INVESTIGACIÓN UNIVERSITARIA",
+    "date": "2025-11-18",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-18-a-las-15.37.31_e0c49fbe-770x1024.jpg",
+    "tags": ["#Investigación", "#Eventos"],
+    "cta": "Más Información",
+    "ctaLink": "#",
+    "excerpt": "Participa en el evento más importante de investigación universitaria en Latinoamérica. Ponencias, talleres y networking."
+  },
+  {
+    "id": 3,
+    "title": "ACTO DE POSESIÓN DELEGADOS DOCENTES Y ESTUDIANTES",
+    "date": "2025-11-13",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-13-a-las-15.33.14_46457da6-1024x724.jpg",
+    "tags": ["#Institucional", "#Comunidad"],
+    "cta": "Ver Galería",
+    "ctaLink": "#",
+    "excerpt": "Ceremonia de posesión de los nuevos delegados docentes y estudiantiles para la gestión 2025-2026."
+  }
+]

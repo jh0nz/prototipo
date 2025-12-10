@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Ing. Julio Marcelo Villarroel Novillo",
+    "role": "Decano",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/05/Decano.png",
+    "email": "decanato@fcyt.umss.edu.bo"
+  },
+  {
+    "id": 2,
+    "name": "Ing. Javier Ricardo Gonzales Rojas",
+    "role": "Director Académico",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/05/Director-Academico.png",
+    "email": "academica@fcyt.umss.edu.bo"
+  },
+  {
+    "id": 3,
+    "name": "M.Sc. Jazmín Rocabado Quiroga",
+    "role": "Jefe de Departamento de Posgrado",
+    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Jazmin-Rocabado-Quiroga.jpg",
+    "email": "postgrado@fcyt.umss.edu.bo"
+  },
+  {
+    "id": 4,
+    "name": "Ing. Rodrigo Echeverria Herrera",
+    "role": "Director de Investigación",
+    "image": "",
+    "email": "investigacion@fcyt.umss.edu.bo"
+  }
+]

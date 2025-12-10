@@ -18,7 +18,15 @@
           >
             <div class="news-card">
               <div class="news-card__image-wrapper">
+                <iframe 
+                  v-if="news.id === 1"
+                  :src="`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`"
+                  class="news-card__pdf-preview"
+                  title="Vista previa del PDF"
+                  scrolling="no"
+                ></iframe>
                 <img 
+                  v-else
                   :src="news.image" 
                   :alt="news.title"
                   class="news-card__image"
@@ -48,7 +56,21 @@
                 </time>
                 <h2 class="news-card__title">{{ news.title }}</h2>
                 <p v-if="news.excerpt" class="news-card__excerpt">{{ news.excerpt }}</p>
-                <a :href="news.ctaLink" class="btn btn-primary btn-lg">
+                <button 
+                  v-if="news.id === 1"
+                  @click="openPdfPreview"
+                  class="btn btn-primary btn-lg"
+                >
+                  {{ news.cta }}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                </button>
+                <a 
+                  v-else
+                  :href="news.ctaLink" 
+                  class="btn btn-primary btn-lg"
+                >
                   {{ news.cta }}
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"/>
@@ -106,45 +128,71 @@
         </div>
       </div>
     </div>
+
+    <!-- PDF Preview Modal -->
+    <Teleport to="body">
+      <div 
+        v-if="showPdfModal" 
+        class="pdf-modal"
+        @click="closePdfPreview"
+      >
+        <div class="pdf-modal__content" @click.stop>
+          <button 
+            class="pdf-modal__close"
+            @click="closePdfPreview"
+            aria-label="Cerrar vista previa"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+          <div class="pdf-modal__header">
+            <h3>Convocatoria Examen de Ingreso 1-2026</h3>
+            <a 
+              :href="pdfUrl" 
+              target="_blank"
+              class="btn btn-sm"
+              download
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Descargar PDF
+            </a>
+          </div>
+          <iframe 
+            :src="pdfUrl"
+            class="pdf-modal__iframe"
+            title="Vista previa del PDF"
+          ></iframe>
+        </div>
+      </div>
+    </Teleport>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import type { NewsItem } from '@/types'
+import noticiasData from '@/data/noticias.json'
 
-const newsItems: NewsItem[] = [
-  {
-    id: 1,
-    title: 'CONVOCATORIA EXAMEN DE INGRESO SEMESTRE 1-2026',
-    date: '2025-12-09',
-    image: 'https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/examen-de-ingreso-fcyt-1-2026-1024x726.jpg',
-    tags: ['#Admisión', '#Nuevo'],
-    cta: 'Ver Convocatoria',
-    ctaLink: '/admision',
-    excerpt: 'Inscripciones abiertas para el examen de ingreso del primer semestre 2026. Consulta requisitos, fechas y lugares de inscripción.'
-  },
-  {
-    id: 2,
-    title: 'FORO LATINOAMERICANO DE INVESTIGACIÓN UNIVERSITARIA',
-    date: '2025-11-18',
-    image: 'https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-18-a-las-15.37.31_e0c49fbe-770x1024.jpg',
-    tags: ['#Investigación', '#Eventos'],
-    cta: 'Más Información',
-    ctaLink: '#',
-    excerpt: 'Participa en el evento más importante de investigación universitaria en Latinoamérica. Ponencias, talleres y networking.'
-  },
-  {
-    id: 3,
-    title: 'ACTO DE POSESIÓN DELEGADOS DOCENTES Y ESTUDIANTES',
-    date: '2025-11-13',
-    image: 'https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-13-a-las-15.33.14_46457da6-1024x724.jpg',
-    tags: ['#Institucional', '#Comunidad'],
-    cta: 'Ver Galería',
-    ctaLink: '#',
-    excerpt: 'Ceremonia de posesión de los nuevos delegados docentes y estudiantiles para la gestión 2025-2026.'
-  }
-]
+const showPdfModal = ref(false)
+const pdfUrl = 'https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/ConvocatoriaExamenIngreso-1-2026.pdf'
+
+function openPdfPreview() {
+  showPdfModal.value = true
+  document.body.style.overflow = 'hidden'
+}
+
+function closePdfPreview() {
+  showPdfModal.value = false
+  document.body.style.overflow = ''
+}
+
+const newsItems: NewsItem[] = noticiasData as NewsItem[]
 
 const currentSlide = ref(0)
 const autoplayInterval = ref<number | null>(null)
@@ -270,6 +318,16 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.news-card__pdf-preview {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none;
+  overflow: hidden;
+  transform: scale(1.1);
+  transform-origin: top center;
 }
 
 .news-card__overlay {
@@ -437,5 +495,141 @@ onUnmounted(() => {
   height: 100%;
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   transition: width 0.05s linear;
+}
+
+/* PDF Modal */
+.pdf-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--spacing-4);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pdf-modal__content {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--shadow-2xl);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.pdf-modal__close {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--color-neutral-dark);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+}
+
+.pdf-modal__close:hover {
+  background-color: var(--color-danger);
+  color: white;
+  transform: scale(1.1);
+}
+
+.pdf-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-6);
+  border-bottom: 1px solid var(--color-neutral-light);
+  gap: var(--spacing-4);
+}
+
+.pdf-modal__header h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-dark);
+  margin: 0;
+  flex: 1;
+}
+
+.pdf-modal__header .btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  white-space: nowrap;
+}
+
+.pdf-modal__iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+@media (max-width: 767px) {
+  .pdf-modal {
+    padding: 0;
+  }
+
+  .pdf-modal__content {
+    height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .pdf-modal__header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-4);
+  }
+
+  .pdf-modal__header h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .pdf-modal__close {
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+  }
+
+  .pdf-modal__iframe {
+    border-radius: 0;
+  }
 }
 </style>
