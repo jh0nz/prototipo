@@ -7,17 +7,7 @@
     <div class="breadcrumb__container container">
       <!-- Mobile: Mostrar padre → actual (máximo 2 niveles) -->
       <div class="breadcrumb__mobile hide-desktop">
-        <button 
-          v-if="sections.length > 0"
-          class="breadcrumb__toggle"
-          @click="isExpanded = !isExpanded"
-          :aria-expanded="isExpanded"
-          aria-label="Mostrar secciones"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12h18M3 6h18M3 18h18"/>
-          </svg>
-        </button>
+
         
         <div class="breadcrumb__path">
           <!-- Mostrar padre si existe -->
@@ -26,6 +16,7 @@
               v-if="mobileBreadcrumbs[0]?.path"
               :to="mobileBreadcrumbs[0].path"
               class="breadcrumb__parent"
+              @click="isExpanded = false"
             >
               {{ mobileBreadcrumbs[0]?.label }}
             </RouterLink>
@@ -38,10 +29,17 @@
             </svg>
           </template>
           
-          <!-- Actual (siempre visible) -->
-          <span class="breadcrumb__current-mobile">
+          <!-- Actual (siempre visible - click para expandir) -->
+          <button 
+            class="breadcrumb__current-mobile btn-reset"
+            @click="isExpanded = !isExpanded"
+            aria-label="Cambiar sección"
+          >
             {{ mobileBreadcrumbs[mobileBreadcrumbs.length - 1]?.label }}
-          </span>
+            <svg class="breadcrumb__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -66,6 +64,27 @@
           >
             {{ item.label }}
           </button>
+          <button
+            v-else-if="sections.length > 0 && index === breadcrumbs.length - 1"
+            class="breadcrumb__dropdown-trigger"
+            @click="isExpanded = !isExpanded"
+            aria-label="Cambiar sección"
+            :aria-expanded="isExpanded"
+          >
+            {{ item.label }}
+            <svg 
+              class="breadcrumb__chevron" 
+              :class="{ 'breadcrumb__chevron--expanded': isExpanded }"
+              width="14" 
+              height="14" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2"
+            >
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
           <span 
             v-else
             class="breadcrumb__current-text"
@@ -89,9 +108,9 @@
         </li>
       </ol>
 
-      <!-- Sections Dropdown (Mobile) -->
+      <!-- Sections Dropdown (Mobile & Desktop) -->
       <Transition name="slide-down">
-        <div v-if="isExpanded && sections.length > 0" class="breadcrumb__sections hide-desktop">
+        <div v-if="isExpanded && sections.length > 0" class="breadcrumb__sections">
           <button
             v-for="section in sections"
             :key="section.id"
@@ -99,8 +118,10 @@
             class="breadcrumb__section"
             :class="{ 'breadcrumb__section--active': activeSection === section.id }"
           >
-            <span class="breadcrumb__section-dot"></span>
             {{ section.label }}
+            <svg v-if="activeSection === section.id" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: auto;">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
           </button>
         </div>
       </Transition>
@@ -144,12 +165,23 @@ function handleSectionClick(sectionId: string) {
   transition: all var(--transition-normal);
 }
 
+/* Desktop default (Compact) */
 .breadcrumb__container {
-  min-height: 36px;
+  min-height: 22px;
   display: flex;
   align-items: center;
-  padding-top: var(--spacing-1);
-  padding-bottom: var(--spacing-1);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  position: relative; /* Anchor for dropdown */
+}
+
+@media (max-width: 767px) {
+  /* Mobile override (Touch friendly) */
+  .breadcrumb__container {
+    min-height: 40px !important;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
 }
 
 /* Desktop Breadcrumb */
@@ -169,21 +201,22 @@ function handleSectionClick(sectionId: string) {
 }
 
 .breadcrumb__link {
-  font-size: var(--font-size-sm);
+  font-size: 13px; /* Slightly smaller than sm (14px) */
   color: var(--color-secondary);
   text-decoration: none;
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: 2px 8px; /* Larger click box */
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
   background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
+  margin: 0 -2px; /* Slight margin offset to compensate padding */
 }
 
 .breadcrumb__link:hover {
   color: var(--color-primary);
-  background-color: var(--color-primary-light);
+  background-color: var(--color-neutral-light); /* Box effect on hover */
   text-decoration: none;
 }
 
@@ -192,15 +225,52 @@ function handleSectionClick(sectionId: string) {
 }
 
 .breadcrumb__current-text {
-  font-size: var(--font-size-sm);
+  font-size: 13px;
   color: var(--color-neutral-dark);
   font-weight: var(--font-weight-semibold);
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: 0 var(--spacing-1);
 }
 
-.breadcrumb__separator {
-  color: var(--color-neutral);
+.breadcrumb__dropdown-trigger {
+  font-size: 13px;
+  color: var(--color-neutral-dark);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+  margin: 0 -4px; /* Align box */
+}
+
+.breadcrumb__dropdown-trigger:hover {
+  background-color: var(--color-neutral-light);
+  color: var(--color-primary);
+}
+
+.breadcrumb__dropdown-trigger[aria-expanded="true"] {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.breadcrumb__chevron {
+  opacity: 0.5;
+  transition: transform var(--transition-normal);
   flex-shrink: 0;
+}
+
+.breadcrumb__dropdown-trigger:hover .breadcrumb__chevron,
+.breadcrumb__dropdown-trigger[aria-expanded="true"] .breadcrumb__chevron {
+  opacity: 1;
+}
+
+.breadcrumb__chevron--expanded {
+  transform: rotate(180deg);
 }
 
 /* Mobile Breadcrumb */
@@ -212,24 +282,7 @@ function handleSectionClick(sectionId: string) {
   padding: 0;
 }
 
-.breadcrumb__toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: none;
-  border: none;
-  color: var(--color-secondary);
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
 
-.breadcrumb__toggle:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-}
 
 .breadcrumb__path {
   display: flex;
@@ -238,6 +291,37 @@ function handleSectionClick(sectionId: string) {
   font-size: var(--font-size-xs);
   flex: 1;
   min-width: 0;
+}
+
+.breadcrumb__current-mobile {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px; /* Touch target visual box */
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.breadcrumb__current-mobile:hover,
+.breadcrumb__current-mobile:active {
+  background-color: var(--color-neutral-light);
+}
+
+.breadcrumb__chevron {
+  opacity: 0.5;
+  flex-shrink: 0;
 }
 
 .breadcrumb__parent {
@@ -249,25 +333,14 @@ function handleSectionClick(sectionId: string) {
   text-overflow: ellipsis;
   flex-shrink: 1;
   min-width: 0;
+  padding: 4px 8px; /* Larger touch target */
+  margin: 0 -4px; /* Offset margin to align text visually but keep box */
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
 }
-
 .breadcrumb__parent:hover {
-  text-decoration: underline;
-}
-
-.breadcrumb__arrow {
-  color: var(--color-neutral);
-  flex-shrink: 0;
-}
-
-.breadcrumb__current-mobile {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-  min-width: 0;
+  background-color: var(--color-secondary-light);
+  text-decoration: none;
 }
 
 /* Sections Dropdown */
@@ -275,13 +348,26 @@ function handleSectionClick(sectionId: string) {
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
+  /* right: 0; Removed to allow auto width in desktop */
+  min-width: 240px;
+  max-width: 100%;
   background-color: var(--color-surface);
-  border-bottom: 1px solid var(--color-neutral-light);
+  border: 1px solid var(--color-neutral-light);
+  border-top: none;
   box-shadow: var(--shadow-lg);
   max-height: 60vh;
   overflow-y: auto;
   z-index: var(--z-dropdown);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+@media (max-width: 767px) {
+  .breadcrumb__sections {
+    right: 0; /* Full width on mobile */
+    min-width: auto;
+    border-left: none;
+    border-right: none;
+  }
 }
 
 .breadcrumb__section {
@@ -312,18 +398,7 @@ function handleSectionClick(sectionId: string) {
   font-weight: var(--font-weight-semibold);
 }
 
-.breadcrumb__section-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background-color: currentColor;
-  opacity: 0.5;
-  flex-shrink: 0;
-}
-
-.breadcrumb__section--active .breadcrumb__section-dot {
-  opacity: 1;
-}
+/* Dot styles removed */
 
 /* Transitions */
 .slide-down-enter-active,
@@ -342,9 +417,6 @@ function handleSectionClick(sectionId: string) {
   .breadcrumb {
     top: 64px;
   }
-  
-  .breadcrumb__container {
-    min-height: 36px;
-  }
 }
+
 </style>

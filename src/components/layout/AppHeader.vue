@@ -5,11 +5,7 @@
       <RouterLink to="/" class="header__logo" aria-label="FCyT UMSS - Ir al inicio">
         <div class="logo">
           <div class="logo__icon">
-            <span class="logo__icon-text">FCyT</span>
-          </div>
-          <div class="logo__text hide-mobile">
-            <span class="logo__title">Facultad de Ciencias y Tecnología</span>
-            <span class="logo__subtitle">UMSS</span>
+            <img src="@/assets/fcyt.png" alt="Facultad de Ciencias y Tecnología - UMSS" class="logo__image" />
           </div>
         </div>
       </RouterLink>
@@ -180,21 +176,24 @@ onUnmounted(() => {
 }
 
 .logo__icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  border-radius: var(--radius-md);
+  width: auto;
+  height: 52px; /* Aumentado para mejor visibilidad dentro del header de 64px */
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
 }
 
-.logo__icon-text {
-  color: white;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.5px;
+.logo__image {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  max-width: 240px; /* Límite de ancho para no ocupar todo el header */
+}
+
+/* En mobile, reducir un poco si es necesario */
+@media (max-width: 767px) {
+  .logo__image {
+    max-width: 200px;
+  }
 }
 
 .logo__text {

@@ -73,7 +73,7 @@ export function useBreadcrumb() {
     function navigateToSection(sectionId: string) {
         const section = sections.value.find(s => s.id === sectionId)
         if (section?.element) {
-            const headerOffset = 110 // Header (64px) + Breadcrumb (46px)
+            const headerOffset = 90 // Header (64px) + Breadcrumb (28px)
             const elementPosition = section.element.getBoundingClientRect().top
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset
 

@@ -292,7 +292,7 @@ function toggleAccordion(index: number) {
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 110px; /* Header (64px) + Breadcrumb (46px) */
+  scroll-padding-top: 90px; /* Header (64px) + Breadcrumb (24px+padding) */
 }
 
 /* Page Header */
