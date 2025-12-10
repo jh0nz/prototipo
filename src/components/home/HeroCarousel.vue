@@ -1,12 +1,11 @@
 <template>
   <section class="hero" aria-label="Noticias destacadas">
-    <div class="container">
-      <div class="carousel" role="region" aria-roledescription="carrusel" aria-label="Noticias principales">
-        <!-- Carousel Track -->
-        <div 
-          class="carousel__track" 
-          :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
-        >
+    <div class="carousel" role="region" aria-roledescription="carrusel" aria-label="Noticias principales">
+      <!-- Carousel Track -->
+      <div 
+        class="carousel__track" 
+        :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
+      >
           <article 
             v-for="(news, index) in newsItems" 
             :key="news.id"
@@ -127,8 +126,6 @@
           ></div>
         </div>
       </div>
-    </div>
-
     <!-- PDF Preview Modal -->
     <Teleport to="body">
       <div 
@@ -274,8 +271,8 @@ onUnmounted(() => {
 
 <style scoped>
 .hero {
-  padding: var(--spacing-8) 0;
-  background: linear-gradient(135deg, var(--color-surface-variant) 0%, var(--color-surface) 100%);
+  /* Removed padding and background to fit in grid */
+  height: 100%;
 }
 
 .carousel {

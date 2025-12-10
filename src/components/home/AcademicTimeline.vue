@@ -1,17 +1,27 @@
+```html
 <template>
   <section id="calendar" class="weekly-calendar section" aria-label="Calendario Semanal">
-    <div class="container">
+    <div class="calendar-content">
       <div class="calendar-header">
         <h2 class="section-title">Agenda Semanal</h2>
         <div class="calendar-controls">
+          <RouterLink to="/calendario" class="btn-icon-link" title="Ver Calendario Mensual">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </RouterLink>
+          <div class="divider-vertical"></div>
           <button @click="prevWeek" class="btn-control" aria-label="Semana anterior">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="15 18 9 12 15 6"/>
             </svg>
           </button>
-          <span class="current-month">{{ currentMonthName }} {{ currentYear }}</span>
+          <span class="current-month">{{ currentMonthName }}</span>
           <button @click="nextWeek" class="btn-control" aria-label="Semana siguiente">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
@@ -34,7 +44,6 @@
             <span class="day-name">{{ day.dayName }}</span>
             <div class="day-number-wrapper">
               <span class="day-number">{{ day.dayNumber }}</span>
-              <span v-if="day.isToday" class="day-today-label">HOY</span>
             </div>
           </div>
 
@@ -42,53 +51,20 @@
             <div 
               v-for="event in getEventsForDay(day.dateStr)" 
               :key="event.id"
-              class="event-card"
-              :class="{ 
-                'event-card--past': day.isPast,
-                'event-card--urgent': event.isUrgent || (isUpcoming(day.dateStr) && !day.isPast && event.type !== 'news'),
-                'event-card--news': event.type === 'news'
-              }"
+              class="event-dot"
+              :class="`event-dot--${event.type}`"
+              :title="event.title"
               @click="openEventModal(event)"
-            >
-              <div class="event-card__indicator" :class="`indicator--${event.type}`"></div>
-              <div class="event-card__content">
-                <div class="event-card__header">
-                  <span class="event-time" v-if="event.time">{{ event.time }}</span>
-                  <span class="event-time news-time" v-if="event.type === 'news'">Noticia</span>
-                  <span class="event-badge" v-if="event.type === 'urgent'">!</span>
-                  <span class="event-badge news-badge" v-if="event.type === 'news'">N</span>
-                </div>
-                <h4 class="event-title">{{ event.title }}</h4>
-                <div v-if="isUpcoming(day.dateStr) && !day.isPast && event.type !== 'news'" class="event-alert">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  Próximo
-                </div>
-              </div>
-            </div>
-            
-            <div v-if="getEventsForDay(day.dateStr).length === 0" class="no-events">
-              <span class="no-events-dot">·</span>
-            </div>
+            ></div>
           </div>
         </div>
       </div>
       
-      <!-- Full Calendar Button -->
-      <div class="calendar-footer">
-        <RouterLink to="/calendario" class="btn btn-outline btn-block">
-          Ver Calendario Completo Mensual
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </RouterLink>
+      <!-- Event List for Selected Day or Today (Compact View) -->
+      <div class="events-list-compact">
+         <!-- Showing logic could be sophisticated, but keeping stick to grid request -->
       </div>
+
 
       <!-- Event Modal -->
       <Teleport to="body">
@@ -310,216 +286,141 @@ function formatDateFull(dateStr: string) {
   box-shadow: var(--shadow-sm);
 }
 
-.current-month {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-lg);
-  min-width: 150px;
-  text-align: center;
-  text-transform: capitalize;
+/* ... (previous styles) ... */
+
+.weekly-calendar {
+  background-color: var(--color-surface);
+  height: 100%; /* Fill height in grid */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Calendar Grid */
+.calendar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  margin: 0;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: var(--color-surface-variant);
+  padding: 4px;
+  border-radius: var(--radius-full);
+}
+
+.btn-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-secondary);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-link:hover {
+  background-color: white;
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-neutral);
+  margin: 0 4px;
+  opacity: 0.3;
+}
+
+.current-month {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Updated Grid for Side-by-Side View */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--spacing-2);
+  gap: 2px;
+  background-color: var(--color-neutral-light);
+  border: 1px solid var(--color-neutral-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: var(--spacing-4);
 }
 
 .calendar-day {
-  background-color: var(--color-surface-variant);
-  border-radius: var(--radius-md);
-  min-height: 200px;
-  padding: var(--spacing-2);
-  border: 2px solid transparent;
-  transition: all var(--transition-normal);
+  background-color: white;
+  min-height: 80px; /* Reduced height for compact view */
+  padding: 6px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .calendar-day--today {
-  background-color: white;
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
-  position: relative;
-  z-index: 10;
-  transform: scale(1.02);
-}
-
-.calendar-day--past {
-  opacity: 0.7;
-  background-color: #f8f9fa;
-}
-
-.day-header {
-  text-align: center;
-  margin-bottom: var(--spacing-4);
-  padding: var(--spacing-2) 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background-color: #F0F9FF;
 }
 
 .day-name {
-  display: block;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
+  font-size: 10px;
+  font-weight: bold;
   color: var(--color-secondary);
   margin-bottom: 2px;
-}
-
-.day-number-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .day-number {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-dark);
-  line-height: 1;
-}
-
-.day-today-label {
-  font-size: 10px;
-  background-color: var(--color-primary);
-  color: white;
-  padding: 1px 6px;
-  border-radius: var(--radius-full);
-  margin-top: 4px;
+  font-size: 14px;
   font-weight: bold;
 }
 
+.calendar-day--today .day-number {
+  color: var(--color-primary);
+}
+
+/* Dot Indicators instead of Cards for Compact View */
 .day-events {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2);
-  flex: 1;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
 }
 
-/* Event Card */
-.event-card {
-  background: white;
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-2);
-  box-shadow: var(--shadow-sm);
-  border-left: 3px solid var(--color-primary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  gap: var(--spacing-2);
-}
-
-.indicator--info { border-left-color: var(--color-info); }
-.indicator--warning { border-left-color: var(--color-warning); }
-.indicator--urgent { border-left-color: var(--color-error); }
-.indicator--success { border-left-color: var(--color-success); }
-.indicator--news { border-left-color: #8B5CF6; /* Purple for news */ }
-
-.event-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.event-card--past {
-  filter: grayscale(1);
-  opacity: 0.6;
-}
-
-.event-card--urgent {
-  background-color: #FFF5F5;
-  border-left-color: var(--color-error);
-}
-
-.event-card--news {
-  background-color: #F3F0FF;
-}
-
-.event-card__content {
-  flex: 1;
-  min-width: 0;
-}
-
-.event-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2px;
-}
-
-.event-time {
-  font-size: 10px;
-  color: var(--color-secondary);
-  font-weight: bold;
-}
-
-.news-time {
-  color: #7C3AED;
-}
-
-.event-badge {
-  background: var(--color-error);
-  color: white;
-  width: 14px;
-  height: 14px;
+.event-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.news-badge {
-  background: #8B5CF6;
+.event-dot:hover {
+  transform: scale(1.5);
 }
 
-.event-title {
-  font-size: 11px;
-  font-weight: var(--font-weight-medium);
-  margin: 0;
-  line-height: 1.3;
-  color: var(--color-neutral-dark);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.event-dot--info { background-color: var(--color-info); }
+.event-dot--success { background-color: var(--color-success); }
+.event-dot--warning { background-color: var(--color-warning); }
+.event-dot--urgent { background-color: var(--color-error); }
+.event-dot--news { background-color: #8B5CF6; }
+
+@media (max-width: 1024px) {
+  .weekly-calendar {
+    padding-bottom: 0;
+  }
 }
 
-.event-alert {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  color: var(--color-error);
-  font-weight: bold;
-  margin-top: 4px;
-}
-
-.no-events {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: var(--color-neutral-light);
-}
-
-.no-events-dot {
-  font-size: 24px;
-}
-
-.calendar-footer {
-  margin-top: var(--spacing-8);
-  display: flex;
-  justify-content: center;
-}
-
-.btn-block {
-  width: 100%;
-  max-width: 300px;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 /* Modal Simple */
 .event-modal-overlay {
