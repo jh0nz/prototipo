@@ -4,10 +4,11 @@ export interface NewsItem {
     title: string
     date: string
     image: string
-    tags: string[]
+    tags?: string[]
     cta: string
     ctaLink: string
     excerpt?: string
+    content?: string
 }
 
 // ===== Timeline/Calendar Types =====

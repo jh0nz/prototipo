@@ -17,15 +17,7 @@
           >
             <div class="news-card">
               <div class="news-card__image-wrapper">
-                <iframe 
-                  v-if="news.id === 1"
-                  :src="`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`"
-                  class="news-card__pdf-preview"
-                  title="Vista previa del PDF"
-                  scrolling="no"
-                ></iframe>
                 <img 
-                  v-else
                   :src="news.image" 
                   :alt="news.title"
                   class="news-card__image"
@@ -34,7 +26,6 @@
                 <div class="news-card__overlay"></div>
               </div>
               <div class="news-card__content">
-
                 <time class="news-card__date" :datetime="news.date">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -47,25 +38,14 @@
                 <h2 class="news-card__title">{{ news.title }}</h2>
                 <p v-if="news.excerpt" class="news-card__excerpt">{{ news.excerpt }}</p>
                 <button 
-                  v-if="news.id === 1"
-                  @click="openPdfPreview"
+                  @click="openNewsModal(news)"
                   class="btn btn-primary btn-lg"
                 >
-                  {{ news.cta }}
+                  {{ news.cta || 'Leer más' }}
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"/>
                   </svg>
                 </button>
-                <a 
-                  v-else
-                  :href="news.ctaLink" 
-                  class="btn btn-primary btn-lg"
-                >
-                  {{ news.cta }}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"/>
-                  </svg>
-                </a>
               </div>
             </div>
           </article>
@@ -117,31 +97,67 @@
           ></div>
         </div>
       </div>
-    <!-- PDF Preview Modal -->
+
+    <!-- News Modal (Blog Reader) -->
     <Teleport to="body">
-      <div 
-        v-if="showPdfModal" 
-        class="pdf-modal"
-        @click="closePdfPreview"
-      >
-        <div class="pdf-modal__content" @click.stop>
-          <button 
-            class="pdf-modal__close"
-            @click="closePdfPreview"
-            aria-label="Cerrar vista previa"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-          <iframe 
-            :src="pdfUrl"
-            class="pdf-modal__iframe"
-            title="Vista previa del PDF"
-          ></iframe>
+      <Transition name="fade">
+        <div 
+          v-if="selectedNews" 
+          class="news-modal-overlay"
+          @click="closeNewsModal"
+        >
+          <div class="news-reader" @click.stop>
+            <button 
+              class="news-reader__close"
+              @click="closeNewsModal"
+              aria-label="Cerrar noticia"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            
+            <div class="news-reader__scroll-content">
+              <div class="news-reader__image-wrapper">
+                <img :src="selectedNews.image" :alt="selectedNews.title" />
+              </div>
+
+              <div class="news-reader__header">
+                <span class="news-reader__date">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  {{ formatDate(selectedNews.date) }}
+                </span>
+                <h2 class="news-reader__title">{{ selectedNews.title }}</h2>
+              </div>
+
+              <div class="news-reader__content">
+                <div class="news-body" v-html="selectedNews.content"></div>
+                
+                <div class="news-reader__footer" v-if="selectedNews.ctaLink && selectedNews.ctaLink !== '#'">
+                  <a 
+                    :href="selectedNews.ctaLink"
+                    class="btn btn-outline"
+                    target="_blank"
+                  >
+                    Abrir enlace externo
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </Transition>
     </Teleport>
   </section>
 </template>
@@ -151,26 +167,26 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import type { NewsItem } from '@/types'
 import noticiasData from '@/data/noticias.json'
 
-const showPdfModal = ref(false)
-const pdfUrl = 'https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/ConvocatoriaExamenIngreso-1-2026.pdf'
-
-function openPdfPreview() {
-  showPdfModal.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-function closePdfPreview() {
-  showPdfModal.value = false
-  document.body.style.overflow = ''
-}
-
 const newsItems: NewsItem[] = noticiasData as NewsItem[]
+const selectedNews = ref<NewsItem | null>(null)
+
+function openNewsModal(news: NewsItem) {
+  selectedNews.value = news
+  document.body.style.overflow = 'hidden'
+  stopAutoplay()
+}
+
+function closeNewsModal() {
+  selectedNews.value = null
+  document.body.style.overflow = ''
+  startAutoplay()
+}
 
 const currentSlide = ref(0)
 const progressWidth = ref(0)
 let animationFrame: ReturnType<typeof requestAnimationFrame> | null = null
 let lastTime = 0
-const SLIDE_DURATION = 5000 // 5 seconds
+const SLIDE_DURATION = 5000 
 
 function startAutoplay() {
   stopAutoplay()
@@ -215,7 +231,6 @@ function goToSlide(index: number) {
 function resetTimer() {
   stopAutoplay()
   progressWidth.value = 0
-  // Small delay to ensure visual reset
   setTimeout(() => {
     startAutoplay()
   }, 10)
@@ -230,8 +245,6 @@ function formatDate(dateString: string): string {
   })
 }
 
-// Removed getTagClass as tags are removed
-
 onMounted(() => {
   startAutoplay()
 })
@@ -243,7 +256,6 @@ onUnmounted(() => {
 
 <style scoped>
 .hero {
-  /* Removed padding and background to fit in grid */
   height: 100%;
 }
 
@@ -289,16 +301,6 @@ onUnmounted(() => {
   object-fit: cover;
 }
 
-.news-card__pdf-preview {
-  width: 100%;
-  height: 100%;
-  border: none;
-  pointer-events: none;
-  overflow: hidden;
-  transform: scale(1.1);
-  transform-origin: top center;
-}
-
 .news-card__overlay {
   position: absolute;
   inset: 0;
@@ -322,18 +324,6 @@ onUnmounted(() => {
   .news-card__content {
     padding: var(--spacing-6);
   }
-}
-
-.news-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-4);
-}
-
-.news-card__tags .chip {
-  font-size: var(--font-size-xs);
-  padding: var(--spacing-1) var(--spacing-3);
 }
 
 .news-card__date {
@@ -466,141 +456,217 @@ onUnmounted(() => {
   transition: width 0.05s linear;
 }
 
-/* PDF Modal */
-.pdf-modal {
+/* News Modal Overlay */
+.news-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: var(--spacing-4);
-  animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.pdf-modal__content {
+/* News Reader Card */
+.news-reader {
   background-color: white;
-  border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 1200px;
+  max-width: 800px;
   height: 90vh;
-  display: flex;
-  flex-direction: column;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-2xl);
-  animation: slideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.news-reader__image-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  background-color: #f1f5f9;
 }
 
-.pdf-modal__close {
+.news-reader__image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-reader__close {
   position: absolute;
   top: var(--spacing-4);
   right: var(--spacing-4);
-  width: 25px;
-  height: 25px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  color: var(--color-neutral-dark);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   z-index: 10;
-  transform: translate(65%, -45%);
 }
 
-.pdf-modal__close:hover,
-.pdf-modal__close:focus-visible {
-  background: rgba(200, 16, 46, 0.95);
-  border-color: transparent;
-  transform: translate(65%, -45%) scale(1.03);
+.news-reader__close:hover {
+  transform: scale(1.1);
+  background: #f8fafc;
 }
 
-.pdf-modal__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-6);
-  border-bottom: 1px solid var(--color-neutral-light);
-  gap: var(--spacing-4);
-}
-
-.pdf-modal__header h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-dark);
-  margin: 0;
+.news-reader__scroll-content {
+  overflow-y: auto;
   flex: 1;
 }
 
-.pdf-modal__header .btn {
+.news-reader__header {
+  padding: var(--spacing-8);
+  padding-bottom: var(--spacing-4);
+}
+
+.news-reader__date {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  white-space: nowrap;
+  color: var(--color-secondary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.pdf-modal__iframe {
-  flex: 1;
-  border: none;
-  width: 100%;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+.news-reader__title {
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--color-neutral-dark);
+  margin: 0;
+  font-weight: 800;
 }
 
-@media (max-width: 767px) {
-  .pdf-modal {
-    padding: 0;
-  }
+.news-reader__content {
+  padding: 0 var(--spacing-8) var(--spacing-8) var(--spacing-8);
+}
 
-  .pdf-modal__content {
+.news-body {
+  color: var(--color-neutral-dark);
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+/* Minimalist Content Styling */
+.news-body :deep(h2) {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.news-body :deep(h3) {
+  font-size: 1.25rem;
+  color: var(--color-neutral-dark);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.news-body :deep(p) {
+  margin-bottom: 1.5rem;
+  color: #475569;
+}
+
+.news-body :deep(ul),
+.news-body :deep(ol) {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: #475569;
+}
+
+.news-body :deep(li) {
+  margin-bottom: 0.5rem;
+}
+
+.news-body :deep(blockquote) {
+  border-left: 4px solid var(--color-accent);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-secondary);
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.news-reader__footer {
+  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-neutral-light);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--color-neutral-light);
+  border-radius: var(--radius-md);
+  color: var(--color-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: #f8fafc;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .news-reader {
     height: 100vh;
-    max-width: 100%;
     border-radius: 0;
   }
-
-  .pdf-modal__header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: var(--spacing-4);
+  
+  .news-reader__image-wrapper {
+    height: 250px;
   }
-
-  .pdf-modal__header h3 {
-    font-size: var(--font-size-lg);
+  
+  .news-reader__header {
+    padding: var(--spacing-5);
+    padding-bottom: var(--spacing-2);
   }
-
-  .pdf-modal__close {
-    top: var(--spacing-2);
-    right: var(--spacing-2);
+  
+  .news-reader__title {
+    font-size: 1.5rem;
   }
-
-  .pdf-modal__iframe {
-    border-radius: 0;
+  
+  .news-reader__content {
+    padding: var(--spacing-5);
+  }
+  
+  .news-reader__close {
+    top: var(--spacing-4);
+    right: var(--spacing-4);
   }
 }
 </style>

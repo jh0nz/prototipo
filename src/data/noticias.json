@@ -3,30 +3,30 @@
     "id": 1,
     "title": "CONVOCATORIA EXAMEN DE INGRESO SEMESTRE 1-2026",
     "date": "2025-12-10",
-    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/examen-de-ingreso-fcyt-1-2026-1024x726.jpg",
-    "tags": ["#Admisión", "#Nuevo"],
-    "cta": "Ver Convocatoria",
-    "ctaLink": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/12/ConvocatoriaExamenIngreso-1-2026.pdf",
-    "excerpt": "Inscripciones abiertas para el examen de ingreso del primer semestre 2026. Consulta requisitos, fechas y lugares de inscripción."
+    "image": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "cta": "Leer Convocatoria",
+    "ctaLink": "#",
+    "excerpt": "Se abren oficialmente las inscripciones para el examen de ingreso I/2026. Conoce el cronograma completo y los requisitos.",
+    "content": "<h2>Proceso de Admisión I/2026</h2><p>La Facultad de Ciencias y Tecnología convoca a todos los bachilleres interesados en cursar una de nuestras carreras de ingeniería y licenciatura al Examen de Ingreso para el semestre 1-2026.</p><h3>Fechas Importantes</h3><ul><li><strong>Venta de Valores:</strong> 1 al 15 de Enero de 2026</li><li><strong>Inscripciones Web:</strong> 1 al 18 de Enero de 2026</li><li><strong>Fecha del Examen:</strong> 25 de Enero de 2026</li></ul><h3>Requisitos para la Inscripción</h3><p>Los postulantes deben presentar los siguientes documentos digitalizados en el sistema de admisión:</p><ol><li>Fotocopia de Cédula de Identidad</li><li>Diploma de Bachiller o Libreta de 6to de Secundaria</li><li>Comprobante de pago de matrícula de examen</li></ol><p>El examen evaluará conocimientos en Matemáticas, Física, Química y Razonamiento Lógico. Se recomienda asistir a los cursos de nivelación gratuitos ofrecidos por la facultad.</p><div style='margin-top: 2rem; text-align: center;'><a href='/admision' class='btn btn-primary' style='display: inline-block; text-decoration: none; color: white; padding: 10px 20px; border-radius: 8px; background-color: var(--color-primary); font-weight: bold;'>Ir a Admisiones</a></div>"
   },
   {
     "id": 2,
-    "title": "FORO LATINOAMERICANO DE INVESTIGACIÓN UNIVERSITARIA",
-    "date": "2025-11-18",
-    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-18-a-las-15.37.31_e0c49fbe-770x1024.jpg",
-    "tags": ["#Investigación", "#Eventos"],
-    "cta": "Más Información",
+    "title": "NUEVO LABORATORIO DE INTELIGENCIA ARTIFICIAL",
+    "date": "2025-12-05",
+    "image": "https://images.unsplash.com/photo-1555255707-c07966088b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "cta": "Leer Noticia",
     "ctaLink": "#",
-    "excerpt": "Participa en el evento más importante de investigación universitaria en Latinoamérica. Ponencias, talleres y networking."
+    "excerpt": "Inauguramos el centro de investigación en IA más moderno del país, equipado con tecnología de última generación para estudiantes y docentes.",
+    "content": "<h2>Innovación Tecnológica en la FCyT</h2><p>Con el objetivo de mantenerse a la vanguardia tecnológica, la Facultad de Ciencias y Tecnología ha inaugurado hoy su nuevo <strong>Laboratorio de Inteligencia Artificial y Ciencia de Datos</strong>.</p><h3>Equipamiento de Primera Nivel</h3><p>Gracias a convenios con empresas del sector tecnológico, el laboratorio cuenta con:</p><ul><li>20 estaciones de trabajo con GPUs NVIDIA A100</li><li>Servidor propio para entrenamiento de modelos</li><li>Áreas de trabajo colaborativo</li></ul><p>Este espacio estará abierto a estudiantes de Ingeniería de Sistemas e Informática que deseen desarrollar tesis y proyectos en áreas como:</p><ul><li>Visión por Computadora</li><li>Procesamiento de Lenguaje Natural</li><li>Sistemas Autónomos</li></ul><p>El Decano de la facultad destacó que este es solo el primer paso hacia la transformación digital completa de la malla curricular.</p>"
   },
   {
     "id": 3,
-    "title": "ACTO DE POSESIÓN DELEGADOS DOCENTES Y ESTUDIANTES",
-    "date": "2025-11-13",
-    "image": "https://www.fcyt.umss.edu.bo/wp-content/uploads/2025/11/Imagen-de-WhatsApp-2025-11-13-a-las-15.33.14_46457da6-1024x724.jpg",
-    "tags": ["#Institucional", "#Comunidad"],
-    "cta": "Ver Galería",
+    "title": "FERIA DE CIENCIA Y TECNOLOGÍA EXPOTEC 2025",
+    "date": "2025-11-28",
+    "image": "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "cta": "Ver Detalles",
     "ctaLink": "#",
-    "excerpt": "Ceremonia de posesión de los nuevos delegados docentes y estudiantiles para la gestión 2025-2026."
+    "excerpt": "Estudiantes de todas las carreras presentaron más de 50 proyectos innovadores en la feria anual de ciencia y tecnología.",
+    "content": "<h2>Éxito Rotundo en la EXPOTEC 2025</h2><p>La feria anual de ciencia y tecnología cerró con broche de oro tras tres días de exposiciones intensas. Más de 2000 visitantes pudieron conocer los proyectos desarrollados por nuestros estudiantes.</p><h3>Proyectos Ganadores</h3><p>El jurado calificador tuvo una difícil tarea, pero finalmente galardonó a las siguientes iniciativas:</p><ul><li><strong>Primer Lugar:</strong> Sistema de Riego Automatizado con IoT (Ing. Electrónica)</li><li><strong>Segundo Lugar:</strong> Filtros de Agua a base de Nanopartículas (Ing. Química)</li><li><strong>Tercer Lugar:</strong> App de Gestión de Residuos Urbanos (Ing. Sistemas)</li></ul><blockquote class='quote'>\"El nivel de innovación este año ha superado todas nuestras expectativas. Nuestros estudiantes están resolviendo problemas reales de nuestra sociedad.\" - Ing. María Pérez, Coordinadora de Investigación</blockquote><p>Agradecemos a todos los participantes y patrocinadores que hicieron posible este evento.</p>"
   }
 ]
