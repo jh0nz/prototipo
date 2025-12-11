@@ -168,7 +168,16 @@
 
             <div class="sidebar-info-box">
                <span class="material-symbols-rounded">location_on</span>
-               <p><strong>Lugar:</strong> Edificio Académico 2, FCyT</p>
+               <p>
+                 <strong>Lugar:</strong>
+                 <a
+                   href="https://maps.app.goo.gl/q94NuABAk8gGb2MH9"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                 >
+                   Edificio Académico 2, FCyT
+                 </a>
+               </p>
             </div>
           </div>
         </div>
