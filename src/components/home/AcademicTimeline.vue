@@ -66,7 +66,10 @@
               v-for="event in getEventsForDay(day.dateStr)" 
               :key="event.id"
               class="event-dot"
-              :class="`event-dot--${event.category}`"
+              :class="[
+                `event-dot--${event.category}`,
+                { 'event-dot--past': day.isPast }
+              ]"
               :title="`${event.title} - ${getCategoryLabel(event.category)}`"
             ></div>
           </div>
@@ -444,6 +447,12 @@ function goToNews(id: number) {
 .event-dot--events, .bg-events { background-color: #10B981; }
 .event-dot--holidays, .bg-holidays { background-color: #64748B; }
 .event-dot--news, .bg-news { background-color: #8B5CF6; }
+
+/* Past events - more subtle colors */
+.event-dot--past {
+  opacity: 0.4;
+  filter: grayscale(0.3);
+}
 
 /* Indicator */
 .day-interaction-indicator {

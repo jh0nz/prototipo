@@ -60,20 +60,32 @@
           tabindex="0"
           :aria-label="`Ver eventos del día ${day.dayNumber}`"
         >
-          <div class="day-number">{{ day.dayNumber }}</div>
+          <div class="day-header-cell">
+            <div class="day-number">{{ day.dayNumber }}</div>
+            <div v-if="getEventsForDay(day.dateStr).length > 0" class="event-count">
+              {{ getEventsForDay(day.dateStr).length }}
+            </div>
+          </div>
           
           <div class="day-events-stack">
             <div 
-              v-for="event in getEventsForDay(day.dateStr).slice(0, 3)" 
+              v-for="event in getEventsForDay(day.dateStr).slice(0, 2)" 
               :key="event.id"
               class="event-pill"
-              :class="`event-pill--${event.category}`"
+              :class="[
+                `event-pill--${event.category}`,
+                { 'event-pill--past': !day.isCurrentMonth || (day.dateStr < formatDateStr(new Date())) }
+              ]"
               :title="event.title"
             >
-              {{ event.title }}
+              <span class="event-indicator" :class="[
+                `event-indicator--${event.category}`,
+                { 'event-indicator--past': !day.isCurrentMonth || (day.dateStr < formatDateStr(new Date())) }
+              ]"></span>
+              <span class="event-title">{{ event.title }}</span>
             </div>
-            <div v-if="getEventsForDay(day.dateStr).length > 3" class="event-more">
-              +{{ getEventsForDay(day.dateStr).length - 3 }} más
+            <div v-if="getEventsForDay(day.dateStr).length > 2" class="event-more">
+              +{{ getEventsForDay(day.dateStr).length - 2 }} más
             </div>
           </div>
         </div>
@@ -406,54 +418,68 @@ function goToNews(id: number) {
   font-weight: bold;
   font-size: 13px;
   color: var(--color-secondary);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .month-day {
   background: white;
-  min-height: 120px;
-  padding: var(--spacing-2);
+  height: 110px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .month-day:hover {
   background: #F8FAFC;
-  transform: scale(1.02);
-  z-index: 1;
+  box-shadow: inset 0 0 0 2px var(--color-primary-light);
 }
 
 .month-day--other-month {
   background: #FAFAFA;
   color: #AAA;
   cursor: default;
+  opacity: 0.5;
 }
 
 .month-day--other-month:hover {
   background: #FAFAFA;
-  transform: none;
+  box-shadow: none;
 }
 
 .month-day--today {
   background: #F0F9FF;
-  border: 2px solid var(--color-primary);
+  box-shadow: inset 0 0 0 2px var(--color-primary);
 }
 
 .month-day--has-events {
   font-weight: 500;
 }
 
+.day-header-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  min-height: 24px;
+}
+
 .day-number {
   font-weight: 600;
-  margin-bottom: var(--spacing-2);
+  font-size: 14px;
   width: 24px;
   height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .month-day--today .day-number {
@@ -461,38 +487,144 @@ function goToNews(id: number) {
   color: white;
 }
 
+.event-count {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
 .day-events-stack {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .event-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   text-align: left;
   font-size: 11px;
-  padding: 2px 6px;
+  padding: 4px 6px;
   border-radius: 4px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 1px;
   pointer-events: none;
+  border-left: 3px solid transparent;
+}
+
+.event-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.event-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .event-more {
   font-size: 10px;
   color: #64748B;
   font-weight: 600;
-  padding: 2px 6px;
+  padding: 4px 6px;
   text-align: center;
-  margin-top: 2px;
+  margin-top: auto;
+  background: #F1F5F9;
+  border-radius: 4px;
 }
 
-.event-pill--exams { background: #FEF3C7; color: #92400E; }
-.event-pill--procedures { background: #DBEAFE; color: #1E40AF; }
-.event-pill--news { background: #F3F0FF; color: #7C3AED; }
-.event-pill--holidays { background: #F1F5F9; color: #475569; }
-.event-pill--events { background: #D1FAE5; color: #065F46; }
+.event-pill--exams { 
+  background: #FEF3C7; 
+  color: #92400E; 
+  border-left-color: #F59E0B;
+}
+.event-indicator--exams { background: #F59E0B; }
+
+.event-pill--procedures { 
+  background: #DBEAFE; 
+  color: #1E40AF; 
+  border-left-color: #3B82F6;
+}
+.event-indicator--procedures { background: #3B82F6; }
+
+.event-pill--news { 
+  background: #F3F0FF; 
+  color: #7C3AED; 
+  border-left-color: #9333EA;
+}
+.event-indicator--news { background: #9333EA; }
+
+.event-pill--holidays { 
+  background: #F1F5F9; 
+  color: #475569; 
+  border-left-color: #64748B;
+}
+.event-indicator--holidays { background: #64748B; }
+
+.event-pill--events { 
+  background: #D1FAE5; 
+  color: #065F46; 
+  border-left-color: #10B981;
+}
+.event-indicator--events { background: #10B981; }
+
+/* Past events - more subtle colors */
+.event-pill--past {
+  opacity: 0.5;
+  filter: grayscale(0.4);
+}
+
+.event-indicator--past {
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .month-day {
+    height: 90px;
+    padding: 6px;
+  }
+  
+  .day-number {
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .event-count {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+  
+  .event-pill {
+    font-size: 10px;
+    padding: 3px 4px;
+    gap: 4px;
+  }
+  
+  .event-indicator {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .weekday-header {
+    font-size: 11px;
+    height: 32px;
+  }
+}
 
 /* Modal Minimalist */
 .event-modal-overlay {
