@@ -1,8 +1,7 @@
-/* FCyT UMSS - Design System
-   Material Design 3 Compliant
-   WCAG 2.1 AA Accessibility */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
   /* Primary Brand Colors */
   --color-primary: #C8102E;
