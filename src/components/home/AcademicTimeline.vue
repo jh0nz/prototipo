@@ -48,14 +48,18 @@
           </div>
 
           <div class="day-events">
-            <div 
+            <button 
               v-for="event in getEventsForDay(day.dateStr)" 
               :key="event.id"
               class="event-dot"
               :class="`event-dot--${event.type}`"
               :title="event.title"
+              type="button"
+              :aria-label="`Ver detalle de ${event.title}`"
               @click="openEventModal(event)"
-            ></div>
+            >
+              <span class="sr-only">{{ event.title }}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -406,6 +410,26 @@ function formatDateFull(dateStr: string) {
   flex-wrap: wrap;
   gap: 3px;
   justify-content: center;
+}
+
+.event-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
+  outline: none;
+}
+
+.event-dot:hover,
+.event-dot:focus-visible {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.35);
 }
 
 .event-dot {
