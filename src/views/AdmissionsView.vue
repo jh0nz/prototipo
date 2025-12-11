@@ -188,16 +188,43 @@
     <!-- Costos Section (Simplified) -->
     <section class="section bg-surface-variant">
       <div class="container">
-        <h2 class="section-title">Costos</h2>
+        <div class="costs-header">
+          <div>
+            <h2 class="section-title">Costos</h2>
+            <p class="costs-subtitle">Tarifas oficiales para el examen de ingreso I-2026. Incluye carpeta, material impreso y credencial.</p>
+          </div>
+          <span class="costs-pill">Pago único • Recibo digital</span>
+        </div>
+
         <div class="costs-grid">
-           <div class="cost-item">
-             <span class="cost-value">Bs 600</span>
-             <span class="cost-label">General</span>
-           </div>
-           <div class="cost-item">
-             <span class="cost-value text-success">Bs 200</span>
-             <span class="cost-label">Repitentes Pre-U</span>
-           </div>
+          <article class="cost-card">
+            <header class="cost-card__header">
+              <span class="cost-chip">General</span>
+              <strong class="cost-amount">Bs 600</strong>
+            </header>
+            <ul class="cost-details">
+              <li>Postulantes nuevos nacionales o extranjeros</li>
+              <li>Incluye certificación médica básica</li>
+              <li>Pago habilitado en QR, Banco Unión y Caja Facultativa</li>
+            </ul>
+          </article>
+
+          <article class="cost-card cost-card--alt">
+            <header class="cost-card__header">
+              <span class="cost-chip cost-chip--success">Repitentes Pre-U</span>
+              <strong class="cost-amount">Bs 200</strong>
+            </header>
+            <ul class="cost-details">
+              <li>Disponible para postulantes de programas Pre-Universitarios</li>
+              <li>Requiere certificado de aprobación del curso</li>
+              <li>Mismos canales de pago habilitados</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="costs-footer">
+          <span class="material-symbols-rounded">info</span>
+          <p>Recuerda conservar el comprobante original. Presentarlo junto al formulario impreso el día de tu opción.</p>
         </div>
       </div>
     </section>
@@ -442,11 +469,123 @@ onMounted(() => {
 }
 
 /* Costos */
-.costs-grid { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-.cost-item { background: white; padding: 16px 32px; border-radius: 12px; text-align: center; border: 1px solid var(--color-neutral-light); }
-.cost-value { display: block; font-size: 1.5rem; font-weight: bold; color: var(--color-neutral-dark); }
-.cost-label { font-size: 0.9rem; color: #666; }
-.text-success { color: var(--color-success); }
+.costs-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  align-items: center;
+}
+
+.costs-subtitle {
+  margin: 8px 0 0 0;
+  color: #475569;
+  max-width: 640px;
+}
+
+.costs-pill {
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  background: white;
+  border: 1px solid var(--color-neutral-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.costs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-5);
+}
+
+.cost-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-neutral-light);
+  padding: var(--spacing-5);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.cost-card--alt {
+  background: linear-gradient(135deg, rgba(0,61,165,0.04), rgba(0,61,165,0.08));
+}
+
+.cost-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.cost-chip {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(200, 16, 46, 0.1);
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.cost-chip--success {
+  background: rgba(39, 174, 96, 0.15);
+  color: var(--color-success);
+}
+
+.cost-amount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-neutral-dark);
+}
+
+.cost-details {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.cost-details li {
+  display: flex;
+  gap: 8px;
+}
+
+.cost-details li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.cost-card--alt .cost-details li::before {
+  background: var(--color-success);
+}
+
+.costs-footer {
+  margin-top: var(--spacing-5);
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  background: white;
+  border: 1px dashed var(--color-neutral-light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
+  color: #475569;
+}
+
+.costs-footer span {
+  color: var(--color-primary);
+}
 
 /* Timeline Options Grid */
 .timeline-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
