@@ -165,6 +165,10 @@ const timeSlots = [
   '17:30 - 19:00'
 ]
 
+import horariosData from '@/data/horarios.json'
+
+// ...
+
 // Sample schedule data
 interface ScheduleEntry {
   subject: string
@@ -173,37 +177,23 @@ interface ScheduleEntry {
   semester: number
 }
 
-const scheduleData: Record<string, Record<string, ScheduleEntry>> = {
-  'Lunes': {
-    '07:00 - 08:30': { subject: 'Cálculo I', professor: 'Ing. García', room: 'Aula 101', semester: 1 },
-    '08:45 - 10:15': { subject: 'Programación I', professor: 'Ing. López', room: 'Lab. 201', semester: 1 },
-    '10:30 - 12:00': { subject: 'Física I', professor: 'Lic. Mendoza', room: 'Aula 102', semester: 1 },
-    '14:00 - 15:30': { subject: 'Álgebra Lineal', professor: 'Ing. Rojas', room: 'Aula 103', semester: 1 }
-  },
-  'Martes': {
-    '07:00 - 08:30': { subject: 'Programación I', professor: 'Ing. López', room: 'Lab. 201', semester: 1 },
-    '08:45 - 10:15': { subject: 'Cálculo I', professor: 'Ing. García', room: 'Aula 101', semester: 1 },
-    '15:45 - 17:15': { subject: 'Física I (Lab)', professor: 'Lic. Mendoza', room: 'Lab. Física', semester: 1 }
-  },
-  'Miércoles': {
-    '08:45 - 10:15': { subject: 'Álgebra Lineal', professor: 'Ing. Rojas', room: 'Aula 103', semester: 1 },
-    '10:30 - 12:00': { subject: 'Introducción a la Ing.', professor: 'Ing. Vargas', room: 'Aula 105', semester: 1 },
-    '14:00 - 15:30': { subject: 'Programación I', professor: 'Ing. López', room: 'Lab. 201', semester: 1 }
-  },
-  'Jueves': {
-    '07:00 - 08:30': { subject: 'Cálculo I', professor: 'Ing. García', room: 'Aula 101', semester: 1 },
-    '10:30 - 12:00': { subject: 'Física I', professor: 'Lic. Mendoza', room: 'Aula 102', semester: 1 },
-    '14:00 - 15:30': { subject: 'Álgebra Lineal', professor: 'Ing. Rojas', room: 'Aula 103', semester: 1 }
-  },
-  'Viernes': {
-    '08:45 - 10:15': { subject: 'Física I', professor: 'Lic. Mendoza', room: 'Aula 102', semester: 1 },
-    '10:30 - 12:00': { subject: 'Programación I', professor: 'Ing. López', room: 'Lab. 201', semester: 1 },
-    '12:15 - 13:45': { subject: 'Introducción a la Ing.', professor: 'Ing. Vargas', room: 'Aula 105', semester: 1 }
-  }
-}
+// Type for the JSON structure
+type CareerSchedule = Record<string, Record<string, Record<string, ScheduleEntry>>>
+const fullSchedules = horariosData as unknown as Record<string, CareerSchedule>
+
+const scheduleData = computed(() => {
+  const career = fullSchedules[selectedCareer.value]
+  if (!career) return {}
+  
+  const semesterData = career[selectedSemester.value.toString()]
+  if (!semesterData) return {}
+  
+  return semesterData
+})
 
 function getScheduleItem(day: string, timeSlot: string): ScheduleEntry | null {
-  return scheduleData[day]?.[timeSlot] || null
+  // scheduleData is now a computed ref, so use .value
+  return scheduleData.value[day]?.[timeSlot] || null
 }
 
 function getCellClass(day: string, timeSlot: string): string {

@@ -1,0 +1,198 @@
+{
+    "info": {
+        "1": {
+            "Lunes": {
+                "07:00 - 08:30": {
+                    "subject": "Cálculo I",
+                    "professor": "Ing. García",
+                    "room": "Aula 691D",
+                    "semester": 1
+                },
+                "08:45 - 10:15": {
+                    "subject": "Intro a la Programación",
+                    "professor": "Lic. Blanco",
+                    "room": "Lab 1",
+                    "semester": 1
+                },
+                "14:00 - 15:30": {
+                    "subject": "Inglés Técnico I",
+                    "professor": "Lic. Ford",
+                    "room": "Aula 617",
+                    "semester": 1
+                }
+            },
+            "Martes": {
+                "08:45 - 10:15": {
+                    "subject": "Álgebra I",
+                    "professor": "Lic. Torrico",
+                    "room": "Aula 692",
+                    "semester": 1
+                },
+                "10:30 - 12:00": {
+                    "subject": "Física General",
+                    "professor": "Ing. Flores",
+                    "room": "Aula 691B",
+                    "semester": 1
+                }
+            },
+            "Miércoles": {
+                "07:00 - 08:30": {
+                    "subject": "Cálculo I",
+                    "professor": "Ing. García",
+                    "room": "Aula 691D",
+                    "semester": 1
+                },
+                "08:45 - 10:15": {
+                    "subject": "Intro a la Programación",
+                    "professor": "Lic. Blanco",
+                    "room": "Lab 1",
+                    "semester": 1
+                }
+            },
+            "Jueves": {
+                "08:45 - 10:15": {
+                    "subject": "Álgebra I",
+                    "professor": "Lic. Torrico",
+                    "room": "Aula 692",
+                    "semester": 1
+                },
+                "14:00 - 15:30": {
+                    "subject": "Física General",
+                    "professor": "Ing. Flores",
+                    "room": "Aula 691B",
+                    "semester": 1
+                }
+            },
+            "Viernes": {
+                "10:30 - 12:00": {
+                    "subject": "Metodología Inv.",
+                    "professor": "Lic. Perez",
+                    "room": "Aula 624",
+                    "semester": 1
+                }
+            }
+        },
+        "2": {
+            "Lunes": {
+                "08:45 - 10:15": {
+                    "subject": "Cálculo II",
+                    "professor": "Ing. Salazar",
+                    "room": "Aula 690",
+                    "semester": 2
+                },
+                "10:30 - 12:00": {
+                    "subject": "Física II",
+                    "professor": "Ing. Montaño",
+                    "room": "Aula 693",
+                    "semester": 2
+                }
+            },
+            "Martes": {
+                "07:00 - 08:30": {
+                    "subject": "Programación Avanzada",
+                    "professor": "Ing. Costas",
+                    "room": "Lab 3",
+                    "semester": 2
+                },
+                "14:00 - 15:30": {
+                    "subject": "Prob. y Estadística",
+                    "professor": "Lic. Guzman",
+                    "room": "Aula 612",
+                    "semester": 2
+                }
+            },
+            "Miércoles": {
+                "08:45 - 10:15": {
+                    "subject": "Cálculo II",
+                    "professor": "Ing. Salazar",
+                    "room": "Aula 690",
+                    "semester": 2
+                }
+            },
+            "Jueves": {
+                "10:30 - 12:00": {
+                    "subject": "Física II",
+                    "professor": "Ing. Montaño",
+                    "room": "Aula 693",
+                    "semester": 2
+                },
+                "14:00 - 15:30": {
+                    "subject": "Programación Avanzada",
+                    "professor": "Ing. Costas",
+                    "room": "Lab 3",
+                    "semester": 2
+                }
+            },
+            "Viernes": {
+                "08:45 - 10:15": {
+                    "subject": "Prob. y Estadística",
+                    "professor": "Lic. Guzman",
+                    "room": "Aula 612",
+                    "semester": 2
+                }
+            }
+        }
+    },
+    "sistemas": {
+        "1": {
+            "Lunes": {
+                "07:00 - 08:30": {
+                    "subject": "Álgebra Lineal",
+                    "professor": "Lic. Claros",
+                    "room": "Aula 605",
+                    "semester": 1
+                },
+                "10:30 - 12:00": {
+                    "subject": "Cálculo I",
+                    "professor": "Ing. Vera",
+                    "room": "Aula 601",
+                    "semester": 1
+                }
+            },
+            "Martes": {
+                "08:45 - 10:15": {
+                    "subject": "Intro. a Sistemas",
+                    "professor": "Ing. Villarroel",
+                    "room": "Aula 618",
+                    "semester": 1
+                }
+            },
+            "Miércoles": {
+                "07:00 - 08:30": {
+                    "subject": "Álgebra Lineal",
+                    "professor": "Lic. Claros",
+                    "room": "Aula 605",
+                    "semester": 1
+                }
+            },
+            "Jueves": {
+                "10:30 - 12:00": {
+                    "subject": "Cálculo I",
+                    "professor": "Ing. Vera",
+                    "room": "Aula 601",
+                    "semester": 1
+                }
+            },
+            "Viernes": {
+                "14:00 - 15:30": {
+                    "subject": "Química General",
+                    "professor": "Ing. Ramos",
+                    "room": "Aula 622",
+                    "semester": 1
+                }
+            }
+        }
+    },
+    "industrial": {
+        "1": {
+            "Lunes": {
+                "07:00 - 08:30": {
+                    "subject": "Dibujo Técnico",
+                    "professor": "Arq. Soliz",
+                    "room": "Sala Dibujo",
+                    "semester": 1
+                }
+            }
+        }
+    }
+}
