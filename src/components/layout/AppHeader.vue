@@ -29,11 +29,12 @@
       <div class="header__actions">
         <!-- Search Button -->
         <button 
-          class="btn btn-icon" 
+          class="btn btn-icon btn-search-highlight" 
           @click="openSearch"
           aria-label="Buscar"
+          title="Buscar en el sitio (Ctrl+K)"
         >
-          <span class="material-symbols-rounded">search</span>
+          <span class="material-symbols-rounded search-icon-lg">search</span>
         </button>
 
         <!-- Mobile Menu Button -->
@@ -317,5 +318,21 @@ onUnmounted(() => {
 .slide-leave-to {
   opacity: 0;
   transform: translateY(-20px);
+}
+
+/* Search Highlight */
+.btn-search-highlight {
+  transition: all 0.2s ease;
+}
+
+.btn-search-highlight:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.search-icon-lg {
+  font-size: 28px; /* Slightly larger than standard 24px */
+  font-weight: 500;
 }
 </style>

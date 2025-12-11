@@ -34,16 +34,7 @@
                 <div class="news-card__overlay"></div>
               </div>
               <div class="news-card__content">
-                <div class="news-card__tags">
-                  <span 
-                    v-for="tag in news.tags" 
-                    :key="tag" 
-                    class="chip"
-                    :class="getTagClass(tag)"
-                  >
-                    {{ tag }}
-                  </span>
-                </div>
+
                 <time class="news-card__date" :datetime="news.date">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -176,56 +167,58 @@ function closePdfPreview() {
 const newsItems: NewsItem[] = noticiasData as NewsItem[]
 
 const currentSlide = ref(0)
-const autoplayInterval = ref<number | null>(null)
 const progressWidth = ref(0)
-const progressInterval = ref<number | null>(null)
-
+let animationFrame: ReturnType<typeof requestAnimationFrame> | null = null
+let lastTime = 0
 const SLIDE_DURATION = 5000 // 5 seconds
+
+function startAutoplay() {
+  stopAutoplay()
+  lastTime = Date.now()
+  animate()
+}
+
+function animate() {
+  const now = Date.now()
+  const elapsed = now - lastTime
+  
+  if (elapsed >= SLIDE_DURATION) {
+    nextSlide()
+    return 
+  }
+  
+  progressWidth.value = (elapsed / SLIDE_DURATION) * 100
+  animationFrame = requestAnimationFrame(animate)
+}
+
+function stopAutoplay() {
+  if (animationFrame) cancelAnimationFrame(animationFrame)
+}
 
 function nextSlide() {
   currentSlide.value = (currentSlide.value + 1) % newsItems.length
-  resetProgress()
+  resetTimer()
 }
 
 function prevSlide() {
   currentSlide.value = currentSlide.value === 0 
     ? newsItems.length - 1 
     : currentSlide.value - 1
-  resetProgress()
+  resetTimer()
 }
 
 function goToSlide(index: number) {
   currentSlide.value = index
-  resetProgress()
+  resetTimer()
 }
 
-function resetProgress() {
+function resetTimer() {
+  stopAutoplay()
   progressWidth.value = 0
-}
-
-function startAutoplay() {
-  // Progress animation
-  const startTime = Date.now()
-  progressInterval.value = window.setInterval(() => {
-    const elapsed = Date.now() - startTime
-    progressWidth.value = Math.min((elapsed / SLIDE_DURATION) * 100, 100)
-  }, 50)
-
-  // Slide change
-  autoplayInterval.value = window.setInterval(() => {
-    nextSlide()
-  }, SLIDE_DURATION)
-}
-
-function stopAutoplay() {
-  if (autoplayInterval.value) {
-    clearInterval(autoplayInterval.value)
-    autoplayInterval.value = null
-  }
-  if (progressInterval.value) {
-    clearInterval(progressInterval.value)
-    progressInterval.value = null
-  }
+  // Small delay to ensure visual reset
+  setTimeout(() => {
+    startAutoplay()
+  }, 10)
 }
 
 function formatDate(dateString: string): string {
@@ -237,12 +230,7 @@ function formatDate(dateString: string): string {
   })
 }
 
-function getTagClass(tag: string): string {
-  if (tag.includes('Admisión') || tag.includes('Nuevo')) return 'chip-primary'
-  if (tag.includes('Investigación')) return 'chip-secondary'
-  if (tag.includes('Eventos')) return 'chip-accent'
-  return 'chip-primary'
-}
+// Removed getTagClass as tags are removed
 
 onMounted(() => {
   startAutoplay()
@@ -279,14 +267,14 @@ onUnmounted(() => {
 /* News Card */
 .news-card {
   position: relative;
-  min-height: 500px;
+  min-height: 380px;
   display: flex;
   align-items: flex-end;
 }
 
 @media (max-width: 767px) {
   .news-card {
-    min-height: 400px;
+    min-height: 350px;
   }
 }
 
@@ -325,7 +313,7 @@ onUnmounted(() => {
 .news-card__content {
   position: relative;
   z-index: 1;
-  padding: var(--spacing-10);
+  padding: var(--spacing-8);
   color: white;
   max-width: 700px;
 }
@@ -358,7 +346,7 @@ onUnmounted(() => {
 }
 
 .news-card__title {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   margin-bottom: var(--spacing-4);
@@ -367,12 +355,12 @@ onUnmounted(() => {
 
 @media (min-width: 768px) {
   .news-card__title {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
   }
 }
 
 .news-card__excerpt {
-  font-size: var(--font-size-base);
+  font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.85);
   line-height: var(--line-height-relaxed);
   margin-bottom: var(--spacing-6);

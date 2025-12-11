@@ -1,31 +1,33 @@
-```html
 <template>
   <section id="calendar" class="weekly-calendar section" aria-label="Calendario Semanal">
     <div class="calendar-content">
       <div class="calendar-header">
-        <h2 class="section-title">Agenda Semanal</h2>
+        <h2 class="section-title">{{ currentMonthName }} {{ currentYear }}</h2>
         <div class="calendar-controls">
-          <RouterLink to="/calendario" class="btn-icon-link" title="Ver Calendario Mensual">
+          <button @click="prevWeek" class="btn-control" aria-label="Semana anterior" title="Semana anterior">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button @click="nextWeek" class="btn-control" aria-label="Semana siguiente" title="Semana siguiente">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+          
+          <button @click="goToToday" class="btn-today" title="Ir al día actual">Hoy</button>
+          
+          <div class="divider-vertical"></div>
+          
+          <RouterLink to="/calendario" class="btn-icon-link" title="Ver Calendario Mensual Completo">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
               <line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
+            <span class="sr-only">Ver completo</span>
           </RouterLink>
-          <div class="divider-vertical"></div>
-          <button @click="prevWeek" class="btn-control" aria-label="Semana anterior">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-          </button>
-          <span class="current-month">{{ currentMonthName }}</span>
-          <button @click="nextWeek" class="btn-control" aria-label="Semana siguiente">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </button>
-          <button @click="goToToday" class="btn-today">Hoy</button>
         </div>
       </div>
 
@@ -37,9 +39,16 @@
           class="calendar-day"
           :class="{ 
             'calendar-day--today': day.isToday,
-            'calendar-day--past': day.isPast
+            'calendar-day--past': day.isPast,
+            'calendar-day--has-events': getEventsForDay(day.dateStr).length > 0
           }"
           @click="openDayModal(day)"
+          tabindex="0"
+          role="button"
+          :aria-label="`Ver detalles del día ${day.dayName} ${day.dayNumber}`"
+          :title="`Ver detalles del ${day.dayName} ${day.dayNumber}`"
+          @keydown.enter="openDayModal(day)"
+          @keydown.space.prevent="openDayModal(day)"
         >
           <div class="day-header">
             <span class="day-name">{{ day.dayName }}</span>
@@ -49,100 +58,103 @@
           </div>
 
           <div class="day-events">
-            <button 
+            <!-- Non-interactive dots -->
+            <div 
               v-for="event in getEventsForDay(day.dateStr)" 
               :key="event.id"
               class="event-dot"
-              :class="`event-dot--${event.type}`"
-              :title="event.title"
-              type="button"
-              :aria-label="`Ver detalle de ${event.title}`"
-              @click="openEventModal(event)"
-            >
-              <span class="sr-only">{{ event.title }}</span>
-            </button>
+              :class="`event-dot--${event.category}`"
+              :title="`${event.title} - ${getCategoryLabel(event.category)}`"
+            ></div>
+          </div>
+          
+          <!-- Interaction Indicator -->
+          <div class="day-interaction-indicator" title="Ver detalles">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="1"/>
+              <circle cx="19" cy="12" r="1"/>
+              <circle cx="5" cy="12" r="1"/>
+            </svg>
           </div>
         </div>
       </div>
       
-      <!-- Event List for Selected Day or Today (Compact View) -->
-      <div class="events-list-compact">
-         <!-- Showing logic could be sophisticated, but keeping stick to grid request -->
+      <!-- Legend -->
+      <div class="calendar-legend">
+        <div class="legend-item" v-for="(label, key) in categories" :key="key" :title="`Eventos tipo: ${label}`">
+          <span class="legend-dot" :class="`event-dot--${key}`"></span>
+          <span class="legend-label">{{ label }}</span>
+        </div>
       </div>
 
-
-      <!-- Day Modal -->
+      <!-- Day Modal (Minimalist & Accessible) -->
       <Teleport to="body">
-        <Transition name="modal">
+        <Transition name="fade">
           <div v-if="selectedDay" class="event-modal-overlay" @click.self="selectedDay = null">
             <div class="event-modal day-modal">
-              <div class="event-modal__header">
-                <div class="header-content">
-                  <h3>{{ selectedDay.dayName }}</h3>
-                  <span class="header-date">{{ formatDateFull(selectedDay.dateStr) }}</span>
-                </div>
-                <button @click="selectedDay = null" class="close-btn">&times;</button>
-              </div>
-              <div class="event-modal__body day-modal__body">
-                <div v-if="getEventsForDay(selectedDay.dateStr).length === 0" class="no-events">
-                  No hay eventos programados para este día.
-                </div>
-                
-                <div 
-                  v-for="event in getEventsForDay(selectedDay.dateStr)" 
-                  :key="event.id"
-                  class="day-event-item"
-                  :class="`day-event-item--${event.type}`"
-                >
-                  <div class="event-pill" :class="`event-pill--${event.category}`">{{ getCategoryLabel(event.category) }}</div>
-                  <h4>{{ event.title }}</h4>
-                  <p class="event-time" v-if="event.time">{{ event.time }}</p>
-                  <p class="event-desc">{{ event.description }}</p>
-                  <a
-                    v-if="event.ctaLink"
-                    :href="event.ctaLink"
-                    class="modal-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {{ event.ctaLabel || 'Más información' }}
-                  </a>
-                  <div class="modal-tags" v-if="event.location">
-                    <span class="tag-location">📍 {{ event.location }}</span>
+              <div class="event-modal__header-minimal">
+                <div class="header-date-group">
+                  <span class="header-day-number">{{ selectedDay.date.getDate() }}</span>
+                  <div class="header-date-text">
+                    <span class="header-day-name">{{ selectedDay.dayName }}</span>
+                    <span class="header-month-year">{{ selectedDay.date.toLocaleDateString('es-BO', { month: 'long', year: 'numeric' }) }}</span>
                   </div>
                 </div>
+                <button @click="selectedDay = null" class="close-btn-minimal" aria-label="Cerrar" title="Cerrar detalle">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
               </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
-
-      <!-- Single Event Modal (Optional/Legacy if clicking specific event) -->
-      <Teleport to="body">
-        <Transition name="modal">
-          <div v-if="selectedEvent" class="event-modal-overlay" @click.self="selectedEvent = null">
-            <div class="event-modal">
-              <div class="event-modal__header" :class="`header--${selectedEvent.type}`">
-                <h3>{{ selectedEvent.title }}</h3>
-                <button @click="selectedEvent = null" class="close-btn">&times;</button>
-              </div>
-              <div class="event-modal__body">
-                <p class="modal-date">{{ formatDateFull(selectedEvent.date) }}</p>
-                <div v-if="selectedEvent.type === 'news'" class="news-tag">Noticia</div>
-                <p v-if="selectedEvent.time" class="modal-time">Hora: {{ selectedEvent.time }}</p>
-                <p>{{ selectedEvent.description }}</p>
-                <a
-                  v-if="selectedEvent.ctaLink"
-                  :href="selectedEvent.ctaLink"
-                  class="modal-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ selectedEvent.ctaLabel || 'Ver detalles de la convocatoria' }}
-                </a>
+              
+              <div class="event-modal__body day-modal__body">
+                <div v-if="getEventsForDay(selectedDay.dateStr).length === 0" class="no-events-minimal">
+                  <p>Sin actividades programadas</p>
+                </div>
                 
-                <div class="modal-tags" v-if="selectedEvent.location">
-                  <span class="tag-location">📍 {{ selectedEvent.location }}</span>
+                <div class="events-timeline">
+                   <div 
+                    v-for="event in getEventsForDay(selectedDay.dateStr)" 
+                    :key="event.id"
+                    class="timeline-event"
+                  >
+                    <div class="timeline-marker" :class="`bg-${event.category}`" :title="getCategoryLabel(event.category)"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-meta">
+                        <span class="event-badge" :class="`bg-${event.category}-soft text-${event.category}`">
+                          {{ getCategoryLabel(event.category) }}
+                        </span>
+                        <span class="timeline-time" v-if="event.time">{{ event.time }}</span>
+                      </div>
+                      <h4 class="timeline-title">{{ event.title }}</h4>
+                      <p class="timeline-desc">{{ event.description }}</p>
+                      
+                      <div class="timeline-actions" v-if="event.ctaLink || event.location">
+                        <a
+                          v-if="event.ctaLink"
+                          :href="event.ctaLink"
+                          class="action-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          :title="event.ctaLabel || 'Más información'"
+                        >
+                          {{ event.ctaLabel || 'Más información' }}
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                          </svg>
+                        </a>
+                        <span class="location-tag" v-if="event.location" :title="`Ubicación: ${event.location}`">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                          </svg>
+                          {{ event.location }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,7 +173,6 @@ import type { TimelineEvent } from '@/types'
 
 // State
 const currentDate = ref(new Date()) // Start with today
-const selectedEvent = ref<TimelineEvent | null>(null)
 const selectedDay = ref<any | null>(null)
 
 // Merge events and news
@@ -181,6 +192,14 @@ const calendarEvents: TimelineEvent[] = [
     isUrgent: false
   }))
 ]
+
+const categories = {
+  exams: 'Exámenes',
+  procedures: 'Trámites',
+  events: 'Eventos',
+  holidays: 'Feriados',
+  news: 'Noticias'
+}
 
 // Utils
 const getStartOfWeek = (date: Date) => {
@@ -258,122 +277,19 @@ function getEventsForDay(dateStr: string) {
   return calendarEvents.filter(e => e.date === dateStr)
 }
 
-function isUpcoming(dateStr: string) {
-  const todayStr = formatDateStr(new Date())
-  if (dateStr <= todayStr) return false
-  
-  // Upcoming is within next 5 days
-  const d = new Date(dateStr)
-  const today = new Date()
-  today.setHours(0,0,0,0)
-  const diffTime = d.getTime() - today.getTime()
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) 
-  return diffDays <= 5
-}
-
-function openEventModal(event: TimelineEvent) {
-  // Open day modal focused on this day
-  const dayName = new Date(event.date + 'T12:00:00').toLocaleDateString('es-BO', { weekday: 'short' }).toUpperCase()
-  selectedDay.value = {
-    dateStr: event.date,
-    dayName: dayName
-  }
-}
-
 function openDayModal(day: any) {
   selectedDay.value = day
 }
 
-function formatDateFull(dateStr: string) {
-  // Fix timezone issue by parsing parts manually
-  const parts = dateStr.split('-').map(Number)
-  const year = parts[0] || 0
-  const month = parts[1] || 0
-  const day = parts[2] || 0
-  
-  if (!year || !month || !day) return dateStr
-  
-  const date = new Date(year, month - 1, day)
-  return date.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' })
-}
-
 const getCategoryLabel = (category: string) => {
-  const map: Record<string, string> = {
-    exams: 'Examen',
-    procedures: 'Trámite',
-    events: 'Evento',
-    holidays: 'Feriado',
-    news: 'Noticia'
-  }
-  return map[category] || 'Evento'
+  return categories[category as keyof typeof categories] || 'Evento'
 }
 </script>
 
 <style scoped>
 .weekly-calendar {
   background-color: var(--color-surface);
-  padding-bottom: var(--spacing-12);
-}
-
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-6);
-  flex-wrap: wrap;
-  gap: var(--spacing-4);
-}
-
-.section-title {
-  margin: 0;
-}
-
-.calendar-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
-  background: var(--color-surface-variant);
-  padding: 4px;
-  border-radius: var(--radius-full);
-}
-
-.btn-control {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  color: var(--color-neutral-dark);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
-}
-
-.btn-control:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-}
-
-.btn-today {
-  padding: 0 var(--spacing-4);
-  height: 36px;
-  border: none;
-  background: white;
-  border-radius: var(--radius-full);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-}
-
-/* ... (previous styles) ... */
-
-.weekly-calendar {
-  background-color: var(--color-surface);
-  height: 100%; /* Fill height in grid */
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -387,6 +303,17 @@ const getCategoryLabel = (category: string) => {
 .section-title {
   font-size: var(--font-size-xl);
   margin: 0;
+  font-weight: 700;
+  color: var(--color-on-surface); /* Assuming they want title to be prominent */
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
 }
 
 .calendar-controls {
@@ -396,6 +323,44 @@ const getCategoryLabel = (category: string) => {
   background: var(--color-surface-variant);
   padding: 4px;
   border-radius: var(--radius-full);
+}
+
+.btn-control {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--color-neutral-dark);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-control:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-today {
+  padding: 0 var(--spacing-4);
+  height: 32px;
+  border: none;
+  background: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-today:hover {
+  background: var(--color-primary-light);
 }
 
 .btn-icon-link {
@@ -410,208 +375,397 @@ const getCategoryLabel = (category: string) => {
 }
 
 .btn-icon-link:hover {
-  background-color: white;
+  background-color: var(--color-surface-variant);
   color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
 }
 
 .divider-vertical {
   width: 1px;
   height: 20px;
-  background-color: var(--color-neutral);
+  background-color: var(--color-neutral-light);
   margin: 0 4px;
-  opacity: 0.3;
 }
 
-.current-month {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
-  min-width: 80px;
-  text-align: center;
-}
-
-/* Updated Grid for Side-by-Side View */
+/* Grid */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  gap: 1px;
   background-color: var(--color-neutral-light);
   border: 1px solid var(--color-neutral-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-top: var(--spacing-4);
+  margin-top: var(--spacing-2);
+  box-shadow: var(--shadow-sm);
 }
 
 .calendar-day {
   background-color: white;
-  min-height: 80px; /* Reduced height for compact view */
-  padding: 6px;
+  min-height: 100px;
+  padding: var(--spacing-2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
 }
 
+.calendar-day:hover,
+.calendar-day:focus-visible {
+  background-color: var(--color-surface-variant);
+  outline: none;
+}
+
+/* Red Highlight for Today */
 .calendar-day--today {
-  background-color: #F0F9FF;
+  background-color: #FEF2F2; /* Red-50 */
+}
+
+.calendar-day--today .day-number,
+.calendar-day--today .day-name {
+  color: var(--color-error); /* Red Text */
+}
+
+.calendar-day--today .day-number {
+  background-color: transparent;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  display: block;
+}
+
+/* Make day number bigger for today if desired, but user just said 'resalten con color rojo' */
+.calendar-day--today .day-number {
+  font-weight: 800;
+  transform: scale(1.1);
+}
+
+.day-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4px;
 }
 
 .day-name {
   font-size: 10px;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   color: var(--color-secondary);
   margin-bottom: 2px;
 }
 
 .day-number {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--color-neutral-dark);
 }
 
-.calendar-day--today .day-number {
-  color: var(--color-primary);
-}
-
-/* Dot Indicators instead of Cards for Compact View */
-/* Dot Indicators */
+/* Events Dots */
 .day-events {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
   justify-content: center;
-  padding: 4px;
+  padding: 2px;
+  flex-grow: 1;
 }
 
 .event-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: block;
-  box-shadow: 0 0 0 1px white;
   padding: 0;
 }
 
-.event-dot:hover,
-.event-dot:focus-visible {
-  transform: scale(1.4);
-  z-index: 10;
-  box-shadow: 0 0 0 2px rgba(14,165,233,0.3);
+/* Colors for Dots and Legend */
+.event-dot--exams, .bg-exams { background-color: #F59E0B; }
+.event-dot--procedures, .bg-procedures { background-color: #3B82F6; }
+.event-dot--events, .bg-events { background-color: #10B981; }
+.event-dot--holidays, .bg-holidays { background-color: #64748B; }
+.event-dot--news, .bg-news { background-color: #8B5CF6; }
+
+/* Indicator */
+.day-interaction-indicator {
+  margin-top: auto;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: all 0.2s;
+  color: var(--color-secondary);
 }
 
-.event-dot--info { background-color: var(--color-info); }
-.event-dot--success { background-color: var(--color-success); }
-.event-dot--warning { background-color: var(--color-warning); }
-.event-dot--urgent { background-color: var(--color-error); }
-.event-dot--news { background-color: #8B5CF6; }
-
-@media (max-width: 1024px) {
-  .weekly-calendar {
-    padding-bottom: 0;
-  }
+.calendar-day:hover .day-interaction-indicator,
+.calendar-day:focus-visible .day-interaction-indicator {
+  opacity: 1;
+  transform: translateY(0);
 }
 
+/* Legend */
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  justify-content: center;
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-neutral-light);
+}
 
-/* Modal Simple */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: help; /* Hint that it has tooltip */
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-label {
+  font-size: 12px;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+/* Modal Minimalist */
 .event-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(2px);
+  z-index: 2000;
   padding: var(--spacing-4);
 }
 
 .event-modal {
   background: white;
   width: 100%;
-  max-width: 400px;
-  border-radius: var(--radius-lg);
+  max-width: 420px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.event-modal__header {
-  padding: var(--spacing-4);
-  background: var(--color-primary);
-  color: white;
+/* Header Minimal */
+.event-modal__header-minimal {
+  padding: var(--spacing-6);
+  padding-bottom: var(--spacing-2);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.header--urgent { background: var(--color-error); }
-.header--warning { background: var(--color-warning); }
-.header--news { background: #8B5CF6; }
-
-.event-modal__header h3 {
-  margin: 0;
-  font-size: var(--font-size-lg);
+.header-date-group {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-3);
+  color: var(--color-primary);
 }
 
-.close-btn {
-  background: none;
+.header-day-number {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.header-date-text {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+
+.header-day-name {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  line-height: 1.2;
+}
+
+.header-month-year {
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.close-btn-minimal {
+  background: transparent;
   border: none;
-  color: white;
-  font-size: 24px;
   cursor: pointer;
-}
-
-.event-modal__body {
-  padding: var(--spacing-4);
-}
-
-.modal-link {
-  display: inline-flex;
+  color: var(--color-secondary);
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: var(--spacing-3);
+  justify-content: center;
+}
+
+.close-btn-minimal:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-neutral-dark);
+}
+
+/* Body */
+.day-modal__body {
+  padding: var(--spacing-6);
+  padding-top: var(--spacing-2);
+  overflow-y: auto;
+}
+
+.no-events-minimal {
+  padding: var(--spacing-8);
+  text-align: center;
+  color: var(--color-secondary);
+  background: var(--color-surface-variant);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-2);
+}
+
+.events-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-2);
+  position: relative;
+}
+
+/* Connecting Line */
+.events-timeline::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 0;
+  left: 6px;
+  width: 2px;
+  background-color: var(--color-neutral-light);
+  border-radius: 2px;
+}
+
+.timeline-event {
+  position: relative;
+  padding-left: 24px;
+}
+
+.timeline-marker {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px white; /* Gap effect */
+  z-index: 1;
+}
+
+.timeline-content {
+  background: white;
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.event-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Badge colors (Soft backgrounds) */
+.bg-exams-soft { background-color: #FFFBEB; }
+.text-exams { color: #B45309; }
+
+.bg-procedures-soft { background-color: #EFF6FF; }
+.text-procedures { color: #1D4ED8; }
+
+.bg-events-soft { background-color: #ECFDF5; }
+.text-events { color: #047857; }
+
+.bg-holidays-soft { background-color: #F1F5F9; }
+.text-holidays { color: #475569; }
+
+.bg-news-soft { background-color: #F5F3FF; }
+.text-news { color: #7C3AED; }
+
+
+.timeline-time {
+  font-size: 12px;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.timeline-title {
+  font-size: 1rem;
+  margin: 0 0 4px 0;
+  color: var(--color-neutral-dark);
+  line-height: 1.4;
+}
+
+.timeline-desc {
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+  margin: 0 0 var(--spacing-3) 0;
+  line-height: 1.6;
+}
+
+.timeline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+
+.action-link {
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-primary);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.modal-link::after {
-  content: '↗';
-  font-size: 0.85em;
-}
-
-.modal-link:hover {
+.action-link:hover {
   text-decoration: underline;
 }
 
-.modal-date {
-  font-weight: bold;
-  color: var(--color-secondary);
-  text-transform: capitalize;
-  margin-bottom: var(--spacing-2);
-}
-
-.modal-tags {
-  margin-top: var(--spacing-4);
-  padding-top: var(--spacing-2);
-  border-top: 1px solid var(--color-neutral-light);
-}
-
-.tag-location {
-  font-size: var(--font-size-sm);
-  color: var(--color-secondary);
-}
-
-.news-tag {
-  display: inline-block;
-  background: #F3F0FF;
-  color: #8B5CF6;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
+.location-tag {
   font-size: 12px;
-  font-weight: bold;
-  margin-bottom: var(--spacing-2);
+  color: var(--color-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Responsive */
@@ -619,127 +773,37 @@ const getCategoryLabel = (category: string) => {
   .calendar-grid {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4);
-  }
-
-  .calendar-day {
-    min-height: auto;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: var(--spacing-4);
-    background-color: white;
-    border: 1px solid var(--color-neutral-light);
-  }
-
-  .calendar-day--today {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary-light);
+    gap: 8px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
   
-  .calendar-day--past {
-    background-color: var(--color-surface-variant);
-    opacity: 0.8;
+  .calendar-day {
+    flex-direction: row;
+    min-height: 70px;
+    border: 1px solid var(--color-neutral-light);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3);
+    align-items: center;
+    justify-content: space-between;
   }
 
   .day-header {
-    width: 60px;
-    border-bottom: none;
-    border-right: 1px solid rgba(0,0,0,0.05);
+    width: auto;
     margin: 0;
-    padding-right: var(--spacing-2);
-    min-height: 60px;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .day-number {
-    font-size: var(--font-size-xl);
+    align-items: flex-start;
   }
   
   .day-events {
-    padding-top: var(--spacing-1);
-    padding-bottom: var(--spacing-1);
+    justify-content: flex-end;
+    margin-right: auto;
+    margin-left: var(--spacing-4);
   }
   
-  .event-card {
-    border: 1px solid var(--color-neutral-light);
-    box-shadow: none;
-    border-left-width: 3px;
-    margin-bottom: 0;
+  .day-interaction-indicator {
+    opacity: 1; /* Always show on mobile since no hover */
+    transform: none;
   }
-}
-
-/* Add Event Pill Styles from CalendarView */
-.event-pill {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  margin-bottom: var(--spacing-2);
-}
-.event-pill--exams { background: #FEF3C7; color: #92400E; }
-.event-pill--procedures { background: #DBEAFE; color: #1E40AF; }
-.event-pill--news { background: #F3F0FF; color: #7C3AED; }
-.event-pill--holidays { background: #F1F5F9; color: #475569; }
-.event-pill--events { background: #D1FAE5; color: #065F46; }
-
-/* Day Modal Styles */
-.day-modal {
-  max-width: 500px;
-}
-.no-events {
-  text-align: center;
-  color: #64748B;
-  padding: var(--spacing-4);
-  background: var(--color-background);
-  border-radius: var(--radius-md);
-}
-.day-event-item {
-  background: var(--color-surface);
-  border: 1px solid var(--color-neutral-light);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-4);
-  margin-bottom: var(--spacing-4);
-  transition: all var(--transition-fast);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.day-event-item:hover {
-  border-color: var(--color-primary-light);
-  box-shadow: var(--shadow-sm);
-}
-.day-event-item h4 {
-  margin: var(--spacing-1) 0 var(--spacing-2) 0;
-  color: var(--color-neutral-dark);
-  font-size: 1rem;
-}
-.day-event-item .event-time {
-  font-size: 0.85rem;
-  color: var(--color-secondary);
-  font-weight: 600;
-  margin-bottom: var(--spacing-2);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.day-event-item .event-time::before {
-  content: '';
-  display: inline-block;
-  width: 4px;
-  height: 4px;
-  background-color: currentColor;
-  border-radius: 50%;
-}
-.day-event-item .event-desc {
-  font-size: 0.9rem;
-  color: #475569;
-  margin-bottom: var(--spacing-2);
-  line-height: 1.5;
-}
-.event-chip-tag {
-  display: none; /* Deprecated in favor of event-pill */
 }
 </style>
