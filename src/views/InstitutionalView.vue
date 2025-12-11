@@ -22,13 +22,8 @@
               como parte de la Universidad Mayor de San Simón (UMSS) en Cochabamba, Bolivia.
             </p>
             <p>
-              Desde su creación, la FCyT ha sido pionera en la formación de profesionales en las áreas de ingeniería y tecnología, 
-              contribuyendo significativamente al desarrollo científico y tecnológico del país.
-            </p>
-            <p>
-              A lo largo de más de cuatro décadas, la facultad ha evolucionado constantemente, incorporando nuevas carreras, 
-              actualizando sus planes de estudio y fortaleciendo su infraestructura para ofrecer educación de calidad 
-              a miles de estudiantes bolivianos.
+              Desde su creación, hemos sido pioneros en la formación de profesionales en ingeniería y tecnología, 
+              contribuyendo al desarrollo científico y tecnológico del país con más de cuatro décadas de excelencia académica.
             </p>
           </div>
           
@@ -110,31 +105,31 @@
         <div class="mission-vision__grid">
           <article class="mission-card">
             <div class="mission-card__header">
-              <span class="mission-card__icon">🎯</span>
+              <span class="mission-card__icon mdi mdi-target"></span>
               <h3 class="mission-card__title">Misión</h3>
             </div>
             <p class="mission-card__content">
-              Es una unidad académica e investigativa en ciencias y tecnología de la UMSS que genera valor para la región, formando integralmente profesionales calificados, líderes, críticos, éticos, con conciencia ciudadana y ambiental; generando y aplicando conocimiento científico y tecnológico desde su Parque Científico, ofertando servicios especializados de calidad, divulgando y difundiendo conocimiento científico; transfiriendo tecnología y consolidando sistemas de innovación y emprendimiento, para mejorar la competitividad regional y nacional.
+              Formamos profesionales calificados, líderes, éticos y con conciencia ciudadana. Generamos y aplicamos conocimiento científico y tecnológico desde nuestro Parque Científico, ofreciendo servicios especializados de calidad. Transferimos tecnología y consolidamos sistemas de innovación para mejorar la competitividad regional y nacional.
             </p>
           </article>
 
           <article class="mission-card">
             <div class="mission-card__header">
-              <span class="mission-card__icon">🔭</span>
+              <span class="mission-card__icon mdi mdi-telescope"></span>
               <h3 class="mission-card__title">Visión</h3>
             </div>
             <p class="mission-card__content">
-              Ser una Facultad referente en ciencias y tecnología a nivel nacional e internacional, reconocida por el desempeño profesional de sus titulados, por la calidad de los resultados de su actividad científica y tecnológica, por su adecuado rol en la articulación con el medio y el entorno internacional, y por propiciar la economía del conocimiento a través de su Parque Científico para la consolidación de Cochabamba como ciudad del conocimiento.
+              Ser una facultad referente en ciencias y tecnología a nivel nacional e internacional, reconocida por la excelencia de nuestros profesionales, la calidad de nuestra investigación científica y tecnológica, y por impulsar la economía del conocimiento a través de nuestro Parque Científico.
             </p>
           </article>
 
           <article class="mission-card mission-card--full">
             <div class="mission-card__header">
-              <span class="mission-card__icon">🎓</span>
+              <span class="mission-card__icon mdi mdi-school"></span>
               <h3 class="mission-card__title">Metas y Objetivos</h3>
             </div>
             <p class="mission-card__content">
-              Por el carácter de las disciplinas que regenta la Facultad de Ciencias y Tecnología, tiene como meta fundamental contribuir al desarrollo de las fuerzas productivas de la región y el país, a través de la preparación de los recursos naturales, por medio de una interacción equilibrada de elaboración teórica y experimental en el campo de la formación profesional, la investigación, la interacción y la producción. Asimismo, se pretende generar un proceso de desarrollo científico y tecnológico, a través de la asimilación, adecuación y desarrollo de procesos tecnológicos que contribuyan al desarrollo productivo de la región y del país.
+              Contribuir al desarrollo productivo de la región y el país mediante la formación profesional de excelencia, la investigación aplicada y la innovación tecnológica. Generamos procesos de desarrollo científico y tecnológico que impulsan la competitividad y el crecimiento sostenible.
             </p>
           </article>
         </div>
@@ -178,68 +173,139 @@
               :hidden="openAccordion !== index"
             >
               <div class="accordion__body">
-                <div v-if="item.unit" class="manual-section">
-                  <h4>Unidad</h4>
-                  <p>{{ item.unit }}</p>
+                <!-- Header compacto -->
+                <div class="manual-header">
+                  <div v-if="item.unit" class="manual-header__unit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    {{ item.unit }}
+                  </div>
                 </div>
                 
-                <div v-if="item.position" class="manual-section">
-                  <h4>Cargo</h4>
-                  <p>{{ item.position }}</p>
-                </div>
-                
-                <div v-if="item.dependency" class="manual-section">
-                  <h4>Dependencia</h4>
-                  <p>{{ item.dependency }}</p>
-                </div>
-                
-                <div v-if="item.dependents" class="manual-section">
-                  <h4>Dependientes</h4>
-                  <p>{{ item.dependents }}</p>
-                </div>
-                
-                <div v-if="item.authority" class="manual-section">
-                  <h4>Autoridad</h4>
-                  <p>{{ item.authority }}</p>
-                </div>
-                
-                <div v-if="item.objective" class="manual-section">
-                  <h4>Objetivo</h4>
+                <!-- Objetivo destacado -->
+                <div v-if="item.objective" class="manual-objective">
+                  <svg class="manual-objective__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="6"/>
+                    <circle cx="12" cy="12" r="2"/>
+                  </svg>
                   <p>{{ item.objective }}</p>
                 </div>
                 
-                <div v-if="item.functions && item.functions.length > 0" class="manual-section">
-                  <h4>Funciones</h4>
-                  <ul>
-                    <li v-for="(func, idx) in item.functions" :key="idx">{{ func }}</li>
+                <!-- Grid de información -->
+                <div class="manual-grid">
+                  <div v-if="item.dependency" class="manual-item">
+                    <span class="manual-item__label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="17 11 12 6 7 11"/>
+                        <polyline points="17 18 12 13 7 18"/>
+                      </svg>
+                      Depende de
+                    </span>
+                    <span class="manual-item__value">{{ item.dependency }}</span>
+                  </div>
+                  
+                  <div v-if="item.dependents" class="manual-item">
+                    <span class="manual-item__label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      </svg>
+                      Supervisa
+                    </span>
+                    <span class="manual-item__value">{{ item.dependents }}</span>
+                  </div>
+                  
+                  <div v-if="item.authority" class="manual-item">
+                    <span class="manual-item__label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                      Autoridad
+                    </span>
+                    <span class="manual-item__value">{{ item.authority }}</span>
+                  </div>
+                  
+                  <div v-if="item.relations" class="manual-item">
+                    <span class="manual-item__label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      </svg>
+                      Relaciones
+                    </span>
+                    <span class="manual-item__value">{{ item.relations }}</span>
+                  </div>
+                </div>
+                
+                <!-- Funciones compactas -->
+                <div v-if="item.functions && item.functions.length > 0" class="manual-list">
+                  <h4 class="manual-list__title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Funciones
+                  </h4>
+                  <ul class="manual-list__items">
+                    <li v-for="(func, idx) in item.functions.slice(0, 5)" :key="idx">{{ func }}</li>
+                    <li v-if="item.functions.length > 5" class="manual-list__more">
+                      + {{ item.functions.length - 5 }} funciones más
+                    </li>
                   </ul>
                 </div>
                 
-                <div v-if="item.responsibilities && item.responsibilities.length > 0" class="manual-section">
-                  <h4>Responsabilidades</h4>
-                  <ul>
-                    <li v-for="(resp, idx) in item.responsibilities" :key="idx">{{ resp }}</li>
+                <!-- Responsabilidades compactas -->
+                <div v-if="item.responsibilities && item.responsibilities.length > 0" class="manual-list">
+                  <h4 class="manual-list__title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 11 12 14 22 4"/>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                    Responsabilidades
+                  </h4>
+                  <ul class="manual-list__items">
+                    <li v-for="(resp, idx) in item.responsibilities.slice(0, 5)" :key="idx">{{ resp }}</li>
+                    <li v-if="item.responsibilities.length > 5" class="manual-list__more">
+                      + {{ item.responsibilities.length - 5 }} responsabilidades más
+                    </li>
                   </ul>
                 </div>
                 
-                <div v-if="item.relations" class="manual-section">
-                  <h4>Relaciones</h4>
-                  <p>{{ item.relations }}</p>
-                </div>
-                
-                <div v-if="item.requirements" class="manual-section">
-                  <h4>Requisitos</h4>
-                  <div v-if="item.requirements.education" class="requirement-item">
-                    <strong>Grado de Instrucción:</strong> {{ item.requirements.education }}
-                  </div>
-                  <div v-if="item.requirements.experience" class="requirement-item">
-                    <strong>Experiencia:</strong> {{ item.requirements.experience }}
-                  </div>
-                  <div v-if="item.requirements.skills" class="requirement-item">
-                    <strong>Habilidades y Destrezas:</strong> {{ item.requirements.skills }}
-                  </div>
-                  <div v-if="item.requirements.knowledge" class="requirement-item">
-                    <strong>Otros Conocimientos:</strong> {{ item.requirements.knowledge }}
+                <!-- Requisitos en formato chips -->
+                <div v-if="item.requirements" class="manual-requirements">
+                  <h4 class="manual-list__title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                    Requisitos
+                  </h4>
+                  <div class="requirement-chips">
+                    <div v-if="item.requirements.education" class="chip">
+                      <span class="chip__label">Educación</span>
+                      <span class="chip__value">{{ item.requirements.education }}</span>
+                    </div>
+                    <div v-if="item.requirements.experience" class="chip">
+                      <span class="chip__label">Experiencia</span>
+                      <span class="chip__value">{{ item.requirements.experience }}</span>
+                    </div>
+                    <div v-if="item.requirements.skills" class="chip chip--full">
+                      <span class="chip__label">Habilidades</span>
+                      <span class="chip__value">{{ item.requirements.skills }}</span>
+                    </div>
+                    <div v-if="item.requirements.knowledge" class="chip chip--full">
+                      <span class="chip__label">Conocimientos</span>
+                      <span class="chip__value">{{ item.requirements.knowledge }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -539,6 +605,7 @@ html {
 .mission-card__icon {
   font-size: 2rem;
   flex-shrink: 0;
+  color: var(--color-secondary);
 }
 
 .mission-card__title {
@@ -618,73 +685,212 @@ html {
 }
 
 .accordion__body {
-  padding: var(--spacing-5);
+  padding: var(--spacing-4);
+  background-color: #FAFBFC;
 }
 
-.accordion__body p {
-  font-size: var(--font-size-sm);
-  color: #6B7280;
-  line-height: var(--line-height-relaxed);
+@media (min-width: 640px) {
+  .accordion__body {
+    padding: var(--spacing-6);
+  }
+}
+
+/* Header del manual */
+.manual-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
   margin-bottom: var(--spacing-4);
 }
 
-.accordion__body ul {
+.manual-header__unit {
+  font-size: var(--font-size-sm);
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.manual-header__unit svg {
+  flex-shrink: 0;
+  color: var(--color-secondary);
+}
+
+/* Objetivo destacado */
+.manual-objective {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-left: 4px solid #F59E0B;
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: start;
+}
+
+.manual-objective__icon {
+  flex-shrink: 0;
+  color: #D97706;
+  margin-top: 2px;
+}
+
+.manual-objective p {
+  font-size: var(--font-size-sm);
+  color: #92400E;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Grid de información */
+.manual-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+@media (min-width: 640px) {
+  .manual-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.manual-item {
+  background-color: white;
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  border: 1px solid #E5E7EB;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.manual-item__label {
+  font-size: var(--font-size-xs);
+  color: #9CA3AF;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.manual-item__label svg {
+  flex-shrink: 0;
+  color: var(--color-secondary);
+}
+
+.manual-item__value {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-dark);
+  line-height: 1.4;
+}
+
+/* Listas compactas */
+.manual-list {
+  margin-bottom: var(--spacing-4);
+}
+
+.manual-list__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.manual-list__title svg {
+  flex-shrink: 0;
+  color: var(--color-secondary);
+}
+
+.manual-list__items {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
-  margin-top: var(--spacing-3);
+  padding-left: 0;
 }
 
-.accordion__body li {
+.manual-list__items li {
   font-size: var(--font-size-sm);
-  color: #4B5563;
+  color: #374151;
   padding-left: var(--spacing-4);
   position: relative;
-  line-height: var(--line-height-relaxed);
+  line-height: 1.5;
 }
 
-.accordion__body li::before {
-  content: '';
+.manual-list__items li::before {
+  content: '•';
   position: absolute;
   left: 0;
-  top: 8px;
-  width: 6px;
-  height: 6px;
-  background-color: var(--color-secondary);
-  border-radius: var(--radius-full);
+  color: var(--color-secondary);
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
-.manual-section {
-  margin-bottom: var(--spacing-6);
+.manual-list__more {
+  color: #6B7280;
+  font-style: italic;
+  font-size: var(--font-size-xs);
 }
 
-.manual-section:last-child {
+.manual-list__more::before {
+  content: '⋯';
+  color: #9CA3AF;
+}
+
+/* Requisitos en formato chips */
+.manual-requirements {
   margin-bottom: 0;
 }
 
-.manual-section h4 {
-  font-size: var(--font-size-base);
+.requirement-chips {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2);
+}
+
+@media (min-width: 640px) {
+  .requirement-chips {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.chip {
+  background-color: white;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  transition: all var(--transition-fast);
+}
+
+.chip:hover {
+  border-color: var(--color-secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chip--full {
+  grid-column: 1 / -1;
+}
+
+.chip__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-3);
-  border-bottom: 2px solid var(--color-surface-variant);
-  padding-bottom: var(--spacing-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.manual-section p {
-  margin-bottom: 0;
-}
-
-.requirement-item {
-  margin-bottom: var(--spacing-2);
+.chip__value {
   font-size: var(--font-size-sm);
-  color: #4B5563;
-  line-height: var(--line-height-relaxed);
-}
-
-.requirement-item strong {
-  color: var(--color-neutral-dark);
-  font-weight: var(--font-weight-semibold);
+  color: #374151;
+  line-height: 1.4;
 }
 </style>

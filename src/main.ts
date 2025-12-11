@@ -6,6 +6,7 @@ import router from './router'
 
 // Import global styles
 import './assets/main.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 const app = createApp(App)
 
