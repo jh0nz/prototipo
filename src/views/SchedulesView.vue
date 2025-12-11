@@ -58,7 +58,16 @@
     <!-- Schedule Table -->
     <section class="schedule section">
       <div class="container">
-        <div class="schedule__wrapper">
+        <div v-if="loading" class="skeleton-schedule">
+          <div class="skeleton-table-header">
+            <div class="skeleton-cell" v-for="n in 6" :key="n"></div>
+          </div>
+          <div v-for="row in 7" :key="row" class="skeleton-table-row">
+            <div class="skeleton-cell" v-for="n in 6" :key="n"></div>
+          </div>
+        </div>
+        
+        <div v-else class="schedule__wrapper">
           <table class="schedule-table" role="grid">
             <thead>
               <tr>
@@ -126,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useToastStore } from '@/stores/toast'
 import { usePageSections } from '@/composables/usePageSections'
 
@@ -136,6 +145,11 @@ document.title = 'Horarios - FCyT UMSS'
 usePageSections()
 
 const toastStore = useToastStore()
+const loading = ref(true)
+
+onMounted(() => {
+  setTimeout(() => { loading.value = false }, 600)
+})
 
 const selectedCareer = ref('info')
 const selectedSemester = ref(1)
@@ -420,4 +434,87 @@ function handleExport() {
 .legend-color--3 { background-color: rgba(0, 61, 165, 0.3); }
 .legend-color--4 { background-color: rgba(0, 61, 165, 0.4); }
 .legend-color--5 { background-color: rgba(0, 61, 165, 0.5); }
+
+/* Skeleton Styles */
+.skeleton-schedule {
+  background: white;
+  border-radius: 12px;
+  padding: var(--spacing-4);
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-table-header {
+  display: grid;
+  grid-template-columns: 120px repeat(5, 1fr);
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.skeleton-table-row {
+  display: grid;
+  grid-template-columns: 120px repeat(5, 1fr);
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.skeleton-cell {
+  height: 80px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-cell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-table-header .skeleton-cell {
+  height: 50px;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .skeleton-table-header,
+  .skeleton-table-row {
+    grid-template-columns: 100px repeat(5, 1fr);
+  }
+  
+  .skeleton-cell {
+    height: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-table-header,
+  .skeleton-table-row {
+    grid-template-columns: 80px repeat(3, 1fr);
+  }
+  
+  .skeleton-cell {
+    height: 60px;
+  }
+}
 </style>

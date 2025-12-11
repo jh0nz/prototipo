@@ -16,7 +16,25 @@
     </header>
 
     <div class="container section">
-      <div v-if="currentNews" class="news-content-wrapper">
+      <div v-if="loading" class="news-skeleton">
+        <div class="skeleton-article">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-meta"></div>
+          <div class="skeleton-hero-image"></div>
+          <div class="skeleton-body">
+            <div v-for="n in 8" :key="n" class="skeleton-line"></div>
+          </div>
+        </div>
+        <div class="skeleton-sidebar">
+          <div class="skeleton-sidebar-title"></div>
+          <div v-for="n in 3" :key="n" class="skeleton-related-card">
+            <div class="skeleton-related-image"></div>
+            <div class="skeleton-related-text"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div v-else-if="currentNews" class="news-content-wrapper">
         <article class="news-article">
           <div class="news-article__header">
             <h1 class="news-title">{{ currentNews.title }}</h1>
@@ -34,7 +52,7 @@
                 <span v-for="tag in currentNews.tags" :key="tag" class="tag">{{ tag }}</span>
               </div>
             </div>
-            <img :src="currentNews.image" :alt="currentNews.title" class="news-hero-image" />
+            <img :src="currentNews.image" :alt="currentNews.title" class="news-hero-image" loading="lazy" />
           </div>
 
           <div class="news-body" v-html="currentNews.content || `<p>${currentNews.excerpt}</p>`"></div>
@@ -55,7 +73,7 @@
           <h3>Otras Noticias</h3>
           <div class="related-news">
              <div v-for="item in relatedNews" :key="item.id" class="related-card" @click="goToNews(item.id)">
-               <img :src="item.image" :alt="item.title" class="related-image" />
+               <img :src="item.image" :alt="item.title" class="related-image" loading="lazy" />
                <div class="related-info">
                  <span class="related-date">{{ formatDate(item.date) }}</span>
                  <h4 class="related-title">{{ item.title }}</h4>
@@ -81,6 +99,7 @@ import type { NewsItem } from '@/types'
 const route = useRoute()
 const router = useRouter()
 const currentNews = ref<NewsItem | null>(null)
+const loading = ref(true)
 
 const relatedNews = computed(() => {
   return (noticiasData as NewsItem[])
@@ -89,13 +108,17 @@ const relatedNews = computed(() => {
 })
 
 function loadNews() {
+  loading.value = true
   const id = Number(route.params.id)
-  const found = noticiasData.find((n: any) => n.id === id)
-  if (found) {
-    currentNews.value = found as NewsItem
-  } else {
-    // Redirect or show error, for now just stay
-  }
+  
+  // Simulate loading delay for images
+  setTimeout(() => {
+    const found = noticiasData.find((n: any) => n.id === id)
+    if (found) {
+      currentNews.value = found as NewsItem
+    }
+    loading.value = false
+  }, 600)
 }
 
 function GoToNews(id: number) {
@@ -549,6 +572,274 @@ watch(() => route.params.id, () => {
   .related-date {
     font-size: 0.7rem;
     margin-bottom: 4px;
+  }
+}
+
+/* Skeleton Styles */
+.news-skeleton {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: var(--spacing-8);
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-article {
+  background: white;
+  border-radius: 16px;
+  padding: var(--spacing-8);
+}
+
+.skeleton-title {
+  height: 40px;
+  width: 80%;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-meta {
+  height: 20px;
+  width: 40%;
+  background-color: #E2E8F0;
+  border-radius: 4px;
+  margin-bottom: var(--spacing-6);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-meta::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-hero-image {
+  height: 400px;
+  width: 100%;
+  background-color: #E2E8F0;
+  border-radius: 12px;
+  margin-bottom: var(--spacing-6);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-hero-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.skeleton-line {
+  height: 16px;
+  background-color: #E2E8F0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-line:nth-child(even) {
+  width: 95%;
+}
+
+.skeleton-line:nth-child(3n) {
+  width: 85%;
+}
+
+.skeleton-sidebar {
+  background: white;
+  border-radius: 16px;
+  padding: var(--spacing-6);
+  height: fit-content;
+}
+
+.skeleton-sidebar-title {
+  height: 24px;
+  width: 60%;
+  background-color: #E2E8F0;
+  border-radius: 4px;
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-sidebar-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-related-card {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skeleton-related-card:last-child {
+  border-bottom: none;
+}
+
+.skeleton-related-image {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  background-color: #E2E8F0;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-related-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-related-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.skeleton-related-text::before,
+.skeleton-related-text::after {
+  content: '';
+  height: 12px;
+  background-color: #E2E8F0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.skeleton-related-text::before {
+  width: 40%;
+}
+
+.skeleton-related-text::after {
+  width: 90%;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .news-skeleton {
+    grid-template-columns: 1fr;
+  }
+  
+  .skeleton-hero-image {
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skeleton-hero-image {
+    height: 200px;
+  }
+  
+  .skeleton-related-image {
+    width: 70px;
+    height: 70px;
   }
 }
 

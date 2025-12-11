@@ -64,7 +64,8 @@
       <div class="container">
         <h2 class="section-title">Autoridades</h2>
         
-        <div class="authorities__grid">
+        <SkeletonGrid v-if="loadingAuthorities" variant="stats" :count="6" :has-image="false" :lines="3" />
+        <div v-else class="authorities__grid">
           <article 
             v-for="authority in authorities" 
             :key="authority.id"
@@ -100,7 +101,8 @@
     <section id="identidad" class="mission-vision section">
       <div class="container">
         <h2 class="section-title">Identidad Institucional</h2>
-        <div class="mission-vision__grid">
+        <SkeletonGrid v-if="loadingIdentity" variant="stats" :count="3" :has-image="false" :lines="4" />
+        <div v-else class="mission-vision__grid">
           <article class="mission-card">
             <div class="mission-card__header">
               <span class="mission-card__icon mdi mdi-target"></span>
@@ -315,10 +317,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { Authority } from '@/types'
 import autoridadesData from '@/data/autoridades.json'
 import manualFuncionesData from '@/data/manual-funciones.json'
+import SkeletonGrid from '@/components/ui/SkeletonGrid.vue'
 import { usePageSections } from '@/composables/usePageSections'
 
 document.title = 'Nosotros - FCyT UMSS'
@@ -329,6 +332,15 @@ const authorities: Authority[] = autoridadesData as Authority[]
 const manualItems = manualFuncionesData
 const getInitials = (name: string) => name.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('')
 const toggleAccordion = (index: number) => openAccordion.value = openAccordion.value === index ? null : index
+
+// Loading states
+const loadingAuthorities = ref(true)
+const loadingIdentity = ref(true)
+
+onMounted(() => {
+  setTimeout(() => { loadingAuthorities.value = false }, 500)
+  setTimeout(() => { loadingIdentity.value = false }, 700)
+})
 </script>
 
 <style scoped>

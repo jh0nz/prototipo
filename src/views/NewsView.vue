@@ -12,7 +12,8 @@
     </header>
 
     <section class="section container">
-      <div class="news-grid">
+      <SkeletonGrid v-if="loading" variant="news" :count="6" :has-image="true" :lines="2" />
+      <div v-else class="news-grid">
         <article 
           v-for="news in filteredNews" 
           :key="news.id"
@@ -20,7 +21,7 @@
           @click="goToNews(news.id)"
         >
           <div class="news-card__image">
-            <img :src="news.image" :alt="news.title" />
+            <img :src="news.image" :alt="news.title" loading="lazy" />
             <div class="news-card__date">
               <span class="mdi mdi-calendar"></span>
               {{ formatDate(news.date) }}
@@ -48,14 +49,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import noticiasData from '@/data/noticias.json'
+import SkeletonGrid from '@/components/ui/SkeletonGrid.vue'
 import type { NewsItem } from '@/types'
 
 document.title = 'Noticias - FCyT UMSS'
 
 const router = useRouter()
+const loading = ref(true)
+
+onMounted(() => {
+  // Simulate loading delay for images
+  setTimeout(() => { loading.value = false }, 600)
+})
 
 const filteredNews = computed(() => {
   const news = noticiasData as NewsItem[]

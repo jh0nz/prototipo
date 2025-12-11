@@ -10,38 +10,51 @@
     </header>
 
     <div class="container section" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
-      <!-- Toolbar -->
-      <div class="calendar-toolbar">
-        <div class="month-nav">
-          <button @click="prevMonth" class="btn-icon" aria-label="Mes anterior">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 18 9 12 15 6"/>
-            </svg>
-          </button>
-          <h2 class="current-month">{{ currentMonthName }} {{ currentYear }}</h2>
-          <button @click="nextMonth" class="btn-icon" aria-label="Mes siguiente">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </button>
-          <button @click="goToToday" class="btn btn-sm btn-outline">Hoy</button>
+      <div v-if="loading" class="calendar-skeleton">
+        <div class="skeleton-toolbar">
+          <div class="skeleton-nav"></div>
+          <div class="skeleton-filters">
+            <div v-for="n in 6" :key="n" class="skeleton-filter"></div>
+          </div>
         </div>
-
-        <div class="filters">
-          <button 
-            v-for="filter in filters" 
-            :key="filter.value"
-            class="filter-chip"
-            :class="{ 'filter-chip--active': activeFilter === filter.value }"
-            @click="activeFilter = filter.value"
-          >
-            {{ filter.icon }} {{ filter.label }}
-          </button>
+        <div class="skeleton-calendar-grid">
+          <div v-for="n in 42" :key="n" class="skeleton-calendar-cell"></div>
         </div>
       </div>
+      
+      <template v-else>
+        <!-- Toolbar -->
+        <div class="calendar-toolbar">
+          <div class="month-nav">
+            <button @click="prevMonth" class="btn-icon" aria-label="Mes anterior">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <h2 class="current-month">{{ currentMonthName }} {{ currentYear }}</h2>
+            <button @click="nextMonth" class="btn-icon" aria-label="Mes siguiente">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+            <button @click="goToToday" class="btn btn-sm btn-outline">Hoy</button>
+          </div>
 
-      <!-- Month Grid -->
-      <div class="month-grid">
+          <div class="filters">
+            <button 
+              v-for="filter in filters" 
+              :key="filter.value"
+              class="filter-chip"
+              :class="{ 'filter-chip--active': activeFilter === filter.value }"
+              @click="activeFilter = filter.value"
+            >
+              {{ filter.icon }} {{ filter.label }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Month Grid -->
+        <div class="month-grid">
         <!-- Weekday Headers -->
         <div class="weekday-header" v-for="day in weekDaysNames" :key="day">{{ day }}</div>
 
@@ -90,6 +103,7 @@
           </div>
         </div>
       </div>
+      </template>
     </div>
 
     <!-- Day Modal -->
@@ -102,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import eventsData from '@/data/calendar-events.json'
 import noticiasData from '@/data/noticias.json'
@@ -120,6 +134,12 @@ function useMeta(arg0: { title: string }) {
 const currentDate = ref(new Date())
 const activeFilter = ref('all')
 const selectedDay = ref<any>(null)
+const loading = ref(true)
+
+onMounted(() => {
+  // Simulate calendar data loading
+  setTimeout(() => { loading.value = false }, 500)
+})
 
 const filters = [
   { label: 'Todos', value: 'all', icon: '📅' },
@@ -858,6 +878,128 @@ function goToNews(id: number) {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Skeleton Styles */
+.calendar-skeleton {
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+  gap: var(--spacing-4);
+}
+
+.skeleton-nav {
+  height: 40px;
+  width: 300px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-nav::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-filters {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.skeleton-filter {
+  height: 36px;
+  width: 100px;
+  background-color: #E2E8F0;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-filter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-2);
+}
+
+.skeleton-calendar-cell {
+  height: 110px;
+  background-color: #E2E8F0;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: var(--spacing-2);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-calendar-cell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Transitions */

@@ -36,7 +36,18 @@
 
     <!-- Main Content Grid: Checklist + Timeline -->
     <section id="requisitos" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
-      <div class="main-grid">
+      <div v-if="loading" class="skeleton-admissions">
+        <div class="skeleton-column">
+          <div class="skeleton-header"></div>
+          <div v-for="n in 5" :key="n" class="skeleton-req-card"></div>
+        </div>
+        <div class="skeleton-column">
+          <div class="skeleton-header"></div>
+          <div class="skeleton-timeline"></div>
+        </div>
+      </div>
+      
+      <div v-else class="main-grid">
         
         <div class="requirements-column">
           <div class="column-header">
@@ -186,6 +197,8 @@ import { usePageSections } from '@/composables/usePageSections'
 document.title = 'Admisión I-2026 - FCyT UMSS'
 usePageSections()
 
+const loading = ref(true)
+
 const requirements = [
   {id: '1', title: 'Ser Bachiller', description: 'Diploma de bachiller o libreta escolar.', icon: 'school', tooltip: 'Documento oficial que acredite la culminación de estudios secundarios'},
   {id: '2', title: 'Formulario de Datos', description: 'Llenar e imprimir en <a href="https://admision.fcyt.umss.edu.bo" target="_blank">admision.fcyt.umss.edu.bo</a>', icon: 'file-document-edit', tooltip: 'El formulario debe ser impreso y presentado el día del examen'},
@@ -247,6 +260,9 @@ onMounted(() => {
   
   updateCountdown()
   countdownInterval = window.setInterval(updateCountdown, 60000)
+  
+  // Simulate loading
+  setTimeout(() => { loading.value = false }, 500)
 })
 </script>
 
@@ -559,4 +575,113 @@ onMounted(() => {
 .t-row { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
 .t-row:last-child { border: none; margin: 0; padding: 0; }
 .t-row.highlight { color: var(--color-primary); font-weight: bold; }
+
+/* Skeleton Styles */
+.skeleton-admissions {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-6);
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.skeleton-header {
+  height: 60px;
+  background-color: #E2E8F0;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-req-card {
+  height: 120px;
+  background-color: #E2E8F0;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-req-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-timeline {
+  height: 500px;
+  background-color: #E2E8F0;
+  border: 1px solid #CBD5E1;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-timeline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .skeleton-admissions {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

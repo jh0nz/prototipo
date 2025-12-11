@@ -3,10 +3,12 @@
     <!-- Dashboard Grid: Carousel + Calendar -->
     <div class="container section dashboard-grid" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div class="dashboard-hero">
-        <HeroCarousel />
+        <SkeletonCard v-if="loadingCarousel" variant="carousel" :has-image="true" :lines="0" />
+        <HeroCarousel v-else />
       </div>
       <div class="dashboard-calendar">
-        <AcademicTimeline />
+        <SkeletonCard v-if="loadingCalendar" variant="card" :has-image="false" :lines="5" />
+        <AcademicTimeline v-else />
       </div>
     </div>
 
@@ -17,7 +19,8 @@
         <p class="section-subtitle">Datos que respaldan nuestra excelencia académica</p>
       </div>
       
-      <div class="stats-grid">
+      <SkeletonGrid v-if="loadingStats" variant="stats" :count="4" card-variant="stat" :has-image="false" :lines="1" />
+      <div v-else class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -82,7 +85,8 @@
         <p class="section-subtitle">Formamos profesionales líderes en ciencia, tecnología e ingeniería</p>
       </div>
       
-      <div class="careers-grid" :class="{ 'careers-grid--expanded': showAllCareers }">
+      <SkeletonGrid v-if="loadingCareers" variant="careers" :count="8" :has-image="false" :lines="2" />
+      <div v-else class="careers-grid" :class="{ 'careers-grid--expanded': showAllCareers }">
         <div class="career-card" v-for="(career, index) in displayedCareers" :key="index">
           <div class="career-icon">{{ career.icon }}</div>
           <h3>{{ career.name }}</h3>
@@ -107,7 +111,8 @@
         <p class="section-subtitle">Todo lo que necesitas para tu formación académica</p>
       </div>
 
-      <div class="services-grid">
+      <SkeletonGrid v-if="loadingServices" variant="stats" :count="6" :has-image="false" :lines="3" />
+      <div v-else class="services-grid">
         <div class="service-card">
           <div class="service-icon">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -222,9 +227,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import HeroCarousel from '@/components/home/HeroCarousel.vue'
 import AcademicTimeline from '@/components/home/AcademicTimeline.vue'
+import SkeletonCard from '@/components/ui/SkeletonCard.vue'
+import SkeletonGrid from '@/components/ui/SkeletonGrid.vue'
 import { usePageSections } from '@/composables/usePageSections'
 
 // Title is handled by router meta, but we can double check
@@ -232,6 +239,27 @@ document.title = 'Inicio - Facultad de Ciencias y Tecnología'
 
 // Initialize page sections
 usePageSections()
+
+// Loading states
+const loadingCarousel = ref(true)
+const loadingCalendar = ref(true)
+const loadingStats = ref(true)
+const loadingCareers = ref(true)
+const loadingServices = ref(true)
+
+// Simulate progressive loading
+onMounted(() => {
+  // Carousel loads first (images)
+  setTimeout(() => { loadingCarousel.value = false }, 800)
+  // Calendar loads next
+  setTimeout(() => { loadingCalendar.value = false }, 1000)
+  // Stats load
+  setTimeout(() => { loadingStats.value = false }, 1200)
+  // Careers load
+  setTimeout(() => { loadingCareers.value = false }, 1400)
+  // Services load last
+  setTimeout(() => { loadingServices.value = false }, 1600)
+})
 
 // Careers data
 const careers = [
