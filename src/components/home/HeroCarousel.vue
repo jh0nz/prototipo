@@ -20,6 +20,9 @@
       <div 
         class="carousel__track" 
         :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
       >
           <article 
             v-for="(news, index) in newsItems" 
@@ -118,7 +121,12 @@ const currentSlide = ref(0)
 const progressWidth = ref(0)
 let animationFrame: ReturnType<typeof requestAnimationFrame> | null = null
 let lastTime = 0
-const SLIDE_DURATION = 5000 
+const SLIDE_DURATION = 5000
+
+// Touch handling
+let touchStartX = 0
+let touchEndX = 0
+const MIN_SWIPE_DISTANCE = 50
 
 function startAutoplay() {
   stopAutoplay()
@@ -175,6 +183,36 @@ function formatDate(dateString: string): string {
     month: 'long',
     year: 'numeric'
   })
+}
+
+function handleTouchStart(e: TouchEvent) {
+  touchStartX = e.touches[0].clientX
+  stopAutoplay()
+}
+
+function handleTouchMove(e: TouchEvent) {
+  touchEndX = e.touches[0].clientX
+}
+
+function handleTouchEnd() {
+  const swipeDistance = touchStartX - touchEndX
+  
+  if (Math.abs(swipeDistance) > MIN_SWIPE_DISTANCE) {
+    if (swipeDistance > 0) {
+      // Swipe left - next slide
+      nextSlide()
+    } else {
+      // Swipe right - previous slide
+      prevSlide()
+    }
+  } else {
+    // No significant swipe, restart autoplay
+    startAutoplay()
+  }
+  
+  // Reset touch positions
+  touchStartX = 0
+  touchEndX = 0
 }
 
 onMounted(() => {
@@ -275,26 +313,34 @@ onUnmounted(() => {
 .news-card {
   position: relative;
   min-height: 380px;
+  height: 380px;
   display: flex;
   align-items: flex-end;
   cursor: pointer;
+  overflow: hidden;
 }
 
 @media (max-width: 767px) {
   .news-card {
-    min-height: 350px;
+    min-height: 400px;
+    height: 400px;
   }
 }
 
 .news-card__image-wrapper {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .news-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   transition: transform 0.5s ease;
 }
 
