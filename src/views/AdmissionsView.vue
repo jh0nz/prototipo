@@ -299,10 +299,11 @@ onMounted(() => {
 .page-header {
   background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
   color: white;
-  padding: var(--spacing-8) 0;
+  padding: 40px 0;
+  margin-bottom: 40px; /* Add margin bottom */
 }
 .header-content { display: flex; justify-content: space-between; align-items: center; gap: 32px; }
-.page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; }
+.page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; color: white; }
 .header-countdown { background: rgba(255,255,255,0.15); padding: 16px; border-radius: 12px; text-align: center; }
 .countdown-timer { display: flex; gap: 12px; align-items: center; }
 .timer-value { font-size: 2rem; font-weight: bold; line-height: 1; }
@@ -419,7 +420,7 @@ onMounted(() => {
 @media (max-width: 768px) { .timeline-options { grid-template-columns: 1fr; } }
 .timeline-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--color-neutral-light); box-shadow: var(--shadow-sm); }
 .timeline-header { padding: 12px 16px; color: white; display: flex; justify-content: space-between; align-items: center; }
-.timeline-header h3 { margin: 0; font-size: 1rem; }
+.timeline-header h3 { margin: 0; font-size: 1rem; color: white; }
 .timeline-header.primary { background: var(--color-primary); }
 .timeline-header.secondary { background: var(--color-secondary); }
 .timeline-header.accent { background: var(--color-accent-dark); }

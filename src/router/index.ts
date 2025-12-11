@@ -14,7 +14,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/institucional',
+      path: '/nosotros',
       name: 'institutional',
       component: () => import('@/views/InstitutionalView.vue'),
       meta: {

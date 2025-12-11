@@ -89,7 +89,7 @@ const isMobileMenuOpen = ref(false)
 
 const navItems = [
   { label: 'Inicio', path: '/', icon: 'home' },
-  { label: 'Nosotros', path: '/institucional', icon: 'account_balance' },
+  { label: 'Nosotros', path: '/nosotros', icon: 'account_balance' },
   { label: 'Calendario', path: '/calendario', icon: 'calendar_month' },
   { label: 'Horarios', path: '/horarios', icon: 'schedule' },
   { label: 'Admisión', path: '/admision', icon: 'edit_document' },

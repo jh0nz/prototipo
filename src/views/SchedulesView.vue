@@ -224,24 +224,24 @@ function handleExport() {
 
 /* Page Header */
 .page-header {
-  padding: var(--spacing-6) 0 var(--spacing-8);
   background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
   color: white;
-  margin-bottom: var(--spacing-4);
+  padding: 40px 0;
+  margin-bottom: 40px;
 }
 
 .page-header__title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-3);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
   color: white;
 }
 
 .page-header__subtitle {
-  font-size: var(--font-size-lg);
+  font-size: 1rem;
   opacity: 0.9;
-  max-width: 600px;
   margin: 0;
+  max-width: 600px;
 }
 
 /* Filters */

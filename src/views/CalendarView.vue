@@ -4,7 +4,7 @@
       <div class="container">
         <h1 class="page-header__title">Calendario Académico y Eventos</h1>
         <p class="page-header__subtitle">
-          Consulta todas las actividades, exámenes, trámites y noticias de la facultad.
+          Consulta todas las actividades, exámenes, trámites y noticias de la facultad
         </p>
       </div>
     </header>
@@ -264,6 +264,28 @@ function formatDateFull(dateStr: string) {
 </script>
 
 <style scoped>
+/* Page Header */
+.page-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
+  color: white;
+  padding: 40px 0;
+  margin-bottom: 40px;
+}
+
+.page-header__title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.page-header__subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
+  max-width: 600px;
+}
+
 .calendar-page {
   padding-bottom: var(--spacing-12);
 }

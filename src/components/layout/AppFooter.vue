@@ -30,9 +30,10 @@
             <h4>Navegación</h4>
             <ul>
               <li><RouterLink to="/">Inicio</RouterLink></li>
-              <li><RouterLink to="/institucional">Nosotros</RouterLink></li>
+              <li><RouterLink to="/nosotros">Nosotros</RouterLink></li>
               <li><RouterLink to="/calendario">Calendario</RouterLink></li>
               <li><RouterLink to="/horarios">Horarios</RouterLink></li>
+              <li><RouterLink to="/contacto">Contacto</RouterLink></li>
             </ul>
           </div>
 

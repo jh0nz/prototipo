@@ -145,10 +145,12 @@ function handleSubmit() {
 
 .page-header {
   background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
-  color: white; padding: 40px 0;
+  color: white; 
+  padding: 40px 0;
+  margin-bottom: 40px;
 }
-.header-content { text-align: center; }
-.page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; }
+.header-content { text-align: left; }
+.page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; color: white; }
 .page-header__subtitle { font-size: 1rem; opacity: 0.9; }
 
 .contact-layout {
