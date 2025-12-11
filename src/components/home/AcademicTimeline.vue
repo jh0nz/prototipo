@@ -1,8 +1,11 @@
 <template>
   <section id="calendar" class="weekly-calendar section" aria-label="Calendario Semanal">
     <div class="calendar-content">
+      <div class="calendar-section-header">
+        <h2 class="main-section-title">Agenda Semanal</h2>
+      </div>
       <div class="calendar-header">
-        <h2 class="section-title">{{ currentMonthName }} {{ currentYear }}</h2>
+        <h3 class="section-title">{{ currentMonthName }} {{ currentYear }}</h3>
         <div class="calendar-controls">
           <button @click="prevWeek" class="btn-control" aria-label="Semana anterior" title="Semana anterior">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -311,6 +314,20 @@ function goToNews(id: number) {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.calendar-section-header {
+  padding: 0 0 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.main-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-neutral-dark);
+  margin: 0;
 }
 
 .calendar-content {

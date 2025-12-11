@@ -1,13 +1,16 @@
 <template>
   <div class="news-detail-view">
-    <!-- Header with Breadcrumb Style -->
     <header class="page-header">
       <div class="container">
-        <h1 class="page-header__title">Noticias</h1>
         <div class="breadcrumb">
-          <router-link to="/" class="breadcrumb-item">Inicio</router-link>
+          <router-link to="/" class="breadcrumb-item">
+            <span class="mdi mdi-home"></span>
+            Inicio
+          </router-link>
           <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">{{ currentNews?.title || 'Detalle' }}</span>
+          <router-link to="/noticias" class="breadcrumb-item">Noticias</router-link>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">{{ currentNews?.id || '...' }}</span>
         </div>
       </div>
     </header>
@@ -124,49 +127,100 @@ watch(() => route.params.id, () => {
 .page-header {
   background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
   color: white;
-  padding: 40px 0;
+  padding: 24px 20px;
   margin-bottom: 40px;
 }
 
-.page-header__title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
+@media (max-width: 768px) {
+  .page-header {
+    padding: 20px;
+    margin-bottom: 28px;
+  }
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
-  opacity: 0.9;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .breadcrumb {
+    font-size: 0.85rem;
+    gap: 8px;
+  }
 }
 
 .breadcrumb-item {
   color: white;
   text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .breadcrumb-item:hover {
-  text-decoration: underline;
+  opacity: 1;
+}
+
+.breadcrumb-separator {
+  opacity: 0.6;
+}
+
+.breadcrumb-current {
+  opacity: 1;
+  font-weight: 600;
 }
 
 .news-content-wrapper {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 40px;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .news-content-wrapper {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .news-content-wrapper {
+    gap: 32px;
   }
 }
 
 .news-article {
   background: white;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  border-radius: 16px;
+  padding: 48px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 1024px) {
+  .news-article {
+    padding: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .news-article {
+    padding: 24px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-article {
+    padding: 20px;
+  }
 }
 
 .news-article__header {
@@ -179,6 +233,18 @@ watch(() => route.params.id, () => {
   line-height: 1.2;
   color: var(--color-neutral-dark);
   margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .news-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-title {
+    font-size: 1.5rem;
+  }
 }
 
 .news-meta {
@@ -203,12 +269,29 @@ watch(() => route.params.id, () => {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   margin-bottom: 2rem;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .news-hero-image {
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    max-height: 300px;
+  }
 }
 
 .news-body {
   color: var(--color-neutral-dark);
   line-height: 1.8;
   font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .news-body {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 
 .news-body :deep(h2) {
@@ -226,6 +309,18 @@ watch(() => route.params.id, () => {
   margin-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+  .news-body :deep(h2) {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .news-body :deep(h3) {
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+  }
+}
+
 .news-body :deep(p) {
   margin-bottom: 1.5rem;
   color: #475569;
@@ -239,54 +334,90 @@ watch(() => route.params.id, () => {
 
 .news-body :deep(li) {
   margin-bottom: 0.5rem;
+.news-sidebar {
+  position: sticky;
+  top: 24px;
 }
 
-.news-footer {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--color-neutral-light);
+@media (max-width: 1024px) {
+  .news-sidebar {
+    position: static;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
 }
 
-/* Sidebar */
 .news-sidebar h3 {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--color-primary);
-  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--color-neutral-dark);
+}
+
+.related-news {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .related-card {
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
   cursor: pointer;
-  group: hover;
+  transition: all 0.2s ease;
+  background: white;
+  border: 1px solid #F1F5F9;
+}
+
+.related-card:hover {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  transform: translateX(4px);
 }
 
 .related-image {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
 .related-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .related-date {
-  font-size: 0.8rem;
-  color: var(--color-secondary);
+  font-size: 0.75rem;
+  color: #94A3B8;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-weight: 500;
 }
 
 .related-title {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin: 0;
+  line-height: 1.4;
+  color: var(--color-neutral-dark);
+  transition: color 0.2s;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.related-card:hover .related-title {
+  color: var(--color-primary);
+} margin: 0;
   line-height: 1.4;
   color: var(--color-neutral-dark);
   transition: color 0.2s;

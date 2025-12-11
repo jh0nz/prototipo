@@ -1,5 +1,9 @@
 <template>
   <section class="hero" aria-label="Noticias destacadas">
+    <div class="container section-header">
+      <h2 class="section-title">Últimas Noticias</h2>
+      <p class="section-subtitle">Mantente informado sobre las novedades más recientes de la facultad</p>
+    </div>
     <div class="carousel" role="region" aria-roledescription="carrusel" aria-label="Noticias principales">
       <!-- Carousel Track -->
       <div 
@@ -188,6 +192,26 @@ onUnmounted(() => {
 <style scoped>
 .hero {
   height: 100%;
+}
+
+.section-header {
+  padding-top: 48px;
+  padding-bottom: 24px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-neutral-dark);
+  margin: 0 0 8px 0;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #64748B;
+  margin: 0;
+  font-weight: 400;
 }
 
 .carousel {
