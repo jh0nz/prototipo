@@ -531,25 +531,27 @@ onUnmounted(() => {
   position: absolute;
   top: var(--spacing-4);
   right: var(--spacing-4);
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  border: none;
-  border-radius: var(--radius-full);
-  color: var(--color-neutral-dark);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  color: white;
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
   z-index: 10;
+  transform: translate(65%, -45%);
 }
 
-.pdf-modal__close:hover {
-  background-color: var(--color-danger);
-  color: white;
-  transform: scale(1.1);
+.pdf-modal__close:hover,
+.pdf-modal__close:focus-visible {
+  background: rgba(200, 16, 46, 0.95);
+  border-color: transparent;
+  transform: translate(65%, -45%) scale(1.03);
 }
 
 .pdf-modal__header {
