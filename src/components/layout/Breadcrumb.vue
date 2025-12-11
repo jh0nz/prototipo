@@ -24,9 +24,7 @@
               {{ mobileBreadcrumbs[0]?.label }}
             </span>
             
-            <svg class="breadcrumb__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
+            <span class="breadcrumb__arrow">/</span>
           </template>
           
           <!-- Actual (siempre visible - click para expandir) -->
@@ -93,18 +91,12 @@
             {{ item.label }}
           </span>
           
-          <svg 
+          <span 
             v-if="index < breadcrumbs.length - 1"
-            class="breadcrumb__separator" 
-            width="16" 
-            height="16" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            stroke-width="2"
+            class="breadcrumb__separator"
           >
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
+            /
+          </span>
         </li>
       </ol>
 
