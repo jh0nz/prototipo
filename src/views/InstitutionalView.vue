@@ -454,31 +454,91 @@ html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 .mission-vision { background: var(--color-surface); }
 .mission-vision__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--spacing-6);
 }
+
+@media (min-width: 768px) {
+  .mission-vision__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mission-vision__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .mission-card {
-  background: var(--color-surface-variant);
+  background: white;
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
+  border: 1px solid #E2E8F0;
 }
-.mission-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.mission-card--full { grid-column: 1 / -1; }
-.mission-card__header { display: flex; align-items: center; gap: var(--spacing-3); margin-bottom: var(--spacing-4); }
-.mission-card__icon { font-size: 2rem; color: var(--color-secondary); }
+
+.mission-card:hover { 
+  box-shadow: var(--shadow-lg); 
+  transform: translateY(-2px);
+  border-color: var(--color-primary-light);
+}
+
+.mission-card--full { 
+  grid-column: 1 / -1; 
+}
+
+@media (min-width: 768px) {
+  .mission-card--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.mission-card__header { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--spacing-3); 
+  margin-bottom: var(--spacing-4); 
+}
+
+.mission-card__icon { 
+  font-size: 2.5rem; 
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
 .mission-card__title {
   font-size: var(--font-size-xl);
   font-weight: bold;
-  color: var(--color-primary);
+  color: var(--color-neutral-dark);
   margin: 0;
 }
+
 .mission-card__content {
   color: #4B5563;
   line-height: var(--line-height-relaxed);
   text-align: justify;
   margin: 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 767px) {
+  .mission-card {
+    padding: var(--spacing-5);
+  }
+  
+  .mission-card__icon {
+    font-size: 2rem;
+  }
+  
+  .mission-card__title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .mission-card__content {
+    font-size: 0.9rem;
+  }
 }
 
 /* Manual */

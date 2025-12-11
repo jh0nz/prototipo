@@ -12,29 +12,6 @@
     </header>
 
     <section class="section container">
-      <div class="news-filters">
-        <div class="filter-group">
-          <button 
-            v-for="cat in categories" 
-            :key="cat.value"
-            :class="['filter-btn', { active: activeCategory === cat.value }]"
-            @click="activeCategory = cat.value"
-          >
-            <span class="mdi" :class="cat.icon"></span>
-            {{ cat.label }}
-          </button>
-        </div>
-        <div class="search-box">
-          <span class="mdi mdi-magnify search-icon"></span>
-          <input 
-            v-model="searchQuery" 
-            type="text" 
-            placeholder="Buscar noticias..."
-            class="search-input"
-          />
-        </div>
-      </div>
-
       <div class="news-grid">
         <article 
           v-for="news in filteredNews" 
@@ -79,27 +56,9 @@ import type { NewsItem } from '@/types'
 document.title = 'Noticias - FCyT UMSS'
 
 const router = useRouter()
-const searchQuery = ref('')
-const activeCategory = ref('all')
-
-const categories = [
-  { value: 'all', label: 'Todas', icon: 'mdi-view-grid' },
-  { value: 'admision', label: 'Admisión', icon: 'mdi-account-school' },
-  { value: 'investigacion', label: 'Investigación', icon: 'mdi-flask' },
-  { value: 'eventos', label: 'Eventos', icon: 'mdi-calendar-star' }
-]
 
 const filteredNews = computed(() => {
-  let news = noticiasData as NewsItem[]
-  
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    news = news.filter(n => 
-      n.title.toLowerCase().includes(query) || 
-      (n.excerpt && n.excerpt.toLowerCase().includes(query))
-    )
-  }
-  
+  const news = noticiasData as NewsItem[]
   return news.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
 
@@ -127,7 +86,8 @@ function formatDate(dateStr: string) {
 }
 
 .header-content {
-  max-width: 800px;
+  max-width: 1200px;
+  text-align: left;
 }
 
 .page-header__title { 
@@ -158,93 +118,6 @@ function formatDate(dateStr: string) {
   .page-header__subtitle {
     font-size: 0.95rem;
   }
-}
-
-.news-filters {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-
-.filter-group {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-@media (max-width: 768px) {
-  .news-filters {
-    margin-bottom: 28px;
-  }
-}
-
-.filter-btn {
-  padding: 10px 20px;
-  border: 1px solid #E2E8F0;
-  background: white;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #475569;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.filter-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  transform: translateY(-1px);
-}
-
-.filter-btn.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
-}
-
-.search-box {
-  position: relative;
-  min-width: 280px;
-  flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .search-box {
-    min-width: 100%;
-    width: 100%;
-  }
-}
-
-.search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94A3B8;
-  font-size: 20px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 12px 16px 12px 44px;
-  border: 1px solid #E2E8F0;
-  border-radius: 50px;
-  font-size: 0.9rem;
-  background: white;
-  transition: all 0.2s ease;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.1);
 }
 
 .news-grid {
@@ -403,15 +276,6 @@ function formatDate(dateStr: string) {
 @media (max-width: 768px) {
   .news-grid {
     grid-template-columns: 1fr;
-  }
-  
-  .news-filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .search-box {
-    min-width: 100%;
   }
 }
 </style>
