@@ -270,6 +270,9 @@ function formatDateFull(dateStr: string) {
   color: white;
   padding: 40px 0;
   margin-bottom: 40px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
 }
 
 .page-header__title {

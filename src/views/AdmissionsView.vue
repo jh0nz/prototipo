@@ -301,6 +301,9 @@ onMounted(() => {
   color: white;
   padding: 40px 0;
   margin-bottom: 40px; /* Add margin bottom */
+  min-height: 220px;
+  display: flex;
+  align-items: center;
 }
 .header-content { display: flex; justify-content: space-between; align-items: center; gap: 32px; }
 .page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; color: white; }

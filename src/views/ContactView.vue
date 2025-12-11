@@ -148,6 +148,9 @@ function handleSubmit() {
   color: white; 
   padding: 40px 0;
   margin-bottom: 40px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
 }
 .header-content { text-align: left; }
 .page-header__title { font-size: 2rem; font-weight: bold; margin-bottom: 8px; color: white; }
