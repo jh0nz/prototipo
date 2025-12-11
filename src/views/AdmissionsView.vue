@@ -110,7 +110,7 @@
                </div>
                <div class="info-content">
                  <strong>Lugar del Examen</strong>
-                 <a href="https://maps.app.goo.gl/q94NuABAk8gGb2MH9" target="_blank" rel="noopener noreferrer" class="location-link">
+                 <a href="https://maps.app.goo.gl/q94NuABAk8gGb2MH9" target="_blank" rel="noopener noreferrer" class="location-link" title="Ver ubicación en Google Maps">
                    <span class="mdi mdi-open-in-new"></span>
                    Edificio Académico 2, FCyT
                  </a>

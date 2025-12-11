@@ -26,18 +26,18 @@
         <!-- Toolbar -->
         <div class="calendar-toolbar">
           <div class="month-nav">
-            <button @click="prevMonth" class="btn-icon" aria-label="Mes anterior">
+            <button @click="prevMonth" class="btn-icon" aria-label="Mes anterior" title="Ir al mes anterior">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"/>
               </svg>
             </button>
             <h2 class="current-month">{{ currentMonthName }} {{ currentYear }}</h2>
-            <button @click="nextMonth" class="btn-icon" aria-label="Mes siguiente">
+            <button @click="nextMonth" class="btn-icon" aria-label="Mes siguiente" title="Ir al mes siguiente">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
             </button>
-            <button @click="goToToday" class="btn btn-sm btn-outline">Hoy</button>
+            <button @click="goToToday" class="btn btn-sm btn-outline" title="Volver al día actual">Hoy</button>
           </div>
 
           <div class="filters">
@@ -45,10 +45,46 @@
               v-for="filter in filters" 
               :key="filter.value"
               class="filter-chip"
-              :class="{ 'filter-chip--active': activeFilter === filter.value }"
+              :class="[{ 'filter-chip--active': activeFilter === filter.value }, `filter-chip--${filter.value}`]"
               @click="activeFilter = filter.value"
+              :title="filter.tooltip"
             >
-              {{ filter.icon }} {{ filter.label }}
+              <span class="filter-icon" :class="`filter-icon--${filter.value}`">
+                <svg v-if="filter.value === 'all'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <svg v-else-if="filter.value === 'exams'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <svg v-else-if="filter.value === 'procedures'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                <svg v-else-if="filter.value === 'events'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+                <svg v-else-if="filter.value === 'holidays'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <svg v-else-if="filter.value === 'news'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+                  <path d="M18 14h-8"/>
+                  <path d="M15 18h-5"/>
+                  <path d="M10 6h8v4h-8z"/>
+                </svg>
+              </span>
+              <span>{{ filter.label }}</span>
             </button>
           </div>
         </div>
@@ -72,6 +108,7 @@
           role="button"
           tabindex="0"
           :aria-label="`Ver eventos del día ${day.dayNumber}`"
+          :title="getEventsForDay(day.dateStr).length > 0 ? `${getEventsForDay(day.dateStr).length} evento${getEventsForDay(day.dateStr).length > 1 ? 's' : ''} - Haz clic para ver detalles` : day.isCurrentMonth ? 'Sin eventos programados' : ''"
         >
           <div class="day-header-cell">
             <div class="day-number">{{ day.dayNumber }}</div>
@@ -142,12 +179,12 @@ onMounted(() => {
 })
 
 const filters = [
-  { label: 'Todos', value: 'all', icon: '📅' },
-  { label: 'Exámenes', value: 'exams', icon: '📝' },
-  { label: 'Trámites', value: 'procedures', icon: '📄' },
-  { label: 'Eventos', value: 'events', icon: '🎓' },
-  { label: 'Feriados', value: 'holidays', icon: '🎉' },
-  { label: 'Noticias', value: 'news', icon: '📰' }
+  { label: 'Todos', value: 'all', tooltip: 'Mostrar todos los eventos del calendario' },
+  { label: 'Exámenes', value: 'exams', tooltip: 'Filtrar solo exámenes y evaluaciones' },
+  { label: 'Trámites', value: 'procedures', tooltip: 'Filtrar trámites administrativos y académicos' },
+  { label: 'Eventos', value: 'events', tooltip: 'Filtrar eventos académicos y actividades' },
+  { label: 'Feriados', value: 'holidays', tooltip: 'Filtrar días feriados y no laborables' },
+  { label: 'Noticias', value: 'news', tooltip: 'Filtrar publicaciones de noticias importantes' }
 ]
 
 const weekDaysNames = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB']
@@ -398,26 +435,100 @@ function goToNews(id: number) {
 
 .filter-chip {
   background: white;
-  border: 1px solid var(--color-neutral-light);
-  padding: 6px 12px;
+  border: 2px solid var(--color-neutral-light);
+  padding: 8px 14px;
   border-radius: var(--radius-full);
   font-size: 13px;
   cursor: pointer;
   transition: all var(--transition-fast);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .filter-chip:hover {
   border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .filter-chip--active {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  border-color: var(--color-primary);
   font-weight: 600;
+}
+
+.filter-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.filter-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Filter colors matching event categories */
+.filter-chip--all .filter-icon {
+  background: #E2E8F0;
+}
+
+.filter-chip--exams .filter-icon {
+  background: #FEF3C7;
+}
+
+.filter-chip--exams.filter-chip--active {
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  color: #92400E;
+}
+
+.filter-chip--procedures .filter-icon {
+  background: #DBEAFE;
+}
+
+.filter-chip--procedures.filter-chip--active {
+  background: #DBEAFE;
+  border-color: #3B82F6;
+  color: #1E40AF;
+}
+
+.filter-chip--events .filter-icon {
+  background: #D1FAE5;
+}
+
+.filter-chip--events.filter-chip--active {
+  background: #D1FAE5;
+  border-color: #10B981;
+  color: #065F46;
+}
+
+.filter-chip--holidays .filter-icon {
+  background: #F1F5F9;
+}
+
+.filter-chip--holidays.filter-chip--active {
+  background: #F1F5F9;
+  border-color: #64748B;
+  color: #475569;
+}
+
+.filter-chip--news .filter-icon {
+  background: #F3F0FF;
+}
+
+.filter-chip--news.filter-chip--active {
+  background: #F3F0FF;
+  border-color: #9333EA;
+  color: #7C3AED;
+}
+
+.filter-chip--all.filter-chip--active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* Month Grid */

@@ -6,10 +6,11 @@
           <h2 class="section-title">Últimas Noticias</h2>
           <p class="section-subtitle">Mantente informado sobre las novedades más recientes de la facultad</p>
         </div>
-        <button @click="goToAllNews" class="btn-view-all">
-          Ver todas
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"/>
+        <button @click="goToAllNews" class="btn-view-all" title="Ver todas las noticias" aria-label="Ver todas las noticias">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </button>
       </div>
@@ -204,9 +205,8 @@ onUnmounted(() => {
 
 @media (max-width: 767px) {
   .header-wrapper {
-    flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
   }
 }
 
@@ -227,17 +227,16 @@ onUnmounted(() => {
 .btn-view-all {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   background: white;
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s;
-  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-view-all:hover {
@@ -252,7 +251,7 @@ onUnmounted(() => {
 }
 
 .btn-view-all:hover svg {
-  transform: translateX(4px);
+  transform: scale(1.1);
 }
 
 .carousel {

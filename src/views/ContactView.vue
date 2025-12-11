@@ -52,7 +52,7 @@
                 <span class="material-symbols-rounded icon">call</span>
                 <div>
                   <strong>Teléfono</strong>
-                  <p><a href="tel:+59144231765">+591 4 4231765</a></p>
+                  <p><a href="tel:+59144231765" title="Llamar al teléfono de la facultad">+591 4 4231765</a></p>
                 </div>
               </li>
 
@@ -60,7 +60,7 @@
                 <span class="material-symbols-rounded icon">mail</span>
                 <div>
                   <strong>Correo Electrónico</strong>
-                  <p><a href="mailto:fcyt@umss.edu.bo">fcyt@umss.edu.bo</a></p>
+                  <p><a href="mailto:fcyt@umss.edu.bo" title="Enviar correo electrónico">fcyt@umss.edu.bo</a></p>
                 </div>
               </li>
 
@@ -74,16 +74,16 @@
             </ul>
 
             <div class="social-links">
-               <a href="https://www.facebook.com/fcytumss.2025" target="_blank" class="social-btn" aria-label="Facebook">
+               <a href="https://www.facebook.com/fcytumss.2025" target="_blank" class="social-btn" aria-label="Facebook" title="Visitar nuestra página de Facebook">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.15 5.96C15.21 5.96 16.12 6.04 16.12 6.04V8.51H15.01C13.77 8.51 13.38 9.28 13.38 10.07V12.06H16.15L15.71 14.96H13.38V21.96C18.16 21.21 21.82 17.06 21.82 12.06C21.82 6.53 17.32 2.04 12 2.04Z"/></svg>
                </a>
-               <a href="https://whatsapp.com/channel/0029Vae7Oov0wajtTjMSnj1v" target="_blank" class="social-btn" aria-label="WhatsApp Canal">
+               <a href="https://whatsapp.com/channel/0029Vae7Oov0wajtTjMSnj1v" target="_blank" class="social-btn" aria-label="WhatsApp Canal" title="Unirse a nuestro canal de WhatsApp">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                </a>
-               <a href="https://t.me/fcyt_umss" target="_blank" class="social-btn" aria-label="Telegram">
+               <a href="https://t.me/fcyt_umss" target="_blank" class="social-btn" aria-label="Telegram" title="Unirse a nuestro canal de Telegram">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65L10.06 14.42L17.74 7.5C18.08 7.19 17.67 7.04 17.22 7.31L7.74 13.3L3.64 12C2.76 11.75 2.75 11.14 3.84 10.7L19.81 4.54C20.54 4.21 21.24 4.72 20.96 5.84L18.24 18.65C18.05 19.56 17.5 19.78 16.74 19.36L12.6 16.3L10.61 18.23C10.38 18.46 10.19 18.65 9.78 18.65Z"/></svg>
                </a>
-               <a href="https://www.tiktok.com/@fac..ciencias.y.te" target="_blank" class="social-btn" aria-label="TikTok">
+               <a href="https://www.tiktok.com/@fac..ciencias.y.te" target="_blank" class="social-btn" aria-label="TikTok" title="Seguirnos en TikTok">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82C15.1 6.5 13.5 6.9 11.8 7.3V13.6C11.8 16.8 9.2 19.4 6 19.4C2.8 19.4 0.2 16.8 0.2 13.6C0.2 10.4 2.8 7.8 6 7.8C6.6 7.8 7.2 7.9 7.8 8V10.6C7.2 10.5 6.6 10.4 6 10.4C4.2 10.4 2.8 11.8 2.8 13.6C2.8 15.4 4.2 16.8 6 16.8C7.8 16.8 9.2 15.4 9.2 13.6V2H11.8C11.8 4.1 13.5 5.8 15.6 5.8V8.4C16.6 8.4 17.6 8.3 18.6 8.1V5.5C17.9 5.6 17.3 5.7 16.6 5.8Z"/></svg>
                </a>
             </div>
@@ -118,7 +118,7 @@
                 <label>Mensaje</label>
                 <textarea v-model="form.message" rows="4" required placeholder="¿En qué podemos ayudarte?"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary btn-block">Enviar Mensaje</button>
+              <button type="submit" class="btn btn-primary btn-block" title="Enviar mensaje a la facultad">Enviar Mensaje</button>
             </form>
           </div>
         </div>

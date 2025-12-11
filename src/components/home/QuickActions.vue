@@ -10,6 +10,8 @@
           :to="action.path"
           class="action-card"
           :style="{ '--action-delay': action.id }"
+          :title="action.description"
+          :aria-label="action.title + ': ' + action.description"
         >
           <div class="action-card__icon">
             <span class="action-card__emoji">{{ action.icon }}</span>
