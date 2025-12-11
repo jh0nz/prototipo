@@ -186,12 +186,16 @@ function formatDate(dateString: string): string {
 }
 
 function handleTouchStart(e: TouchEvent) {
-  touchStartX = e.touches[0].clientX
-  stopAutoplay()
+  if (e.touches[0]) {
+    touchStartX = e.touches[0].clientX
+    stopAutoplay()
+  }
 }
 
 function handleTouchMove(e: TouchEvent) {
-  touchEndX = e.touches[0].clientX
+  if (e.touches[0]) {
+    touchEndX = e.touches[0].clientX
+  }
 }
 
 function handleTouchEnd() {
