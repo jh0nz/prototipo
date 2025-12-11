@@ -219,7 +219,7 @@ watch(() => route.params.id, () => {
 
 @media (max-width: 480px) {
   .news-article {
-    padding: 20px;
+    padding: 16px;
   }
 }
 
@@ -250,10 +250,19 @@ watch(() => route.params.id, () => {
 .news-meta {
   display: flex;
   align-items: center;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
   color: var(--color-secondary);
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .news-meta {
+    gap: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
 }
 
 .news-date {
@@ -261,6 +270,12 @@ watch(() => route.params.id, () => {
   align-items: center;
   gap: 6px;
   font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .news-date {
+    font-size: 0.85rem;
+  }
 }
 
 .news-hero-image {
@@ -334,6 +349,92 @@ watch(() => route.params.id, () => {
 
 .news-body :deep(li) {
   margin-bottom: 0.5rem;
+}
+
+.news-body :deep(a) {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.news-body :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.news-footer {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+@media (max-width: 480px) {
+  .news-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #002D7A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 61, 165, 0.3);
+}
+
+.news-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .news-tags {
+    gap: 6px;
+  }
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #F1F5F9;
+  color: #475569;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .tag {
+    padding: 3px 10px;
+    font-size: 0.8rem;
+  }
+}
+
 .news-sidebar {
   position: sticky;
   top: 24px;
@@ -349,6 +450,18 @@ watch(() => route.params.id, () => {
   }
 }
 
+@media (max-width: 768px) {
+  .news-sidebar {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .news-sidebar {
+    padding: 16px;
+  }
+}
+
 .news-sidebar h3 {
   font-size: 1.15rem;
   font-weight: 700;
@@ -356,10 +469,23 @@ watch(() => route.params.id, () => {
   color: var(--color-neutral-dark);
 }
 
+@media (max-width: 480px) {
+  .news-sidebar h3 {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+}
+
 .related-news {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .related-news {
+    gap: 12px;
+  }
 }
 
 .related-card {
@@ -371,6 +497,14 @@ watch(() => route.params.id, () => {
   transition: all 0.2s ease;
   background: white;
   border: 1px solid #F1F5F9;
+}
+
+@media (max-width: 480px) {
+  .related-card {
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+  }
 }
 
 .related-card:hover {
@@ -387,11 +521,20 @@ watch(() => route.params.id, () => {
   flex-shrink: 0;
 }
 
+@media (max-width: 480px) {
+  .related-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+  }
+}
+
 .related-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
 }
 
 .related-date {
@@ -400,6 +543,13 @@ watch(() => route.params.id, () => {
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .related-date {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+  }
 }
 
 .related-title {
@@ -415,15 +565,21 @@ watch(() => route.params.id, () => {
   overflow: hidden;
 }
 
-.related-card:hover .related-title {
-  color: var(--color-primary);
-} margin: 0;
-  line-height: 1.4;
-  color: var(--color-neutral-dark);
-  transition: color 0.2s;
+@media (max-width: 480px) {
+  .related-title {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+  }
 }
 
 .related-card:hover .related-title {
   color: var(--color-primary);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94A3B8;
+  font-size: 1.1rem;
 }
 </style>

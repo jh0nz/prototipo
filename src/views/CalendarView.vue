@@ -52,59 +52,40 @@
           class="month-day"
           :class="{ 
             'month-day--today': day.isToday,
-            'month-day--other-month': !day.isCurrentMonth
+            'month-day--other-month': !day.isCurrentMonth,
+            'month-day--has-events': getEventsForDay(day.dateStr).length > 0
           }"
+          @click="openDayModal(day)"
+          role="button"
+          tabindex="0"
+          :aria-label="`Ver eventos del día ${day.dayNumber}`"
         >
           <div class="day-number">{{ day.dayNumber }}</div>
           
           <div class="day-events-stack">
-            <button 
-              v-for="event in getEventsForDay(day.dateStr)" 
+            <div 
+              v-for="event in getEventsForDay(day.dateStr).slice(0, 3)" 
               :key="event.id"
               class="event-pill"
               :class="`event-pill--${event.category}`"
-              @click="openEventModal(event)"
               :title="event.title"
             >
               {{ event.title }}
-            </button>
+            </div>
+            <div v-if="getEventsForDay(day.dateStr).length > 3" class="event-more">
+              +{{ getEventsForDay(day.dateStr).length - 3 }} más
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Event Modal -->
-    <Teleport to="body">
-        <Transition name="modal">
-          <div v-if="selectedEvent" class="event-modal-overlay" @click.self="selectedEvent = null">
-            <div class="event-modal">
-              <div class="event-modal__header" :class="`header--${selectedEvent.type}`">
-                <h3>{{ selectedEvent.title }}</h3>
-                <button @click="selectedEvent = null" class="close-btn">&times;</button>
-              </div>
-              <div class="event-modal__body">
-                <p class="modal-date">{{ formatDateFull(selectedEvent.date) }}</p>
-                <div v-if="selectedEvent.type === 'news'" class="news-tag">Noticia</div>
-                <p v-if="selectedEvent.time" class="modal-time">Hora: {{ selectedEvent.time }}</p>
-                <p>{{ selectedEvent.description }}</p>
-                <a
-                  v-if="selectedEvent.ctaLink"
-                  :href="selectedEvent.ctaLink"
-                  class="modal-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ selectedEvent.ctaLabel || 'Ver detalles de la convocatoria' }}
-                </a>
-                
-                <div class="modal-tags" v-if="selectedEvent.location">
-                  <span class="tag-location">📍 {{ selectedEvent.location }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+    <!-- Day Modal -->
+    <DayEventsModal 
+      :selected-day="selectedDay" 
+      :events="selectedDay ? getEventsForDay(selectedDay.dateStr) : []"
+      @close="selectedDay = null"
+    />
   </div>
 </template>
 
@@ -114,6 +95,7 @@ import { useRouter } from 'vue-router'
 import eventsData from '@/data/calendar-events.json'
 import noticiasData from '@/data/noticias.json'
 import type { TimelineEvent } from '@/types'
+import DayEventsModal from '@/components/calendar/DayEventsModal.vue'
 
 // Setup
 const router = useRouter()
@@ -125,7 +107,7 @@ function useMeta(arg0: { title: string }) {
 
 const currentDate = ref(new Date())
 const activeFilter = ref('all')
-const selectedEvent = ref<TimelineEvent | null>(null)
+const selectedDay = ref<any>(null)
 
 const filters = [
   { label: 'Todos', value: 'all', icon: '📅' },
@@ -223,6 +205,19 @@ const calendarDays = computed(() => {
      })
   }
   
+  // Filter days for mobile when a filter is active
+  const isMobile = window.innerWidth < 768
+  if (isMobile && activeFilter.value !== 'all') {
+    const todayStr = formatDateStr(new Date())
+    return days.filter(day => {
+      // Always show today
+      if (day.dateStr === todayStr) return true
+      // Only show days with events matching the current filter
+      const dayEvents = getEventsForDay(day.dateStr)
+      return dayEvents.length > 0
+    })
+  }
+  
   return days
 })
 
@@ -249,12 +244,17 @@ function goToToday() {
   currentDate.value = new Date()
 }
 
-function openEventModal(event: TimelineEvent) {
+function openDayModal(day: any) {
+  if (!day.isCurrentMonth) return
+  selectedDay.value = day
+}
+
+function handleEventClick(event: TimelineEvent) {
   if (event.category === 'news' && event.newsId) {
     router.push(`/noticias/${event.newsId}`)
-    return
+  } else if (event.ctaLink && event.ctaLink !== '#') {
+    window.open(event.ctaLink, '_blank')
   }
-  selectedEvent.value = event
 }
 
 function formatDateFull(dateStr: string) {
@@ -268,6 +268,23 @@ function formatDateFull(dateStr: string) {
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' })
 }
+
+const categories = {
+  exams: 'Exámenes',
+  procedures: 'Trámites',
+  events: 'Eventos',
+  holidays: 'Feriados',
+  news: 'Noticias'
+}
+
+const getCategoryLabel = (category: string) => {
+  return categories[category as keyof typeof categories] || 'Evento'
+}
+
+function goToNews(id: number) {
+  router.push(`/noticias/${id}`)
+}
+
 </script>
 
 <style scoped>
@@ -397,15 +414,35 @@ function formatDateFull(dateStr: string) {
   padding: var(--spacing-2);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.month-day:hover {
+  background: #F8FAFC;
+  transform: scale(1.02);
+  z-index: 1;
 }
 
 .month-day--other-month {
   background: #FAFAFA;
   color: #AAA;
+  cursor: default;
+}
+
+.month-day--other-month:hover {
+  background: #FAFAFA;
+  transform: none;
 }
 
 .month-day--today {
   background: #F0F9FF;
+  border: 2px solid var(--color-primary);
+}
+
+.month-day--has-events {
+  font-weight: 500;
 }
 
 .day-number {
@@ -431,21 +468,24 @@ function formatDateFull(dateStr: string) {
 }
 
 .event-pill {
-  border: none;
   text-align: left;
   font-size: 11px;
   padding: 2px 6px;
   border-radius: 4px;
-  cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 1px;
-  transition: opacity 0.2s;
+  pointer-events: none;
 }
 
-.event-pill:hover {
-  opacity: 0.8;
+.event-more {
+  font-size: 10px;
+  color: #64748B;
+  font-weight: 600;
+  padding: 2px 6px;
+  text-align: center;
+  margin-top: 2px;
 }
 
 .event-pill--exams { background: #FEF3C7; color: #92400E; }
@@ -454,104 +494,249 @@ function formatDateFull(dateStr: string) {
 .event-pill--holidays { background: #F1F5F9; color: #475569; }
 .event-pill--events { background: #D1FAE5; color: #065F46; }
 
-/* Modal Styles Reuse */
+/* Modal Minimalist */
 .event-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(2px);
+  z-index: 2000;
   padding: var(--spacing-4);
 }
 
 .event-modal {
   background: white;
   width: 100%;
-  max-width: 400px;
-  border-radius: var(--radius-lg);
+  max-width: 420px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.event-modal__header {
-  padding: var(--spacing-4);
-  background: var(--color-primary);
-  color: white;
+/* Header Minimal */
+.event-modal__header-minimal {
+  padding: var(--spacing-6);
+  padding-bottom: var(--spacing-2);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.header--urgent { background: var(--color-error); }
-.header--warning { background: var(--color-warning); }
-.header--news { background: #8B5CF6; }
-
-.event-modal__header h3 {
-  margin: 0;
-  font-size: var(--font-size-lg);
+.header-date-group {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-3);
+  color: var(--color-primary);
 }
 
-.close-btn {
-  background: none;
+.header-day-number {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.header-date-text {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4px;
+}
+
+.header-day-name {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  line-height: 1.2;
+}
+
+.header-month-year {
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.close-btn-minimal {
+  background: transparent;
   border: none;
-  color: white;
-  font-size: 24px;
   cursor: pointer;
-}
-
-.event-modal__body {
-  padding: var(--spacing-4);
-}
-
-.modal-link {
-  display: inline-flex;
+  color: var(--color-secondary);
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: var(--spacing-3);
+  justify-content: center;
+}
+
+.close-btn-minimal:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-neutral-dark);
+}
+
+/* Body */
+.day-modal__body {
+  padding: var(--spacing-6);
+  padding-top: var(--spacing-2);
+  overflow-y: auto;
+}
+
+.no-events-minimal {
+  padding: var(--spacing-8);
+  text-align: center;
+  color: var(--color-secondary);
+  background: var(--color-surface-variant);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-2);
+}
+
+.events-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-2);
+  position: relative;
+}
+
+/* Connecting Line */
+.events-timeline::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 0;
+  left: 6px;
+  width: 2px;
+  background-color: var(--color-neutral-light);
+  border-radius: 2px;
+}
+
+.timeline-event {
+  position: relative;
+  padding-left: 24px;
+}
+
+.timeline-marker {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px white; /* Gap effect */
+  z-index: 1;
+}
+
+.timeline-content {
+  background: white;
+}
+
+.timeline-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.event-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Badge colors (Soft backgrounds) */
+.bg-exams-soft { background-color: #FFFBEB; }
+.text-exams { color: #B45309; }
+
+.bg-procedures-soft { background-color: #EFF6FF; }
+.text-procedures { color: #1D4ED8; }
+
+.bg-events-soft { background-color: #ECFDF5; }
+.text-events { color: #047857; }
+
+.bg-holidays-soft { background-color: #F1F5F9; }
+.text-holidays { color: #475569; }
+
+.bg-news-soft { background-color: #F5F3FF; }
+.text-news { color: #7C3AED; }
+
+/* Colors for Dots and Markers */
+.bg-exams { background-color: #F59E0B; }
+.bg-procedures { background-color: #3B82F6; }
+.bg-events { background-color: #10B981; }
+.bg-holidays { background-color: #64748B; }
+.bg-news { background-color: #8B5CF6; }
+
+.timeline-time {
+  font-size: 12px;
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.timeline-title {
+  font-size: 1rem;
+  margin: 0 0 4px 0;
+  color: var(--color-neutral-dark);
+  line-height: 1.4;
+}
+
+.timeline-desc {
+  font-size: 0.875rem;
+  color: var(--color-secondary);
+  margin: 0 0 var(--spacing-3) 0;
+  line-height: 1.6;
+}
+
+.timeline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+
+.action-link {
+  font-size: 13px;
   font-weight: 600;
   color: var(--color-primary);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
-.modal-link::after {
-  content: '↗';
-  font-size: 0.85em;
-}
-
-.modal-link:hover {
+.action-link:hover {
   text-decoration: underline;
 }
 
-.modal-date {
-  font-weight: bold;
-  color: var(--color-secondary);
-  text-transform: capitalize;
-  margin-bottom: var(--spacing-2);
-}
-
-.modal-tags {
-  margin-top: var(--spacing-4);
-  padding-top: var(--spacing-2);
-  border-top: 1px solid var(--color-neutral-light);
-}
-
-.tag-location {
-  font-size: var(--font-size-sm);
-  color: var(--color-secondary);
-}
-
-.news-tag {
-  display: inline-block;
-  background: #F3F0FF;
-  color: #8B5CF6;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
+.location-tag {
   font-size: 12px;
-  font-weight: bold;
-  margin-bottom: var(--spacing-2);
+  color: var(--color-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @media (max-width: 768px) {

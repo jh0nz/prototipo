@@ -31,6 +31,7 @@
             <ul>
               <li><RouterLink to="/">Inicio</RouterLink></li>
               <li><RouterLink to="/nosotros">Nosotros</RouterLink></li>
+              <li><RouterLink to="/noticias">Noticias</RouterLink></li>
               <li><RouterLink to="/calendario">Calendario</RouterLink></li>
               <li><RouterLink to="/horarios">Horarios</RouterLink></li>
               <li><RouterLink to="/contacto">Contacto</RouterLink></li>

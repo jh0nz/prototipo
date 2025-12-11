@@ -90,92 +90,12 @@
         </div>
       </div>
 
-      <!-- Day Modal (Minimalist & Accessible) -->
-      <Teleport to="body">
-        <Transition name="fade">
-          <div v-if="selectedDay" class="event-modal-overlay" @click.self="selectedDay = null">
-            <div class="event-modal day-modal">
-              <div class="event-modal__header-minimal">
-                <div class="header-date-group">
-                  <span class="header-day-number">{{ selectedDay.date.getDate() }}</span>
-                  <div class="header-date-text">
-                    <span class="header-day-name">{{ selectedDay.dayName }}</span>
-                    <span class="header-month-year">{{ selectedDay.date.toLocaleDateString('es-BO', { month: 'long', year: 'numeric' }) }}</span>
-                  </div>
-                </div>
-                <button @click="selectedDay = null" class="close-btn-minimal" aria-label="Cerrar" title="Cerrar detalle">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
-              
-              <div class="event-modal__body day-modal__body">
-                <div v-if="getEventsForDay(selectedDay.dateStr).length === 0" class="no-events-minimal">
-                  <p>Sin actividades programadas</p>
-                </div>
-                
-                <div class="events-timeline">
-                   <div 
-                    v-for="event in getEventsForDay(selectedDay.dateStr)" 
-                    :key="event.id"
-                    class="timeline-event"
-                  >
-                    <div class="timeline-marker" :class="`bg-${event.category}`" :title="getCategoryLabel(event.category)"></div>
-                    <div class="timeline-content">
-                      <div class="timeline-meta">
-                        <span class="event-badge" :class="`bg-${event.category}-soft text-${event.category}`">
-                          {{ getCategoryLabel(event.category) }}
-                        </span>
-                        <span class="timeline-time" v-if="event.time">{{ event.time }}</span>
-                      </div>
-                      <h4 class="timeline-title">{{ event.title }}</h4>
-                      <p class="timeline-desc">{{ event.description }}</p>
-                      
-                      <div class="timeline-actions" v-if="event.ctaLink || event.location || event.category === 'news'">
-                        <button
-                          v-if="event.category === 'news'"
-                          @click="goToNews(event.newsId || 0)"
-                          class="action-link"
-                          title="Leer noticia completa"
-                        >
-                          Leer noticia completa
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                          </svg>
-                        </button>
-                        <a
-                          v-else-if="event.ctaLink"
-                          :href="event.ctaLink"
-                          class="action-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          :title="event.ctaLabel || 'Más información'"
-                        >
-                          {{ event.ctaLabel || 'Más información' }}
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="7" y1="17" x2="17" y2="7"/>
-                            <polyline points="7 7 17 7 17 17"/>
-                          </svg>
-                        </a>
-                        <span class="location-tag" v-if="event.location" :title="`Ubicación: ${event.location}`">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                          </svg>
-                          {{ event.location }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+      <!-- Day Modal -->
+      <DayEventsModal 
+        :selected-day="selectedDay" 
+        :events="selectedDay ? getEventsForDay(selectedDay.dateStr) : []"
+        @close="selectedDay = null"
+      />
     </div>
   </section>
 </template>
@@ -186,6 +106,7 @@ import { useRouter } from 'vue-router'
 import eventsData from '@/data/calendar-events.json'
 import noticiasData from '@/data/noticias.json'
 import type { TimelineEvent } from '@/types'
+import DayEventsModal from '@/components/calendar/DayEventsModal.vue'
 
 // State
 const router = useRouter()
