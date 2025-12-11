@@ -357,14 +357,35 @@ onMounted(() => {
 .req-card--checked { border-color: var(--color-success); background: #F0FDF4; }
 
 .checkbox-custom {
-  width: 24px; height: 24px;
-  border: 2px solid var(--color-neutral);
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  background: white; flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(15, 23, 42, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFF, #F4F7FB);
+  flex-shrink: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-.req-card--checked .checkbox-custom { background: var(--color-success); border-color: var(--color-success); color: white; }
-.req-card--checked .checkbox-custom span { font-size: 18px; font-weight: bold; }
+
+.req-card:hover .checkbox-custom {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.req-card--checked .checkbox-custom {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.req-card--checked .checkbox-custom span {
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .req-content { flex: 1; }
 .req-content h3 { margin: 0 0 4px 0; font-size: 1rem; color: var(--color-neutral-dark); }
