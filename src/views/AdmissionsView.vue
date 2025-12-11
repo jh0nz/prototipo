@@ -35,14 +35,14 @@
     </header>
 
     <!-- Main Content Grid: Checklist + Timeline -->
-    <section class="section container">
+    <section id="requisitos" class="section container">
       <div class="main-grid">
         
         <!-- Left Column: Requirements Checklist -->
         <div class="requirements-column">
           <h2 class="section-title">
-            <span class="material-symbols-rounded icon-title">checklist</span>
-            Checklist de Requisitos
+
+            Requisitos
           </h2>
           <p class="section-desc">Marca los pasos que ya has completado para llevar un control de tu inscripción.</p>
           
@@ -186,8 +186,7 @@
     </section>
 
     <!-- Costos Section (Simplified) -->
-    <section class="section bg-surface-variant">
-      <div class="container">
+    <section id="costos" class="section container">
         <div class="costs-header">
           <div>
             <h2 class="section-title">Costos</h2>
@@ -226,11 +225,10 @@
           <span class="material-symbols-rounded">info</span>
           <p>Recuerda conservar el comprobante original. Presentarlo junto al formulario impreso el día de tu opción.</p>
         </div>
-      </div>
     </section>
 
     <!-- Full Details Expandable or Detailed Section Below -->
-    <section class="section container">
+    <section id="cronograma" class="section container">
         <h2 class="section-title">Cronograma Detallado</h2>
         <!-- Reusing the detailed horizontal cards I made before, but maybe simplified -->
         <div class="timeline-options">
