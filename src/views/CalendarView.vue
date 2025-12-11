@@ -9,7 +9,7 @@
       </div>
     </header>
 
-    <div class="container section">
+    <div class="container section" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <!-- Toolbar -->
       <div class="calendar-toolbar">
         <div class="month-nav">
