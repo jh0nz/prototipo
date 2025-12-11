@@ -55,28 +55,6 @@
           </article>
         </div>
 
-        <!-- Carousel Controls -->
-        <button 
-          class="carousel__control carousel__control--prev"
-          @click="prevSlide"
-          aria-label="Noticia anterior"
-          :disabled="currentSlide === 0"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-        </button>
-        <button 
-          class="carousel__control carousel__control--next"
-          @click="nextSlide"
-          aria-label="Siguiente noticia"
-          :disabled="currentSlide === newsItems.length - 1"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-
         <!-- Carousel Indicators -->
         <div class="carousel__indicators" role="tablist">
           <button 
@@ -267,9 +245,10 @@ onUnmounted(() => {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(15, 23, 42, 0.95) 0%,
-    rgba(15, 23, 42, 0.7) 40%,
-    rgba(15, 23, 42, 0.2) 100%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.75) 35%,
+    rgba(0, 0, 0, 0.5) 70%,
+    rgba(0, 0, 0, 0.3) 100%
   );
 }
 
@@ -302,6 +281,7 @@ onUnmounted(() => {
   line-height: var(--line-height-tight);
   margin-bottom: var(--spacing-4);
   color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 @media (min-width: 768px) {
@@ -312,35 +292,37 @@ onUnmounted(() => {
 
 .news-card__excerpt {
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.95);
   line-height: var(--line-height-relaxed);
   margin-bottom: var(--spacing-6);
   max-width: 550px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Carousel Controls */
 .carousel__control {
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
   width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.95);
   border: none;
   border-radius: var(--radius-full);
   color: var(--color-neutral-dark);
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 2;
 }
 
 .carousel__control:hover:not(:disabled) {
   background-color: white;
   transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 .carousel__control:disabled {
