@@ -35,7 +35,7 @@
     </header>
 
     <!-- Main Content Grid: Checklist + Timeline -->
-    <section id="requisitos" class="section container">
+    <section id="requisitos" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div class="main-grid">
         
         <!-- Left Column: Requirements Checklist -->
@@ -186,7 +186,7 @@
     </section>
 
     <!-- Costos Section (Simplified) -->
-    <section id="costos" class="section container">
+    <section id="costos" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
         <div class="costs-header">
           <div>
             <h2 class="section-title">Costos</h2>
@@ -228,7 +228,7 @@
     </section>
 
     <!-- Full Details Expandable or Detailed Section Below -->
-    <section id="cronograma" class="section container">
+    <section id="cronograma" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
         <h2 class="section-title">Cronograma Detallado</h2>
         <!-- Reusing the detailed horizontal cards I made before, but maybe simplified -->
         <div class="timeline-options">
