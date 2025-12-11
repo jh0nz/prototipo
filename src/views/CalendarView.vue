@@ -110,11 +110,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import eventsData from '@/data/calendar-events.json'
 import noticiasData from '@/data/noticias.json'
 import type { TimelineEvent } from '@/types'
 
 // Setup
+const router = useRouter()
 useMeta({ title: 'Calendario - FCyT UMSS' })
 
 function useMeta(arg0: { title: string }) {
@@ -141,6 +143,7 @@ const allEvents: TimelineEvent[] = [
   ...(eventsData as TimelineEvent[]),
   ...noticiasData.map((news: any) => ({
     id: 10000 + news.id,
+    newsId: news.id,
     date: news.date,
     title: news.title,
     description: news.excerpt,
@@ -247,6 +250,10 @@ function goToToday() {
 }
 
 function openEventModal(event: TimelineEvent) {
+  if (event.category === 'news' && event.newsId) {
+    router.push(`/noticias/${event.newsId}`)
+    return
+  }
   selectedEvent.value = event
 }
 

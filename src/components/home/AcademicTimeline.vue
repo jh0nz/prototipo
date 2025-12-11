@@ -130,9 +130,21 @@
                       <h4 class="timeline-title">{{ event.title }}</h4>
                       <p class="timeline-desc">{{ event.description }}</p>
                       
-                      <div class="timeline-actions" v-if="event.ctaLink || event.location">
+                      <div class="timeline-actions" v-if="event.ctaLink || event.location || event.category === 'news'">
+                        <button
+                          v-if="event.category === 'news'"
+                          @click="goToNews(event.newsId || 0)"
+                          class="action-link"
+                          title="Leer noticia completa"
+                        >
+                          Leer noticia completa
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </button>
                         <a
-                          v-if="event.ctaLink"
+                          v-else-if="event.ctaLink"
                           :href="event.ctaLink"
                           class="action-link"
                           target="_blank"
@@ -167,11 +179,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import eventsData from '@/data/calendar-events.json'
 import noticiasData from '@/data/noticias.json'
 import type { TimelineEvent } from '@/types'
 
 // State
+const router = useRouter()
 const currentDate = ref(new Date()) // Start with today
 const selectedDay = ref<any | null>(null)
 
@@ -180,6 +194,7 @@ const calendarEvents: TimelineEvent[] = [
   ...(eventsData as TimelineEvent[]),
   ...noticiasData.map((news: any) => ({
     id: 10000 + news.id,
+    newsId: news.id,
     date: news.date,
     title: news.title,
     description: news.excerpt,
@@ -283,6 +298,10 @@ function openDayModal(day: any) {
 
 const getCategoryLabel = (category: string) => {
   return categories[category as keyof typeof categories] || 'Evento'
+}
+
+function goToNews(id: number) {
+  router.push(`/noticias/${id}`)
 }
 </script>
 

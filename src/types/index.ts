@@ -26,6 +26,7 @@ export interface TimelineEvent {
     time?: string
     location?: string
     isUrgent?: boolean
+    newsId?: number
 }
 
 // ===== Navigation Types =====

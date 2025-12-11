@@ -50,6 +50,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/noticias/:id',
+      name: 'news-detail',
+      component: () => import('@/views/NewsDetailView.vue'),
+      meta: {
+        title: 'Noticia - FCyT UMSS',
+        breadcrumb: 'Noticia'
+      }
+    },
+    {
       path: '/contacto',
       name: 'contact',
       component: () => import('@/views/ContactView.vue'),

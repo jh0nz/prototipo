@@ -38,7 +38,7 @@
                 <h2 class="news-card__title">{{ news.title }}</h2>
                 <p v-if="news.excerpt" class="news-card__excerpt">{{ news.excerpt }}</p>
                 <button 
-                  @click="openNewsModal(news)"
+                  @click="goToNews(news)"
                   class="btn btn-primary btn-lg"
                 >
                   {{ news.cta || 'Leer más' }}
@@ -97,89 +97,20 @@
           ></div>
         </div>
       </div>
-
-    <!-- News Modal (Blog Reader) -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div 
-          v-if="selectedNews" 
-          class="news-modal-overlay"
-          @click="closeNewsModal"
-        >
-          <div class="news-reader" @click.stop>
-            <button 
-              class="news-reader__close"
-              @click="closeNewsModal"
-              aria-label="Cerrar noticia"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-            
-            <div class="news-reader__scroll-content">
-              <div class="news-reader__image-wrapper">
-                <img :src="selectedNews.image" :alt="selectedNews.title" />
-              </div>
-
-              <div class="news-reader__header">
-                <span class="news-reader__date">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                  {{ formatDate(selectedNews.date) }}
-                </span>
-                <h2 class="news-reader__title">{{ selectedNews.title }}</h2>
-              </div>
-
-              <div class="news-reader__content">
-                <div class="news-body" v-html="selectedNews.content"></div>
-                
-                <div class="news-reader__footer" v-if="selectedNews.ctaLink && selectedNews.ctaLink !== '#'">
-                  <a 
-                    :href="selectedNews.ctaLink"
-                    class="btn btn-outline"
-                    target="_blank"
-                  >
-                    Abrir enlace externo
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                      <polyline points="15 3 21 3 21 9"></polyline>
-                      <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import type { NewsItem } from '@/types'
 import noticiasData from '@/data/noticias.json'
 
+const router = useRouter()
 const newsItems: NewsItem[] = noticiasData as NewsItem[]
-const selectedNews = ref<NewsItem | null>(null)
 
-function openNewsModal(news: NewsItem) {
-  selectedNews.value = news
-  document.body.style.overflow = 'hidden'
-  stopAutoplay()
-}
-
-function closeNewsModal() {
-  selectedNews.value = null
-  document.body.style.overflow = ''
-  startAutoplay()
+function goToNews(news: NewsItem) {
+  router.push(`/noticias/${news.id}`)
 }
 
 const currentSlide = ref(0)
@@ -282,6 +213,7 @@ onUnmounted(() => {
   min-height: 380px;
   display: flex;
   align-items: flex-end;
+  cursor: pointer;
 }
 
 @media (max-width: 767px) {
@@ -299,6 +231,11 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.news-card:hover .news-card__image {
+  transform: scale(1.03);
 }
 
 .news-card__overlay {
@@ -454,219 +391,5 @@ onUnmounted(() => {
   height: 100%;
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   transition: width 0.05s linear;
-}
-
-/* News Modal Overlay */
-.news-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: var(--spacing-4);
-}
-
-/* News Reader Card */
-.news-reader {
-  background-color: white;
-  width: 100%;
-  max-width: 800px;
-  height: 90vh;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  position: relative;
-  box-shadow: var(--shadow-2xl);
-  display: flex;
-  flex-direction: column;
-}
-
-.news-reader__image-wrapper {
-  position: relative;
-  height: 300px;
-  width: 100%;
-  background-color: #f1f5f9;
-}
-
-.news-reader__image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.news-reader__close {
-  position: absolute;
-  top: var(--spacing-4);
-  right: var(--spacing-4);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white;
-  border: none;
-  color: var(--color-neutral-dark);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  z-index: 10;
-}
-
-.news-reader__close:hover {
-  transform: scale(1.1);
-  background: #f8fafc;
-}
-
-.news-reader__scroll-content {
-  overflow-y: auto;
-  flex: 1;
-}
-
-.news-reader__header {
-  padding: var(--spacing-8);
-  padding-bottom: var(--spacing-4);
-}
-
-.news-reader__date {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  color: var(--color-secondary);
-  font-weight: 600;
-  font-size: var(--font-size-sm);
-  margin-bottom: var(--spacing-3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.news-reader__title {
-  font-size: 2rem;
-  line-height: 1.2;
-  color: var(--color-neutral-dark);
-  margin: 0;
-  font-weight: 800;
-}
-
-.news-reader__content {
-  padding: 0 var(--spacing-8) var(--spacing-8) var(--spacing-8);
-}
-
-.news-body {
-  color: var(--color-neutral-dark);
-  line-height: 1.8;
-  font-size: 1.1rem;
-}
-
-/* Minimalist Content Styling */
-.news-body :deep(h2) {
-  font-size: 1.5rem;
-  color: var(--color-primary);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
-}
-
-.news-body :deep(h3) {
-  font-size: 1.25rem;
-  color: var(--color-neutral-dark);
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-}
-
-.news-body :deep(p) {
-  margin-bottom: 1.5rem;
-  color: #475569;
-}
-
-.news-body :deep(ul),
-.news-body :deep(ol) {
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
-  color: #475569;
-}
-
-.news-body :deep(li) {
-  margin-bottom: 0.5rem;
-}
-
-.news-body :deep(blockquote) {
-  border-left: 4px solid var(--color-accent);
-  margin: 1.5rem 0;
-  padding-left: 1rem;
-  font-style: italic;
-  color: var(--color-secondary);
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 0 8px 8px 0;
-}
-
-.news-reader__footer {
-  margin-top: var(--spacing-8);
-  padding-top: var(--spacing-6);
-  border-top: 1px solid var(--color-neutral-light);
-}
-
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: 1px solid var(--color-neutral-light);
-  border-radius: var(--radius-md);
-  color: var(--color-secondary);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-}
-
-.btn-outline:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: #f8fafc;
-}
-
-/* Transitions */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-@media (max-width: 768px) {
-  .news-reader {
-    height: 100vh;
-    border-radius: 0;
-  }
-  
-  .news-reader__image-wrapper {
-    height: 250px;
-  }
-  
-  .news-reader__header {
-    padding: var(--spacing-5);
-    padding-bottom: var(--spacing-2);
-  }
-  
-  .news-reader__title {
-    font-size: 1.5rem;
-  }
-  
-  .news-reader__content {
-    padding: var(--spacing-5);
-  }
-  
-  .news-reader__close {
-    top: var(--spacing-4);
-    right: var(--spacing-4);
-  }
 }
 </style>
