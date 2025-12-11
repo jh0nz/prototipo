@@ -1,8 +1,18 @@
 <template>
   <section class="hero" aria-label="Noticias destacadas">
     <div class="container section-header">
-      <h2 class="section-title">Últimas Noticias</h2>
-      <p class="section-subtitle">Mantente informado sobre las novedades más recientes de la facultad</p>
+      <div class="header-wrapper">
+        <div>
+          <h2 class="section-title">Últimas Noticias</h2>
+          <p class="section-subtitle">Mantente informado sobre las novedades más recientes de la facultad</p>
+        </div>
+        <button @click="goToAllNews" class="btn-view-all">
+          Ver todas
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="carousel" role="region" aria-roledescription="carrusel" aria-label="Noticias principales">
       <!-- Carousel Track -->
@@ -89,10 +99,18 @@ import type { NewsItem } from '@/types'
 import noticiasData from '@/data/noticias.json'
 
 const router = useRouter()
-const newsItems: NewsItem[] = noticiasData as NewsItem[]
+
+// Ordenar por fecha y tomar las 3 más recientes
+const newsItems: NewsItem[] = (noticiasData as NewsItem[])
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3)
 
 function goToNews(news: NewsItem) {
   router.push(`/noticias/${news.id}`)
+}
+
+function goToAllNews() {
+  router.push('/noticias')
 }
 
 const currentSlide = ref(0)
@@ -175,7 +193,21 @@ onUnmounted(() => {
 .section-header {
   padding-top: 48px;
   padding-bottom: 24px;
-  text-align: center;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 767px) {
+  .header-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 }
 
 .section-title {
@@ -190,6 +222,37 @@ onUnmounted(() => {
   color: #64748B;
   margin: 0;
   font-weight: 400;
+}
+
+.btn-view-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: white;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-view-all:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-view-all svg {
+  transition: transform 0.2s;
+}
+
+.btn-view-all:hover svg {
+  transform: translateX(4px);
 }
 
 .carousel {
@@ -263,6 +326,7 @@ onUnmounted(() => {
 @media (max-width: 767px) {
   .news-card__content {
     padding: var(--spacing-6);
+    padding-bottom: 70px;
   }
 }
 
