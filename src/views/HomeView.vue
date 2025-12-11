@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- Dashboard Grid: Carousel + Calendar -->
-    <div class="container section dashboard-grid">
+    <div class="container section dashboard-grid" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div class="dashboard-hero">
         <HeroCarousel />
       </div>
@@ -11,7 +11,7 @@
     </div>
 
     <!-- About Section -->
-    <section class="section container about-section">
+    <section class="section container about-section" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div class="about-content">
         <h2 class="title-accent">Ciencia y Tecnología al Servicio del País</h2>
         <p>
@@ -23,7 +23,7 @@
     </section>
 
     <!-- Admissions CTA -->
-    <section class="section container">
+    <section class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div class="admissions-cta-home">
         <div class="cta-text">
           <h2>Admisiones FCyT 2026</h2>

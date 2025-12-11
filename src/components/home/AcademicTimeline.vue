@@ -39,6 +39,7 @@
             'calendar-day--today': day.isToday,
             'calendar-day--past': day.isPast
           }"
+          @click="openDayModal(day)"
         >
           <div class="day-header">
             <span class="day-name">{{ day.dayName }}</span>
@@ -70,7 +71,53 @@
       </div>
 
 
-      <!-- Event Modal -->
+      <!-- Day Modal -->
+      <Teleport to="body">
+        <Transition name="modal">
+          <div v-if="selectedDay" class="event-modal-overlay" @click.self="selectedDay = null">
+            <div class="event-modal day-modal">
+              <div class="event-modal__header">
+                <div class="header-content">
+                  <h3>{{ selectedDay.dayName }}</h3>
+                  <span class="header-date">{{ formatDateFull(selectedDay.dateStr) }}</span>
+                </div>
+                <button @click="selectedDay = null" class="close-btn">&times;</button>
+              </div>
+              <div class="event-modal__body day-modal__body">
+                <div v-if="getEventsForDay(selectedDay.dateStr).length === 0" class="no-events">
+                  No hay eventos programados para este día.
+                </div>
+                
+                <div 
+                  v-for="event in getEventsForDay(selectedDay.dateStr)" 
+                  :key="event.id"
+                  class="day-event-item"
+                  :class="`day-event-item--${event.type}`"
+                >
+                  <div class="event-pill" :class="`event-pill--${event.category}`">{{ getCategoryLabel(event.category) }}</div>
+                  <h4>{{ event.title }}</h4>
+                  <p class="event-time" v-if="event.time">{{ event.time }}</p>
+                  <p class="event-desc">{{ event.description }}</p>
+                  <a
+                    v-if="event.ctaLink"
+                    :href="event.ctaLink"
+                    class="modal-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ event.ctaLabel || 'Más información' }}
+                  </a>
+                  <div class="modal-tags" v-if="event.location">
+                    <span class="tag-location">📍 {{ event.location }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
+
+      <!-- Single Event Modal (Optional/Legacy if clicking specific event) -->
       <Teleport to="body">
         <Transition name="modal">
           <div v-if="selectedEvent" class="event-modal-overlay" @click.self="selectedEvent = null">
@@ -115,6 +162,7 @@ import type { TimelineEvent } from '@/types'
 // State
 const currentDate = ref(new Date()) // Start with today
 const selectedEvent = ref<TimelineEvent | null>(null)
+const selectedDay = ref<any | null>(null)
 
 // Merge events and news
 const calendarEvents: TimelineEvent[] = [
@@ -224,7 +272,16 @@ function isUpcoming(dateStr: string) {
 }
 
 function openEventModal(event: TimelineEvent) {
-  selectedEvent.value = event
+  // Open day modal focused on this day
+  const dayName = new Date(event.date + 'T12:00:00').toLocaleDateString('es-BO', { weekday: 'short' }).toUpperCase()
+  selectedDay.value = {
+    dateStr: event.date,
+    dayName: dayName
+  }
+}
+
+function openDayModal(day: any) {
+  selectedDay.value = day
 }
 
 function formatDateFull(dateStr: string) {
@@ -238,6 +295,17 @@ function formatDateFull(dateStr: string) {
   
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' })
+}
+
+const getCategoryLabel = (category: string) => {
+  const map: Record<string, string> = {
+    exams: 'Examen',
+    procedures: 'Trámite',
+    events: 'Evento',
+    holidays: 'Feriado',
+    news: 'Noticia'
+  }
+  return map[category] || 'Evento'
 }
 </script>
 
@@ -405,43 +473,32 @@ function formatDateFull(dateStr: string) {
 }
 
 /* Dot Indicators instead of Cards for Compact View */
+/* Dot Indicators */
 .day-events {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 4px;
   justify-content: center;
+  padding: 4px;
 }
 
 .event-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: var(--radius-full);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.9);
-  outline: none;
+  display: block;
+  box-shadow: 0 0 0 1px white;
+  padding: 0;
 }
 
 .event-dot:hover,
 .event-dot:focus-visible {
-  transform: scale(1.25);
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.35);
-}
-
-.event-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.event-dot:hover {
-  transform: scale(1.5);
+  transform: scale(1.4);
+  z-index: 10;
+  box-shadow: 0 0 0 2px rgba(14,165,233,0.3);
 }
 
 .event-dot--info { background-color: var(--color-info); }
@@ -611,5 +668,78 @@ function formatDateFull(dateStr: string) {
     border-left-width: 3px;
     margin-bottom: 0;
   }
+}
+
+/* Add Event Pill Styles from CalendarView */
+.event-pill {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-2);
+}
+.event-pill--exams { background: #FEF3C7; color: #92400E; }
+.event-pill--procedures { background: #DBEAFE; color: #1E40AF; }
+.event-pill--news { background: #F3F0FF; color: #7C3AED; }
+.event-pill--holidays { background: #F1F5F9; color: #475569; }
+.event-pill--events { background: #D1FAE5; color: #065F46; }
+
+/* Day Modal Styles */
+.day-modal {
+  max-width: 500px;
+}
+.no-events {
+  text-align: center;
+  color: #64748B;
+  padding: var(--spacing-4);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+}
+.day-event-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-neutral-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.day-event-item:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+.day-event-item h4 {
+  margin: var(--spacing-1) 0 var(--spacing-2) 0;
+  color: var(--color-neutral-dark);
+  font-size: 1rem;
+}
+.day-event-item .event-time {
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  font-weight: 600;
+  margin-bottom: var(--spacing-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.day-event-item .event-time::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+.day-event-item .event-desc {
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: var(--spacing-2);
+  line-height: 1.5;
+}
+.event-chip-tag {
+  display: none; /* Deprecated in favor of event-pill */
 }
 </style>
