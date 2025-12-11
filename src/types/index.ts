@@ -71,6 +71,20 @@ export interface InstitutionalGoal {
     icon: string
 }
 
+export interface ManualFunctionEntry {
+    id: number
+    title: string
+    unit?: string
+    dependency?: string
+    dependents?: string
+    objective?: string
+    authority?: string
+    functions?: string[]
+    responsibilities?: string[]
+    requirements?: Record<string, string>
+    relations?: string
+}
+
 // ===== Schedule Types =====
 export interface ScheduleSlot {
     id: string
@@ -86,12 +100,23 @@ export interface DaySchedule {
 }
 
 // ===== Search Types =====
+export type SearchSuggestionType =
+    | 'page'
+    | 'event'
+    | 'career'
+    | 'news'
+    | 'document'
+    | 'schedule'
+    | 'authority'
+
 export interface SearchSuggestion {
     id: string
     title: string
-    type: 'page' | 'event' | 'career' | 'news'
+    type: SearchSuggestionType
     path: string
     icon?: string
+    source: string
+    snippet?: string
 }
 
 // ===== Toast Types =====
