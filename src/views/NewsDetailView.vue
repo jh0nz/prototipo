@@ -1,20 +1,5 @@
 <template>
   <div class="news-detail-view">
-    <header class="page-header">
-      <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/" class="breadcrumb-item">
-            <span class="mdi mdi-home"></span>
-            Inicio
-          </router-link>
-          <span class="breadcrumb-separator">/</span>
-          <router-link to="/noticias" class="breadcrumb-item">Noticias</router-link>
-          <span class="breadcrumb-separator">/</span>
-          <span class="breadcrumb-current">{{ currentNews?.id || '...' }}</span>
-        </div>
-      </div>
-    </header>
-
     <div class="container section">
       <div v-if="loading" class="news-skeleton">
         <div class="skeleton-article">
@@ -91,15 +76,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import noticiasData from '@/data/noticias.json'
+import { useBreadcrumb } from '@/composables/useBreadcrumb'
 import type { NewsItem } from '@/types'
 
 const route = useRoute()
 const router = useRouter()
 const currentNews = ref<NewsItem | null>(null)
 const loading = ref(true)
+const { setDynamicBreadcrumb, clearDynamicBreadcrumb } = useBreadcrumb()
 
 const relatedNews = computed(() => {
   return (noticiasData as NewsItem[])
@@ -116,6 +103,8 @@ function loadNews() {
     const found = noticiasData.find((n: any) => n.id === id)
     if (found) {
       currentNews.value = found as NewsItem
+      // Actualizar breadcrumb dinámico con el título de la noticia
+      setDynamicBreadcrumb(found.title)
     }
     loading.value = false
   }, 600)
@@ -140,6 +129,10 @@ onMounted(() => {
   window.scrollTo(0, 0)
 })
 
+onUnmounted(() => {
+  clearDynamicBreadcrumb()
+})
+
 watch(() => route.params.id, () => {
   loadNews()
   window.scrollTo(0, 0)
@@ -147,57 +140,8 @@ watch(() => route.params.id, () => {
 </script>
 
 <style scoped>
-.page-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #002D7A 100%);
-  color: white;
-  padding: 24px 20px;
-  margin-bottom: 40px;
-}
-
-@media (max-width: 768px) {
-  .page-header {
-    padding: 20px;
-    margin-bottom: 28px;
-  }
-}
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 480px) {
-  .breadcrumb {
-    font-size: 0.85rem;
-    gap: 8px;
-  }
-}
-
-.breadcrumb-item {
-  color: white;
-  text-decoration: none;
-  opacity: 0.9;
-  transition: opacity 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.breadcrumb-item:hover {
-  opacity: 1;
-}
-
-.breadcrumb-separator {
-  opacity: 0.6;
-}
-
-.breadcrumb-current {
-  opacity: 1;
-  font-weight: 600;
+.news-detail-view {
+  padding-top: var(--spacing-4);
 }
 
 .news-content-wrapper {

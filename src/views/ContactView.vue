@@ -13,7 +13,26 @@
     </header>
 
     <div class="container">
-      <div class="contact-layout">
+      <div v-if="loading" class="skeleton-contact">
+        <div class="skeleton-info-card">
+          <div class="skeleton-title"></div>
+          <div v-for="n in 4" :key="n" class="skeleton-contact-item"></div>
+          <div class="skeleton-social-links">
+            <div v-for="n in 4" :key="n" class="skeleton-social-btn"></div>
+          </div>
+        </div>
+        <div class="skeleton-form-card">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-form-grid">
+            <div v-for="n in 2" :key="n" class="skeleton-input"></div>
+          </div>
+          <div class="skeleton-input"></div>
+          <div class="skeleton-textarea"></div>
+          <div class="skeleton-button"></div>
+        </div>
+      </div>
+      
+      <div v-else class="contact-layout">
         
         <!-- Contact Info Sidebar -->
         <div class="info-column">
@@ -105,6 +124,7 @@
         </div>
 
       </div>
+      </div>
     </div>
 
     <!-- Map Iframe -->
@@ -124,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToastStore } from '@/stores/toast'
 import { usePageSections } from '@/composables/usePageSections'
 
@@ -133,6 +153,11 @@ usePageSections()
 
 const toastStore = useToastStore()
 const form = ref({ name: '', email: '', subject: '', message: '' })
+const loading = ref(true)
+
+onMounted(() => {
+  setTimeout(() => { loading.value = false }, 400)
+})
 
 function handleSubmit() {
   toastStore.success('Mensaje enviado. Nos pondremos en contacto pronto.')
@@ -218,4 +243,224 @@ function handleSubmit() {
 /* Map */
 .map-section { margin-top: 40px; line-height: 0; }
 iframe { width: 100%; height: 400px; }
+
+/* Skeleton Styles */
+.skeleton-contact {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: var(--spacing-6);
+  animation: fadeIn 0.3s ease;
+}
+
+.skeleton-info-card {
+  background: white;
+  border-radius: 16px;
+  padding: var(--spacing-6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-form-card {
+  background: white;
+  border-radius: 16px;
+  padding: var(--spacing-8);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-title {
+  height: 28px;
+  width: 50%;
+  background-color: #E2E8F0;
+  border-radius: 6px;
+  margin-bottom: var(--spacing-6);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-contact-item {
+  height: 70px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: var(--spacing-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-contact-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-social-links {
+  display: flex;
+  gap: 12px;
+  margin-top: var(--spacing-6);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid #E5E7EB;
+}
+
+.skeleton-social-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #E2E8F0;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-social-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+}
+
+.skeleton-input {
+  height: 46px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-input::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-textarea {
+  height: 120px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: var(--spacing-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-textarea::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+.skeleton-button {
+  height: 48px;
+  background-color: #E2E8F0;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .skeleton-contact {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .skeleton-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

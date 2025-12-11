@@ -17,6 +17,7 @@ export interface PageSection {
 // Estado global compartido
 const sections = ref<PageSection[]>([])
 const activeSection = ref<string | null>(null)
+const dynamicBreadcrumb = ref<string | null>(null)
 
 export function useBreadcrumb() {
     const route = useRoute()
@@ -30,11 +31,37 @@ export function useBreadcrumb() {
         // Agregar página actual si no es home
         if (route.path !== '/') {
             const pageLabel = (route.meta.breadcrumb as string) || route.name?.toString() || 'Página'
-            items.push({
-                label: pageLabel,
-                path: route.path,
-                isActive: !activeSection.value
-            })
+            
+            // Si es una ruta de noticia detalle, agregar el nivel intermedio
+            if (route.path.startsWith('/noticias/') && route.params.id) {
+                // Agregar "Noticias" como nivel intermedio
+                items.push({
+                    label: 'Noticias',
+                    path: '/noticias',
+                    isActive: false
+                })
+                
+                // Agregar el título dinámico de la noticia si existe
+                if (dynamicBreadcrumb.value) {
+                    items.push({
+                        label: dynamicBreadcrumb.value,
+                        path: route.path,
+                        isActive: !activeSection.value
+                    })
+                } else {
+                    items.push({
+                        label: `Noticia ${route.params.id}`,
+                        path: route.path,
+                        isActive: !activeSection.value
+                    })
+                }
+            } else {
+                items.push({
+                    label: pageLabel,
+                    path: route.path,
+                    isActive: !activeSection.value
+                })
+            }
         }
 
         // Agregar sección activa si existe
@@ -84,6 +111,16 @@ export function useBreadcrumb() {
         }
     }
 
+    // Establecer breadcrumb dinámico (para páginas de detalle)
+    function setDynamicBreadcrumb(label: string | null) {
+        dynamicBreadcrumb.value = label
+    }
+
+    // Limpiar breadcrumb dinámico
+    function clearDynamicBreadcrumb() {
+        dynamicBreadcrumb.value = null
+    }
+
     return {
         breadcrumbs,
         sections: computed(() => sections.value),
@@ -91,6 +128,8 @@ export function useBreadcrumb() {
         registerSections,
         clearSections,
         setActiveSection,
-        navigateToSection
+        navigateToSection,
+        setDynamicBreadcrumb,
+        clearDynamicBreadcrumb
     }
 }
