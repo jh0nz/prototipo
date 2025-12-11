@@ -10,7 +10,6 @@
       </div>
     </header>
 
-    <!-- History Section -->
     <section id="antecedentes" class="history section">
       <div class="container">
         <h2 class="section-title">Antecedentes</h2>
@@ -61,7 +60,6 @@
       </div>
     </section>
 
-    <!-- Authorities Section -->
     <section id="autoridades" class="authorities section">
       <div class="container">
         <h2 class="section-title">Autoridades</h2>
@@ -99,9 +97,9 @@
       </div>
     </section>
 
-    <!-- Mission, Vision & Goals Section -->
-    <section id="mision-vision" class="mission-vision section">
+    <section id="identidad" class="mission-vision section">
       <div class="container">
+        <h2 class="section-title">Identidad Institucional</h2>
         <div class="mission-vision__grid">
           <article class="mission-card">
             <div class="mission-card__header">
@@ -136,7 +134,6 @@
       </div>
     </section>
 
-    <!-- Manual de Funciones -->
     <section id="manual-funciones" class="manual section">
       <div class="container">
         <h2 class="section-title">Manual de Funciones</h2>
