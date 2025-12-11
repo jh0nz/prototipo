@@ -53,7 +53,7 @@
                   class="suggestion-item"
                   @click="executeSearch(term)"
                 >
-                  <svg class="suggestion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="suggestion-leading-icon suggestion-leading-icon--muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>
                   </svg>
@@ -78,9 +78,19 @@
                   role="option"
                   :aria-selected="focusedIndex === index"
                 >
-                  <span class="suggestion-emoji">{{ suggestion.icon }}</span>
+                  <span class="suggestion-leading-icon" aria-hidden="true">
+                    <span v-if="suggestion.icon" class="mdi" :class="suggestion.icon"></span>
+                    <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"/>
+                      <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                  </span>
                   <div class="suggestion-content">
-                    <span class="suggestion-title">{{ suggestion.title }}</span>
+                    <div class="suggestion-header">
+                      <span class="suggestion-title">{{ suggestion.title }}</span>
+                      <span class="suggestion-source">{{ suggestion.source }}</span>
+                    </div>
+                    <p v-if="suggestion.snippet" class="suggestion-snippet" v-html="formatSnippet(suggestion.snippet)"></p>
                     <span class="suggestion-type">{{ getTypeLabel(suggestion.type) }}</span>
                   </div>
                   <svg class="suggestion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -112,7 +122,9 @@
                   class="suggestion-item"
                   @click="goTo(action.path)"
                 >
-                  <span class="suggestion-emoji">{{ action.icon }}</span>
+                  <span class="suggestion-leading-icon" aria-hidden="true">
+                    <span class="mdi" :class="action.icon"></span>
+                  </span>
                   <span>{{ action.title }}</span>
                   <svg class="suggestion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"/>
@@ -154,18 +166,21 @@ const searchQuery = computed({
 })
 
 const quickActions = [
-  { title: 'Calendario Académico', path: '/#calendar', icon: '📅' },
-  { title: 'Horarios de Clases', path: '/horarios', icon: '🕒' },
-  { title: 'Examen de Ingreso', path: '/admision', icon: '📝' },
-  { title: 'Explorar Carreras', path: '/admision', icon: '🎓' }
+  { title: 'Calendario Académico', path: '/calendario', icon: 'mdi-calendar-month' },
+  { title: 'Horarios de Clases', path: '/horarios', icon: 'mdi-table-clock' },
+  { title: 'Admisión y Requisitos', path: '/admision', icon: 'mdi-account-check-outline' },
+  { title: 'Contacto y Soporte', path: '/contacto', icon: 'mdi-lifebuoy' }
 ]
 
-function getTypeLabel(type: string): string {
-  const labels: Record<string, string> = {
+function getTypeLabel(type: SearchSuggestion['type']): string {
+  const labels: Record<SearchSuggestion['type'], string> = {
     page: 'Página',
     event: 'Evento',
     career: 'Carrera',
-    news: 'Noticia'
+    news: 'Noticia',
+    document: 'Documento',
+    schedule: 'Horario',
+    authority: 'Autoridad'
   }
   return labels[type] || type
 }
@@ -190,8 +205,7 @@ function executeSearch(term: string) {
 }
 
 function clearRecent() {
-  recentSearches.value = []
-  localStorage.removeItem('fcyt-recent-searches')
+  searchStore.clearRecent()
 }
 
 function focusNextSuggestion() {
@@ -211,6 +225,42 @@ function selectFocusedSuggestion() {
   if (focusedIndex.value >= 0 && suggestion) {
     goToSuggestion(suggestion)
   }
+}
+
+function formatSnippet(snippet?: string): string {
+  if (!snippet) return ''
+  const tokens = searchQuery.value.trim().split(/\s+/).filter(Boolean)
+  let formatted = escapeHtml(snippet)
+
+  if (!tokens.length) {
+    return formatted
+  }
+
+  tokens.forEach(token => {
+    try {
+      const regex = new RegExp(`(${escapeRegExp(token)})`, 'ig')
+      formatted = formatted.replace(regex, '<mark>$1</mark>')
+    } catch {
+      /* ignore invalid regex tokens */
+    }
+  })
+
+  return formatted
+}
+
+function escapeHtml(value: string): string {
+  const entities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }
+  return value.replace(/[&<>"']/g, char => entities[char] ?? char)
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 // Focus input when modal opens
@@ -377,12 +427,25 @@ watch(searchQuery, () => {
   background-color: var(--color-neutral-light);
 }
 
-.suggestion-icon {
+.suggestion-leading-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-neutral-light);
+  color: var(--color-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.suggestion-leading-icon--muted {
+  background-color: transparent;
   color: #6B7280;
 }
 
-.suggestion-emoji {
-  font-size: var(--font-size-lg);
+.suggestion-leading-icon .mdi {
+  font-size: 1.25rem;
 }
 
 .suggestion-content {
@@ -391,14 +454,46 @@ watch(searchQuery, () => {
   flex-direction: column;
 }
 
+.suggestion-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
 .suggestion-title {
   font-size: var(--font-size-sm);
   color: var(--color-neutral-dark);
 }
 
-.suggestion-type {
+.suggestion-source {
   font-size: var(--font-size-xs);
-  color: #6B7280;
+  color: #1F2937;
+  background-color: var(--color-neutral-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.suggestion-snippet {
+  margin-top: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  color: #4B5563;
+  line-height: 1.4;
+}
+
+.suggestion-snippet mark {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0 2px;
+}
+
+.suggestion-type {
+  margin-top: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-medium);
 }
 
 .suggestion-arrow {
