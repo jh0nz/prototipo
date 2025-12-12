@@ -26,18 +26,18 @@
         <!-- Toolbar -->
         <div class="calendar-toolbar">
           <div class="month-nav">
-            <button @click="prevMonth" class="btn-icon" aria-label="Mes anterior" title="Ir al mes anterior">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button @click="prevMonth" class="btn-control" aria-label="Mes anterior" title="Ir al mes anterior">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"/>
               </svg>
             </button>
             <h2 class="current-month">{{ currentMonthName }} {{ currentYear }}</h2>
-            <button @click="nextMonth" class="btn-icon" aria-label="Mes siguiente" title="Ir al mes siguiente">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button @click="nextMonth" class="btn-control" aria-label="Mes siguiente" title="Ir al mes siguiente">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
             </button>
-            <button @click="goToToday" class="btn btn-sm btn-outline" title="Volver al día actual">Hoy</button>
+            <button @click="goToToday" class="btn-today" title="Volver al día actual">Hoy</button>
           </div>
 
           <div class="filters">
@@ -427,6 +427,43 @@ function goToNews(id: number) {
   background-color: var(--color-neutral-light);
 }
 
+.btn-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-secondary);
+  border: none;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-control:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-today {
+  padding: 0 var(--spacing-4);
+  height: 32px;
+  border: none;
+  background: white;
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-today:hover {
+  background: var(--color-primary-light);
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -568,8 +605,7 @@ function goToNews(id: number) {
 }
 
 .month-day:hover {
-  background: #F8FAFC;
-  box-shadow: inset 0 0 0 2px var(--color-primary-light);
+  background-color: var(--color-surface-variant);
 }
 
 .month-day--other-month {
@@ -581,12 +617,10 @@ function goToNews(id: number) {
 
 .month-day--other-month:hover {
   background: #FAFAFA;
-  box-shadow: none;
 }
 
 .month-day--today {
-  background: #F0F9FF;
-  box-shadow: inset 0 0 0 2px var(--color-primary);
+  background-color: #FEF2F2;
 }
 
 .month-day--has-events {
@@ -604,18 +638,14 @@ function goToNews(id: number) {
 .day-number {
   font-weight: 600;
   font-size: 14px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  color: var(--color-neutral-dark);
   flex-shrink: 0;
 }
 
 .month-day--today .day-number {
-  background: var(--color-primary);
-  color: white;
+  color: var(--color-error);
+  font-weight: 800;
+  transform: scale(1.1);
 }
 
 .event-count {
