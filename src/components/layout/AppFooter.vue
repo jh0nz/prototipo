@@ -6,7 +6,7 @@
           <!-- Brand / Logo -->
           <div class="footer__brand">
             <div class="footer__logo">
-              <img src="@/assets/fcyt.png" alt="FCyT Logo" class="logo-image" />
+              <img src="@/assets/fcyt.png" alt="Logo de la Facultad de Ciencias y Tecnología - UMSS" class="logo-image" />
             </div>
             <div class="footer__social">
               <a href="https://www.facebook.com/fcytumss.2025" target="_blank" class="social-link" aria-label="Facebook">

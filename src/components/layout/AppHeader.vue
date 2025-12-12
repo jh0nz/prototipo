@@ -5,7 +5,7 @@
       <RouterLink to="/" class="header__logo" aria-label="FCyT UMSS - Ir al inicio">
         <div class="logo">
           <div class="logo__icon">
-            <img src="@/assets/fcyt.png" alt="Facultad de Ciencias y Tecnología - UMSS" class="logo__image" />
+            <img src="@/assets/fcyt.png" alt="Logo de la Facultad de Ciencias y Tecnología - UMSS" class="logo__image" />
           </div>
         </div>
       </RouterLink>

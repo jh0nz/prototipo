@@ -37,7 +37,7 @@
                 <span v-for="tag in currentNews.tags" :key="tag" class="tag">{{ tag }}</span>
               </div>
             </div>
-            <img :src="currentNews.image" :alt="currentNews.title" class="news-hero-image" loading="lazy" />
+            <img :src="currentNews.image" :alt="`Imagen principal de la noticia: ${currentNews.title}`" class="news-hero-image" loading="lazy" />
           </div>
 
           <div class="news-body" v-html="currentNews.content || `<p>${currentNews.excerpt}</p>`"></div>
@@ -58,7 +58,7 @@
           <h3>Otras Noticias</h3>
           <div class="related-news">
              <div v-for="item in relatedNews" :key="item.id" class="related-card" @click="goToNews(item.id)">
-               <img :src="item.image" :alt="item.title" class="related-image" loading="lazy" />
+               <img :src="item.image" :alt="`Imagen de noticia relacionada: ${item.title}`" class="related-image" loading="lazy" />
                <div class="related-info">
                  <span class="related-date">{{ formatDate(item.date) }}</span>
                  <h4 class="related-title">{{ item.title }}</h4>

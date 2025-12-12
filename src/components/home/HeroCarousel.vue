@@ -37,7 +37,7 @@
               <div class="news-card__image-wrapper">
                 <img 
                   :src="news.image" 
-                  :alt="news.title"
+                  :alt="`Imagen destacada de la noticia: ${news.title}`"
                   class="news-card__image"
                   loading="lazy"
                 />

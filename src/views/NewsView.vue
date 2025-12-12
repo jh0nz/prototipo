@@ -21,7 +21,7 @@
           @click="goToNews(news.id)"
         >
           <div class="news-card__image">
-            <img :src="news.image" :alt="news.title" loading="lazy" />
+            <img :src="news.image" :alt="`Imagen de la noticia: ${news.title}`" loading="lazy" />
             <div class="news-card__date">
               <span class="mdi mdi-calendar"></span>
               {{ formatDate(news.date) }}
