@@ -78,31 +78,7 @@
       </div>
     </section>
 
-    <!-- Careers Section -->
-    <section id="carreras" class="section container careers-section" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
-      <div class="section-header">
-        <h2 class="section-title">Nuestras Carreras</h2>
-        <p class="section-subtitle">Formamos profesionales líderes en ciencia, tecnología e ingeniería</p>
-      </div>
-      
-      <SkeletonGrid v-if="loadingCareers" variant="careers" :count="8" :has-image="false" :lines="2" />
-      <div v-else class="careers-grid" :class="{ 'careers-grid--expanded': showAllCareers }">
-        <div class="career-card" v-for="(career, index) in displayedCareers" :key="index">
-          <div class="career-icon">{{ career.icon }}</div>
-          <h3>{{ career.name }}</h3>
-          <p>{{ career.description }}</p>
-        </div>
-      </div>
 
-      <div class="careers-cta">
-        <button @click="showAllCareers = !showAllCareers" class="btn btn-outline btn-lg">
-          {{ showAllCareers ? 'Ver menos carreras' : 'Ver todas las carreras' }}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline :points="showAllCareers ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
-          </svg>
-        </button>
-      </div>
-    </section>
 
     <!-- Services Section -->
     <section id="servicios" class="section container services-section" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
@@ -244,7 +220,7 @@ usePageSections()
 const loadingCarousel = ref(true)
 const loadingCalendar = ref(true)
 const loadingStats = ref(true)
-const loadingCareers = ref(true)
+
 const loadingServices = ref(true)
 
 // Simulate progressive loading
@@ -256,40 +232,12 @@ onMounted(() => {
   // Stats load
   setTimeout(() => { loadingStats.value = false }, 1200)
   // Careers load
-  setTimeout(() => { loadingCareers.value = false }, 1400)
+
   // Services load last
   setTimeout(() => { loadingServices.value = false }, 1600)
 })
 
-// Careers data
-const careers = [
-  { icon: '💻', name: 'Ingeniería de Sistemas', description: 'Desarrollo de software, sistemas de información y soluciones tecnológicas' },
-  { icon: '🏗️', name: 'Ingeniería Civil', description: 'Construcción, infraestructura y gestión de proyectos' },
-  { icon: '🏭', name: 'Ingeniería Industrial', description: 'Optimización de procesos y gestión de producción' },
-  { icon: '⚙️', name: 'Ingeniería Electromecánica', description: 'Sistemas mecánicos, eléctricos y automatización industrial' },
-  { icon: '🔬', name: 'Ingeniería Química', description: 'Procesos químicos, biotecnología y control de calidad' },
-  { icon: '💾', name: 'Ingeniería Informática', description: 'Arquitectura de computadoras, redes y seguridad informática' },
-  { icon: '⚡', name: 'Ingeniería Eléctrica', description: 'Sistemas de potencia, energías renovables y control automático' },
-  { icon: '📡', name: 'Ingeniería Electrónica', description: 'Diseño de circuitos, telecomunicaciones y sistemas electrónicos' },
-  { icon: '🍔', name: 'Ingeniería de Alimentos', description: 'Tecnología alimentaria y control de calidad' },
-  { icon: '🔧', name: 'Ingeniería Mecánica', description: 'Diseño mecánico, manufactura y sistemas de energía' },
-  { icon: '🧬', name: 'Ingeniería en Biotecnología', description: 'Aplicaciones biotecnológicas e ingeniería genética' },
-  { icon: '🌿', name: 'Licenciatura en Biología', description: 'Ciencias biológicas, ecología y biodiversidad' },
-  { icon: '🧪', name: 'Licenciatura en Química', description: 'Investigación científica y análisis químico aplicado' },
-  { icon: '🔭', name: 'Licenciatura en Física', description: 'Investigación en física aplicada y teórica' },
-  { icon: '📐', name: 'Ingeniería Matemática', description: 'Modelado matemático aplicado a problemas de ingeniería' },
-  { icon: '📊', name: 'Licenciatura en Matemáticas', description: 'Matemática pura y análisis cuantitativo' },
-  { icon: '🍽️', name: 'Tecnología Superior en Gastronomía', description: 'Arte culinario y gestión gastronómica' },
-  { icon: '⚡', name: 'Ingeniería en Energía', description: 'Energías renovables y eficiencia energética' },
-  { icon: '📚', name: 'Didáctica de la Matemática', description: 'Enseñanza y metodología educativa en matemáticas' },
-  { icon: '🔬', name: 'Didáctica de la Física', description: 'Pedagogía y enseñanza de la física' }
-]
 
-const showAllCareers = ref(false)
-
-const displayedCareers = computed(() => {
-  return showAllCareers.value ? careers : careers.slice(0, 8)
-})
 </script>
 
 <style scoped>
@@ -408,57 +356,7 @@ const displayedCareers = computed(() => {
   margin: 0 auto;
 }
 
-/* Careers Section */
-.careers-section {
-  padding: var(--spacing-10) var(--spacing-4);
-}
 
-.careers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-6);
-  margin-bottom: var(--spacing-8);
-}
-
-.career-card {
-  background: white;
-  padding: var(--spacing-6);
-  border-radius: var(--radius-lg);
-  border: 2px solid #E2E8F0;
-  transition: all 0.3s;
-  text-align: center;
-}
-
-.career-card:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
-}
-
-.career-icon {
-  font-size: 3rem;
-  margin-bottom: var(--spacing-3);
-}
-
-.career-card h3 {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--color-neutral-dark);
-  margin-bottom: var(--spacing-2);
-}
-
-.career-card p {
-  font-size: 0.9rem;
-  color: var(--color-secondary);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.careers-cta {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--spacing-8);
-}
 
 /* Services Section */
 .services-section {

@@ -34,6 +34,31 @@
       </div>
     </header>
 
+    <!-- Careers Link Section -->
+    <section id="carreras" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4); margin-bottom: var(--spacing-8);">
+      <div class="section-header">
+        <h2 class="section-title">Nuestras Carreras</h2>
+        <p class="section-desc">Conoce la oferta académica disponible para esta gestión.</p>
+      </div>
+      
+      <div class="careers-grid" :class="{ 'careers-grid--expanded': showAllCareers }">
+        <div class="career-card" v-for="(career, index) in displayedCareers" :key="index">
+          <div class="career-icon">{{ career.icon }}</div>
+          <h3>{{ career.name }}</h3>
+          <p>{{ career.description }}</p>
+        </div>
+      </div>
+
+      <div class="careers-cta">
+        <button @click="showAllCareers = !showAllCareers" class="btn btn-outline btn-lg">
+          {{ showAllCareers ? 'Ver menos carreras' : 'Ver todas las carreras' }}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline :points="showAllCareers ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
     <!-- Main Content Grid: Checklist + Timeline -->
     <section id="requisitos" class="section container" style="padding-left: var(--spacing-4); padding-right: var(--spacing-4);">
       <div v-if="loading" class="skeleton-admissions">
@@ -191,7 +216,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { usePageSections } from '@/composables/usePageSections'
 
 document.title = 'Admisión I-2026 - FCyT UMSS'
@@ -263,6 +288,36 @@ onMounted(() => {
   
   // Simulate loading
   setTimeout(() => { loading.value = false }, 500)
+})
+
+// Careers data
+const careers = [
+  { icon: '💻', name: 'Ingeniería de Sistemas', description: 'Desarrollo de software, sistemas de información y soluciones tecnológicas' },
+  { icon: '🏗️', name: 'Ingeniería Civil', description: 'Construcción, infraestructura y gestión de proyectos' },
+  { icon: '🏭', name: 'Ingeniería Industrial', description: 'Optimización de procesos y gestión de producción' },
+  { icon: '⚙️', name: 'Ingeniería Electromecánica', description: 'Sistemas mecánicos, eléctricos y automatización industrial' },
+  { icon: '🔬', name: 'Ingeniería Química', description: 'Procesos químicos, biotecnología y control de calidad' },
+  { icon: '💾', name: 'Ingeniería Informática', description: 'Arquitectura de computadoras, redes y seguridad informática' },
+  { icon: '⚡', name: 'Ingeniería Eléctrica', description: 'Sistemas de potencia, energías renovables y control automático' },
+  { icon: '📡', name: 'Ingeniería Electrónica', description: 'Diseño de circuitos, telecomunicaciones y sistemas electrónicos' },
+  { icon: '🍔', name: 'Ingeniería de Alimentos', description: 'Tecnología alimentaria y control de calidad' },
+  { icon: '🔧', name: 'Ingeniería Mecánica', description: 'Diseño mecánico, manufactura y sistemas de energía' },
+  { icon: '🧬', name: 'Ingeniería en Biotecnología', description: 'Aplicaciones biotecnológicas e ingeniería genética' },
+  { icon: '🌿', name: 'Licenciatura en Biología', description: 'Ciencias biológicas, ecología y biodiversidad' },
+  { icon: '🧪', name: 'Licenciatura en Química', description: 'Investigación científica y análisis químico aplicado' },
+  { icon: '🔭', name: 'Licenciatura en Física', description: 'Investigación en física aplicada y teórica' },
+  { icon: '📐', name: 'Ingeniería Matemática', description: 'Modelado matemático aplicado a problemas de ingeniería' },
+  { icon: '📊', name: 'Licenciatura en Matemáticas', description: 'Matemática pura y análisis cuantitativo' },
+  { icon: '🍽️', name: 'Tecnología Superior en Gastronomía', description: 'Arte culinario y gestión gastronómica' },
+  { icon: '⚡', name: 'Ingeniería en Energía', description: 'Energías renovables y eficiencia energética' },
+  { icon: '📚', name: 'Didáctica de la Matemática', description: 'Enseñanza y metodología educativa en matemáticas' },
+  { icon: '🔬', name: 'Didáctica de la Física', description: 'Pedagogía y enseñanza de la física' }
+]
+
+const showAllCareers = ref(false)
+
+const displayedCareers = computed(() => {
+  return showAllCareers.value ? careers : careers.slice(0, 4)
 })
 </script>
 
@@ -684,4 +739,54 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 }
+
+/* Careers Section Styles */
+.careers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+  margin-top: var(--spacing-6);
+}
+
+.career-card {
+  background: white;
+  padding: var(--spacing-6);
+  border-radius: var(--radius-lg);
+  border: 2px solid #E2E8F0;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.career-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.career-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-3);
+}
+
+.career-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-neutral-dark);
+  margin-bottom: var(--spacing-2);
+}
+
+.career-card p {
+  font-size: 0.9rem;
+  color: var(--color-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.careers-cta {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-4);
+}
+
 </style>
