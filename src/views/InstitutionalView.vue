@@ -3,7 +3,7 @@
     <!-- Page Header -->
     <header class="page-header">
       <div class="container">
-        <h1 class="page-header__title">Nosotros</h1>
+        <h1 class="page-header__title">Acerca de</h1>
         <p class="page-header__subtitle">
           Conoce nuestra historia, misión y las personas que hacen posible la excelencia académica
         </p>
@@ -324,7 +324,7 @@ import manualFuncionesData from '@/data/manual-funciones.json'
 import SkeletonGrid from '@/components/ui/SkeletonGrid.vue'
 import { usePageSections } from '@/composables/usePageSections'
 
-document.title = 'Nosotros - FCyT UMSS'
+document.title = 'Acerca de - FCyT UMSS'
 usePageSections()
 
 const openAccordion = ref<number | null>(null)

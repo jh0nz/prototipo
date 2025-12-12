@@ -14,12 +14,12 @@ const router = createRouter({
       }
     },
     {
-      path: '/nosotros',
+      path: '/acerca-de',
       name: 'institutional',
       component: () => import('@/views/InstitutionalView.vue'),
       meta: {
-        title: 'Nosotros - FCyT UMSS',
-        breadcrumb: 'Nosotros'
+        title: 'Acerca de - FCyT UMSS',
+        breadcrumb: 'Acerca de'
       }
     },
     {
@@ -66,6 +66,10 @@ const router = createRouter({
         title: 'Noticia - FCyT UMSS',
         breadcrumb: 'Noticia'
       }
+    },
+    {
+      path: '/nosotros',
+      redirect: '/acerca-de'
     },
     {
       // Catch-all redirect to home

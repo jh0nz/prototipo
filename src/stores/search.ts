@@ -209,10 +209,10 @@ function createPageEntries(): SearchIndexItem[] {
                 'Requisitos, cronograma, documentación, cursos de nivelación y pasos para postular al examen de ingreso.'
         },
         {
-            id: createId('page', 'nosotros'),
-            title: 'Nosotros',
+            id: createId('page', 'acerca-de'),
+            title: 'Acerca de',
             type: 'page' as const,
-            path: '/nosotros',
+            path: '/acerca-de',
             icon: 'mdi-domain',
             source: 'Página Institucional',
             content:
@@ -360,7 +360,7 @@ function createManualEntries(): SearchIndexItem[] {
             id: createId('manual', item.id.toString()),
             title: item.title,
             type: 'document',
-            path: '/nosotros',
+            path: '/acerca-de',
             icon: 'mdi-file-document-outline',
             source: 'Manual de Funciones',
             content: [
@@ -388,7 +388,7 @@ function createAuthorityEntries(): SearchIndexItem[] {
             id: createId('authority', authority.id.toString()),
             title: authority.name,
             type: 'authority',
-            path: '/nosotros',
+            path: '/acerca-de',
             icon: 'mdi-account-tie',
             source: 'Autoridades FCyT',
             content: [authority.role, authority.email].filter(Boolean).join(' ')
