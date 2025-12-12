@@ -213,8 +213,7 @@
                 </svg>
               </a>
 
-              <RouterLink 
-                to="/contacto" 
+              <div 
                 class="contact-card contact-card--location"
               >
                 <div class="contact-card__icon">
@@ -230,7 +229,7 @@
                 <svg class="contact-card__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
-              </RouterLink>
+              </div>
             </div>
           </div>
         </Transition>
@@ -289,7 +288,7 @@ const steps = [
   { id: 1, title: '¿Qué carrera te interesa?', shortTitle: 'Carrera' },
   { id: 2, title: '¿Cuáles son los requisitos?', shortTitle: 'Requisitos' },
   { id: 3, title: '¿Cuándo se abre la admisión?', shortTitle: 'Fechas' },
-  { id: 4, title: 'Confirmación y Contacto', shortTitle: 'Contacto' }
+  { id: 4, title: 'Confirmación', shortTitle: 'Confirmación' }
 ]
 
 const careers: Career[] = [

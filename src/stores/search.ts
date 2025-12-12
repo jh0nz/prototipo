@@ -227,16 +227,6 @@ function createPageEntries(): SearchIndexItem[] {
             source: 'Página Noticias',
             content:
                 'Convocatorias, logros académicos, ferias tecnológicas y comunicados oficiales de la facultad.'
-        },
-        {
-            id: createId('page', 'contacto'),
-            title: 'Contacto',
-            type: 'page' as const,
-            path: '/contacto',
-            icon: 'mdi-phone-incoming-outline',
-            source: 'Página Contacto',
-            content:
-                'Canales de atención, correo institucional, ubicación, horarios de oficina y soporte para estudiantes.'
         }
     ]
 

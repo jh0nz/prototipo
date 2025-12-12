@@ -192,9 +192,6 @@
                 <polyline points="12 5 19 12 12 19"/>
               </svg>
             </RouterLink>
-            <RouterLink to="/contacto" class="btn btn-outline btn-lg">
-              Contactar Admisiones
-            </RouterLink>
           </div>
         </div>
       </div>

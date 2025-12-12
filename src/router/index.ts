@@ -68,15 +68,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/contacto',
-      name: 'contact',
-      component: () => import('@/views/ContactView.vue'),
-      meta: {
-        title: 'Contacto - FCyT UMSS',
-        breadcrumb: 'Contacto'
-      }
-    },
-    {
       // Catch-all redirect to home
       path: '/:pathMatch(.*)*',
       redirect: '/'

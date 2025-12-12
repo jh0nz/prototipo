@@ -168,8 +168,7 @@ const searchQuery = computed({
 const quickActions = [
   { title: 'Calendario Académico', path: '/calendario', icon: 'mdi-calendar-month' },
   { title: 'Horarios de Clases', path: '/horarios', icon: 'mdi-table-clock' },
-  { title: 'Admisión y Requisitos', path: '/admision', icon: 'mdi-account-check-outline' },
-  { title: 'Contacto y Soporte', path: '/contacto', icon: 'mdi-lifebuoy' }
+  { title: 'Admisión y Requisitos', path: '/admision', icon: 'mdi-account-check-outline' }
 ]
 
 function getTypeLabel(type: SearchSuggestion['type']): string {

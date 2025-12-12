@@ -75,7 +75,7 @@
               <img 
                 v-if="authority.image"
                 :src="authority.image" 
-                :alt="`Fotografía de ${authority.name} - ${authority.position}`"
+                :alt="`Fotografía de ${authority.name} - ${authority.role}`"
                 class="authority-card__photo"
               />
               <div v-else class="authority-card__placeholder">

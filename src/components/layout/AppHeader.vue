@@ -94,8 +94,7 @@ const navItems = [
   { label: 'Noticias', path: '/noticias', icon: 'newspaper' },
   { label: 'Calendario', path: '/calendario', icon: 'calendar_month' },
   { label: 'Horarios', path: '/horarios', icon: 'schedule' },
-  { label: 'Admisión', path: '/admision', icon: 'edit_document' },
-  { label: 'Contacto', path: '/contacto', icon: 'mail' }
+  { label: 'Admisión', path: '/admision', icon: 'edit_document' }
 ]
 
 function isActive(path: string) {
